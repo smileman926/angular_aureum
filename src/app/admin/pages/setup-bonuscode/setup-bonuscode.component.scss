@@ -1,0 +1,54 @@
+.export-btn {
+    background-color: #1f2e69;
+    color: white;
+    margin-bottom: 10px;
+
+}
+table {
+    width: 100%;
+  }
+  .notification-sec{
+    margin-top: 15px;
+    position: relative;
+    
+    .add-product-list{
+        .mat-table{
+            width: 100%;
+            th{
+                min-width: 100px;
+            }
+        }
+        .product-list{
+            height: 50px;
+            width: 50px;
+            overflow: hidden;
+            text-align: center;
+        }
+      
+    }
+    tr.mat-header-row {
+        height: 25px;
+    }
+    td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+        padding-left: 10px;
+       
+    }
+  th.mat-header-cell{
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    }
+    td.mat-cell{
+        vertical-align: middle;
+    }
+    .input-groupn{
+        position: relative;
+    }
+   
+}
+.float-right{
+    margin-left: 100px;
+}
+.move-left{
+    margin-left: -10px;
+}

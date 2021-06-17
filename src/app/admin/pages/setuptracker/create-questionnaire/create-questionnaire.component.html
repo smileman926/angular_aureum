@@ -1,0 +1,34 @@
+<h3 class="title">
+  {{ title }}
+</h3>
+
+<div class="wrapper-list">
+  <span
+    *ngIf="listQuestions.length === 0"
+    class="label"
+  >
+    No questions added
+  </span>
+  <app-question-item
+    *ngFor="let question of listQuestions"
+    [question]="question"
+    (handleRemoveQuestion)="removeQuestion($event)"
+    (handleUpdateQuestion)="updateQuestion($event)"
+  ></app-question-item>
+
+  <button
+    mat-button
+    mat-stroked-button
+    color="primary"
+    *ngIf="!isOpenForm"
+    (click)="isOpenForm = true"
+  >
+    Create question
+  </button>
+</div>
+
+<app-create-question
+  *ngIf="isOpenForm"
+  (handlerCreateQuestion)="createNewQuestion($event)"
+  (handleCancelForm)="isOpenForm = false"
+></app-create-question>

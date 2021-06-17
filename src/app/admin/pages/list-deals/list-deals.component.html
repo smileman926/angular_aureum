@@ -1,0 +1,399 @@
+<div class="content-wrapper ">
+    <section class="content ">
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box-admin  page-title-box-sec">
+                        <h4 class="pageTitle admin pageTitle-sec">Deals </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="notification-sec ">
+                <div class="spinner-section" *ngIf="loader">
+                    <mat-spinner *ngIf="loader"></mat-spinner>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card cardTable">
+                            <div class="card-body add-product-list table-responsive">
+                                <div class="cases-filter">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+                                                <button class="export-btn" mat-button (click)="openImportDailog()">
+                                                    Import Deals <mat-icon> cloud_upload</mat-icon></button>
+                                            </div>
+                                            <div class="col-md-2"><button class="export-btn" mat-button
+                                                    (click)="exportArray()">
+                                                    Export Deals <mat-icon> cloud_download</mat-icon></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <mat-form-field class="example-full-width">
+                                        <span matPrefix>
+                                            <i class="material-icons">search</i>
+                                        </span>
+                                        <input type="text" matInput placeholder="Search" (input)=searchDeal($event)>
+                                    </mat-form-field>
+
+                                    <!-- <table mat-table [dataSource]="dealsData">
+                                        <ng-container matColumnDef="createdAt">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Date</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('createdAt',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('createdAt',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{(element.createdAt ? element.createdAt : '') | date}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="url">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Deal URL</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('url',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('url',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.simpleUrl ? element.simpleUrl : (element.url ? element.url : '')}}"
+                                                matTooltipPosition="above">
+                                                <a target="_blank" [href]="element.url ? element.url : ''">{{element.simpleUrl ? element.simpleUrl : (element.url ? element.url : '') | limitTo}}</a>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="category">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Category</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('category',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('category',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.category ? element.category : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="memberNo">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Member No.</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberNo',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberNo',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.user_id ? element.user_id : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="firstName">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>First Name</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('firstName',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('firstName',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.firstName ? element.firstName : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="lastName">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Last Name</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('lastName',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('lastName',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.lastName ? element.lastName : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="email">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Email</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('email',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('email',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.email ? element.email : ''}}"
+                                                matTooltipPosition="above">
+                                                {{(element.email ? element.email : '')| limitTo}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="eligible">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Eligible?</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('eligible',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('eligible',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.eligible ? 'Yes' : 'No'}}"
+                                                matTooltipPosition="above">
+                                                <div class="actionIcon text-centre">
+                                                    <a class="viewI" matTooltip="Approve" *ngIf="element.eligible">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a class="deleteI" matTooltip="Approve" *ngIf="!element.eligible">
+                                                        <i class="fa fa-close" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="removeDeal">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Remove Deal</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('removeDeal',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('removeDeal',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <button *ngIf="!element.isDeleted" mat-flat-button color="warn" (click)="deleteRestoreDeal(element._id, true)">Delete</button>
+                                                <button *ngIf="element.isDeleted" mat-flat-button color="primary" (click)="deleteRestoreDeal(element._id, false)">Reinstate</button>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="memberTier">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Member Tier</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberTier',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberTier',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="memberCommission">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Member Commission</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberCommission',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                       (click)="sortByFun('memberCommission',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="actionIcon">
+                                                    <a class="viewI" (click)="showUpdateDealDialog(element)"
+                                                        matTooltip="Edit Deal Data">
+                                                        <i class="material-icons edit-icons">edit</i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                    </table> -->
+                                    
+                                    <div class="col-md-2"><button class="export-btn" mat-button
+                                        (click)="displayDialog()">Customize
+                                        Columns </button>
+                                </div>
+                                <ag-grid-angular style="width: 100%;" class="ag-theme-alpine"
+                                [frameworkComponents]="frameworkComponents" [gridOptions]="gridOptions"
+                                [rowData]="dealsData" domLayout='autoHeight' [columnDefs]="columnDefs">
+                            </ag-grid-angular>
+
+                                    <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count"
+                                        [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons>
+                                    </mat-paginator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Import Deals(Using excel sheet) dialog -->
+<p-dialog header="Import Deals(Using .csv)" (onHide)="closedilog()" [(visible)]="openImportDail" [modal]="true"
+    baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form">
+    <div class="mws-connect-form">
+        <p>Deals sample import Excel Sheet Format / Template:</p>
+        <div class="watch-tutorial">
+            <a href="/assets/csv/dealSampleFile.csv" download="dealSampleFile.csv">Download</a>
+        </div>
+        <hr>
+        <div>
+            <form class="example-form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-groupn">
+                            <h4>Instructions:</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="">
+                            <p>1. All the fields are mandatory.</p>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="">
+                            <p>2. Each URL must be unique.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="">
+                            <p>3. Header should be same as sample template.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            <!-- <p>4. Eligible value should be yes/ no.</p> -->
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="add-product-details">
+                            <div class="col-md-12">
+                                <div class="fileupload" (dragover)="allowDrop($event)" (drop)="drop($event)"
+                                    (click)="fileField.click()">
+                                    <span class="ddinfo">
+                                        <i class="fa fa-upload" aria-hidden="true">
+                                        </i>Choose a csv or drag here
+                                    </span>
+                                    <input type="file" name="uploadedCsv" #fileField accept=".csv"
+                                        (change)="upload($event.target.files)" hidden>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="col-md-12" style="padding: 5px;">
+                        <div class="add-product-details">
+                            <div class="col-md-12">
+                                <div class="image-list" *ngFor="let file of fileArr; let i = index">
+                                    <div class="profile">
+                                        <span style="padding: 20px;">{{file.item.name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="btn-sec">
+                            <button type="submit" mat-raised-button color="primary" class="btn-login"
+                                (click)="importSellers()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>
+
+<p-dialog header="Customize Columns" (onHide)="closeViewdilog()" [(visible)]="customizedColumns" [modal]="true"
+    baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <div *ngFor="let item of columnsData; let i = index;">
+                        <mat-checkbox [checked]="item.checked" (change)="onChange($event, i, item)">
+                            {{item.label}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>

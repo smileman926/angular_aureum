@@ -1,0 +1,85 @@
+<p-dialog header="{{updateUserHader}} - Update seller info" (onHide)="onHide()"
+    [(visible)]="displayUpdateSellerDialogue" [modal]="true" baseZIndex="1" [responsive]="true"
+    [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true' dismissableMask='true' baseZIndex='0'
+    closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <form class="example-form" [formGroup]="updateUserForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="text" matInput placeholder='Frist name' formControlName="firstname">
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="updateUserForm.controls['firstname'].dirty && updateUserForm.controls['firstname'].invalid">
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['firstname'].dirty && updateUserForm.controls['firstname'].hasError('required')">
+                            Please enter first name.</p>
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['email'].dirty && updateUserForm.controls['email'].hasError('pattern')">
+                            Please enter correct first name</p>
+                    </div>
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="text" matInput placeholder='Last name' formControlName="lastname">
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="updateUserForm.controls['lastname'].dirty && updateUserForm.controls['lastname'].invalid">
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['lastname'].dirty && updateUserForm.controls['lastname'].hasError('required')">
+                            Please last name.</p>
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['lastname'].dirty && updateUserForm.controls['lastname'].hasError('pattern')">
+                            Please enter the correct last name</p>
+                    </div>
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="text" matInput placeholder='Public name' formControlName="publicName">
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="updateUserForm.controls['publicName'].dirty && updateUserForm.controls['publicName'].invalid">
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['publicName'].dirty && updateUserForm.controls['publicName'].hasError('required')">
+                            Please enter public name.</p>
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['publicName'].dirty && updateUserForm.controls['publicName'].hasError('pattern')">
+                            Please enter the correct public name</p>
+                    </div>
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="text" matInput
+                            placeholder='Email (Attention: if you change email - submit it before "forgot password")'
+                            formControlName="email">
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="updateUserForm.controls['email'].dirty && updateUserForm.controls['email'].invalid">
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['email'].dirty && updateUserForm.controls['email'].hasError('required')">
+                            Please enter email address.</p>
+                        <p class="form_error"
+                            *ngIf="updateUserForm.controls['email'].dirty && updateUserForm.controls['email'].hasError('pattern')">
+                            Please enter the correct email address</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Select Subscription level</mat-label>
+                        <mat-select matInput type="tel" formControlName="subscription" placeholder="Select subscription"
+                            (selectionChange)="subscriptionNameChange($event.value)">
+                            <mat-option *ngFor="let plan of planData" [value]="plan">
+                                {{plan.subscription_name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="btn-sec">
+                    <button type="submit" [disabled]="!updateUserForm.valid" mat-raised-button color="primary"
+                        class="btn-login" (click)="updateUserData()">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>

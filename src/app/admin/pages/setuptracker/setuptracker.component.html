@@ -1,0 +1,458 @@
+<div class="content-wrapper">
+  <!-- <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <h1>Add a Product screen</h1>
+            </div>
+        </div>
+    </section> -->
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box-admin page-title-box-sec">
+            <h4 class="pageTitle admin pageTitle-sec">Setup Tracker</h4>
+            <!-- end row -->
+          </div>
+
+          <!-- end page-title-box -->
+        </div>
+      </div>
+      <!-- <p>listproduct works!</p> -->
+      <div class="notification-sec">
+        <div class="spinner-section" *ngIf="loader">
+          <mat-spinner *ngIf="loader"></mat-spinner>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card cardTable">
+              <div class="card-body add-product-list table-responsive">
+                <div class="cases-filter">
+                  <mat-form-field class="example-full-width">
+                    <span matPrefix>
+                      <i class="material-icons">search</i>
+                    </span>
+                    <input
+                      type="text"
+                      matInput
+                      placeholder="Search"
+                      (input)="searchData($event)"
+                    />
+                  </mat-form-field>
+                  <!-- <div class="input-group col-md-4">
+                                        <mat-form-field>
+                                            <mat-label>Sort By</mat-label>
+                                            <mat-select [(ngModel)]="sortBy.isDefault" (selectionChange)="getsortByStatus($event)">
+                                                <mat-option [value]="sortBy.isAll">
+                                                    All
+                                                </mat-option>
+                                                <mat-option [value]="sortBy.isLive">
+                                                    Filter By Live
+                                                </mat-option>
+                                                <mat-option [value]="sortBy.isPending">
+                                                    Filter By Pending payment
+                                                </mat-option>
+                                                <mat-option [value]="sortBy.isCompleted">
+                                                    Filter By Completed
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> -->
+                  <!-- <table mat-table [dataSource]="setupData">
+
+
+
+                                        
+                                        <ng-container matColumnDef="contact_name">
+                                            <th mat-header-cell *matHeaderCellDef>Contact Name</th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.seller_info.firstname ? element.seller_info.firstname : ''}}"
+                                                matTooltipPosition="above">
+                                                {{element.seller_info.firstname ? element.seller_info.firstname +' '+element.seller_info.lastname : ''}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="contact_email">
+                                            <th mat-header-cell *matHeaderCellDef>Contact Email</th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.seller_info.email ? element.seller_info.email : ''}}"
+                                                matTooltipPosition="above">
+                                                {{(element.seller_info.email ? element.seller_info.email : '') | limitTo}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="gw_no">
+                                            <th mat-header-cell *matHeaderCellDef>Launch no</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.launch_number ? element.launch_number : ''}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="item_name">
+                                            <th mat-header-cell *matHeaderCellDef>Item Name</th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.product_title ? element.product_title : ''}}"
+                                                matTooltipPosition="above">
+                                                {{(element.product_title ? element.product_title : '') | limitTo}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="asin">
+                                            <th mat-header-cell *matHeaderCellDef>ASIN</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.asin ? element.asin : ''}}
+
+                                            </td>
+
+                                        </ng-container>
+                                        <ng-container matColumnDef="link">
+                                            <th mat-header-cell *matHeaderCellDef>Link</th>
+                                            <td mat-cell *matCellDef="let element">
+                                               
+                                                <a class="mb-2 btn btn-info btn-sm"
+                                                    href="{{element.amazon_link  ? element.amazon_link  : ''}}"
+                                                    target="_blank"><i class="fa fa-external-link"
+                                                        aria-hidden="true"></i></a>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="start_date">
+                                            <th mat-header-cell *matHeaderCellDef>Start date</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{(element.launch_date? element.launch_date: '') |date}}
+
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="end_date">
+                                            <th mat-header-cell *matHeaderCellDef>End date</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{(element.end_date ? element.end_date : '') |date}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef>Status</th>
+
+                                            <td mat-cell *matCellDef="let element">
+                                                <i *ngIf="!displayLiveStatus"
+                                                    aria-hidden="true">{{element.launch_isActive==true ? "Completed" : 'Pending'}}</i>
+                                                <i *ngIf="displayLiveStatus" aria-hidden="true">{{'Live'}}</i>
+
+                                                
+
+                                            </td>
+
+                                            
+                                        </ng-container>
+                                        <ng-container matColumnDef="Approve Launch Product">
+                                            <th mat-header-cell *matHeaderCellDef>Approve Launch Product</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <i *ngIf="!element.launch_isApproved"
+                                                    (click)="approveProductLaunch(element)" class="fa fa-check"
+                                                    aria-hidden="true"></i>
+                                                <i *ngIf="element.launch_isApproved" class="fa fa-close"
+                                                    aria-hidden="true"></i>
+
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                    </table> -->
+
+                  <div class="col-md-2">
+                    <button
+                      class="export-btn"
+                      mat-button
+                      (click)="displayDialog()"
+                    >
+                      Customize Columns
+                    </button>
+                  </div>
+                  <ag-grid-angular
+                    style="width: 100%"
+                    class="ag-theme-alpine"
+                    [frameworkComponents]="frameworkComponents"
+                    [gridOptions]="gridOptions"
+                    [rowData]="setupData"
+                    domLayout="autoHeight"
+                    [columnDefs]="columnDefs"
+                  >
+                  </ag-grid-angular>
+                  <mat-paginator
+                    [length]="totalCount"
+                    (page)="paginate($event)"
+                    [pageSize]="count"
+                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                    showFirstLastButtons
+                  >
+                  </mat-paginator>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<p-dialog
+  header="Customize Columns"
+  (onHide)="closeViewdilog()"
+  [(visible)]="customizedColumns"
+  [modal]="true"
+  baseZIndex="1"
+  [responsive]="true"
+  [style]="{ width: '600px', minWidth: '600px' }"
+  [minY]="700"
+  closable="true"
+  dismissableMask="true"
+  baseZIndex="0"
+  closeOnEscape="true"
+  responsive="true"
+  class="edit-example-form-admin"
+>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="">
+          <div *ngFor="let item of data; let i = index">
+            <mat-checkbox
+              [checked]="item.checked"
+              (change)="onChange($event, i, item)"
+            >
+              {{ item.label }}
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spinner-section" *ngIf="loader">
+    <mat-spinner *ngIf="loader"></mat-spinner>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="Testing header"
+  [(visible)]="isOpenQuestionModal"
+  [responsive]="true"
+  [resizable]="true"
+  [draggable]="false"
+  [modal]="true"
+  [blockScroll]="true"
+  [positionTop]="200"
+  [contentStyle]="{ 'max-height': '600px' }"
+  class="edit-example-form-admin"
+>
+  <div class="questions-wrapper">
+    <app-create-questionnaire
+      [title]="selectProductModal.title"
+      [id]="selectProductModal.id"
+      [questions]="selectProductModal.questions"
+      (changeProduct)="updateDataProduct($event)"
+    ></app-create-questionnaire>
+  </div>
+</p-dialog>
+<!-- <p-dialog header=" View Instruction" (onHide)="closeInstdilog()" [(visible)]="viewInst" [modal]="true" baseZIndex="1"
+    [responsive]="true" [style]="{width: '850px', minWidth: '850px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <form class="example-form" [formGroup]="instForm">
+            <div class="row">
+                <div class="col-md-12" *ngIf="keywordPresent">
+                    <div class="add-launch-input">
+                        <div formArrayName="keyword">
+                            <div *ngFor="let keyword of keywordArr.controls; let i=index" [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="text" matInput formControlName="keyword" readonly
+                                                placeholder="KW{{i+1}}">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="%[{{i+1}}]" readonly
+                                                formControlName="weightPercent">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS1" readonly
+                                                formControlName="INS1">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS1%"
+                                                formControlName="INS1Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="keyword.controls['INS1Percent'].dirty && keyword.controls['INS1Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="keyword.controls['INS1Percent'].hasError('required')">
+                                                Please enter INS1</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS2" readonly
+                                                formControlName="INS2">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS2%"
+                                                formControlName="INS2Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="keyword.controls['INS2Percent'].dirty && keyword.controls['INS2Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="keyword.controls['INS2Percent'].hasError('required')">
+                                                Please enter INS2</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS3" readonly
+                                                formControlName="INS3">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS3%"
+                                                formControlName="INS3Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="keyword.controls['INS3Percent'].dirty && keyword.controls['INS3Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="keyword.controls['INS3Percent'].hasError('required')">
+                                                Please enter INS3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="!keywordPresent">
+                    <div class="add-launch-input">
+                        <div formArrayName="link">
+                            <div *ngFor="let link of linkArr.controls; let i=index" [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="text" matInput formControlName="link" readonly
+                                                placeholder="LINK{{i+1}}">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput formControlName="weightPercent" readonly
+                                                placeholder="%[{{i+1}}]">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS1" readonly
+                                                formControlName="INS1">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS1%"
+                                                formControlName="INS1Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="link.controls['INS1Percent'].dirty && link.controls['INS1Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="link.controls['INS1Percent'].hasError('required')">
+                                                Please enter INS1</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS2" readonly
+                                                formControlName="INS2">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS2%"
+                                                formControlName="INS2Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="link.controls['INS2Percent'].dirty && link.controls['INS2Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="link.controls['INS2Percent'].hasError('required')">
+                                                Please enter INS2</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS3" readonly
+                                                formControlName="INS3">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-form-field class="example-full-width  relative-sec">
+                                            <input type="number" matInput placeholder="INS3%"
+                                                formControlName="INS3Percent">
+                                        </mat-form-field>
+                                        <div class="error-msg"
+                                            *ngIf="link.controls['INS3Percent'].dirty && link.controls['INS3Percent'].invalid">
+                                            <p class="form_error"
+                                                *ngIf="link.controls['INS3Percent'].hasError('required')">
+                                                Please enter INS3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="number" matInput placeholder="INS4" readonly
+                                    formControlName="special_link_INS4">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="test" matInput placeholder="Rotary Link" formControlName="rotaryLink">
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="instForm.controls['rotaryLink'].dirty && instForm.controls['rotaryLink'].invalid">
+                                <p class="form_error" *ngIf="instForm.controls['rotaryLink'].hasError('required')">
+                                    Please enter rotary link</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="first-step-next">
+                        <button mat-button class="export-btn" (click)="closeViewdilog()"> Back </button>
+                        <button mat-button class="export-btn" (click)="updateINS()"
+                            [disabled]="!instForm.valid">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog> -->

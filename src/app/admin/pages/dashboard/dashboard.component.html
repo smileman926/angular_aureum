@@ -1,0 +1,89 @@
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box ">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <h4 class="pageTitle admin">Dashboard</h4>
+                            </div>
+
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end page-title-box -->
+                </div>
+            </div>
+            <!-- end page title -->
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="card dashboardCard dashboardCard_1">
+                        <div class="currentCases ">
+                            <div class="p-3 mini-stat-desc">
+                                <h2>{{BuyersCount}}</h2>
+                                <h3>Buyers
+                                </h3>
+                            </div>
+                            <div class="cardViewMore">
+                                <a [routerLink]="['/layout/admin/list-buyers']"> View more <i class="material-icons">arrow_forward_ios</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="card dashboardCard dashboardCard_2">
+                        <div class="pastCases ">
+                            <div class="p-3 mini-stat-desc">
+                                <h2>{{SellersCount}}</h2>
+                                <h3>Sellers
+                                </h3>
+                            </div>
+                            <div class="cardViewMore">
+                                <a [routerLink]="['/layout/admin/list-sellers']"> View more <i class="material-icons">arrow_forward_ios </i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spinner-section" *ngIf="loader">
+                    <mat-spinner *ngIf="loader"></mat-spinner>
+
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="card dashboardCard dashboardCard_3">
+                        <div class="pendingCases ">
+                            <div class="p-3 mini-stat-desc">
+                                <h2>{{ProductsCount}}</h2>
+                                <h3>Giveaways
+                                </h3>
+                            </div>
+                            <div class="cardViewMore">
+                                <a [routerLink]="['/layout/admin/setuptracker']"> View more <i class="material-icons">arrow_forward_ios</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- end row -->
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="card dashboardCard dashboardCard_3">
+                        <div class="pendingCases ">
+                            <div class="p-3 mini-stat-desc">
+                                <h2>{{OrdersCount}}</h2>
+                                <h3>Orders
+                                </h3>
+                            </div>
+                            <div class="cardViewMore">
+                                <a [routerLink]="['/layout/admin/giveawaysdb']"> View more <i class="material-icons">arrow_forward_ios</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- container fluid -->
+    </section>
+</div>

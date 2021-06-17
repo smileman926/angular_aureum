@@ -1,0 +1,320 @@
+<div class="content-wrapper ">
+    <!-- <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <h1>Add a Product screen</h1>
+            </div>
+        </div>
+    </section> -->
+
+    <section class="content ">
+
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box-admin  page-title-box-sec">
+                        <h4 class="pageTitle admin pageTitle-sec">Giveaways Database </h4>
+                        <!-- end row -->
+                    </div>
+
+                    <!-- end page-title-box -->
+                </div>
+            </div>
+            <!-- <p>listproduct works!</p> -->
+            <div class="notification-sec ">
+
+
+                <div class="spinner-section" *ngIf="loader">
+                    <mat-spinner *ngIf="loader"></mat-spinner>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card cardTable">
+                            <div class="card-body add-product-list table-responsive">
+                                <div class="cases-filter">
+                                    <mat-form-field class="example-full-width">
+                                        <span matPrefix>
+                                            <i class="material-icons">search</i>
+                                        </span>
+                                        <input type="text" matInput placeholder="Search" (input)=searchOrder($event)>
+
+
+                                    </mat-form-field>
+                                    <!-- <div class="input-group col-md-4">
+
+                                        <mat-form-field>
+                                            <mat-label>Sort By</mat-label>
+                                            <mat-select [(ngModel)]="sortBy.isDefault" name="notificationStatus" (selectionChange)="getsortByStatus($event)">
+                                                <mat-option [value]="sortBy.isNewLaunch">
+                                                    Newest Launcher First
+                                                </mat-option>
+                                                <mat-option [value]="sortBy.isLastAsc">
+                                                    SortBy Seller (A to Z)
+                                                </mat-option>
+                                                <mat-option [value]="sortBy.isLastDsc">
+                                                    SortBy Seller (Z to A)
+                                                </mat-option>
+
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> -->
+                                    <div class="input-group col-md-4">
+
+                                        <mat-form-field>
+                                            <mat-label>Buyer Action Key</mat-label>
+                                            <mat-select name="notificationStatus">
+                                                <mat-option [value]="ActionKey.sfb">
+                                                    SFB
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.sfcb">
+                                                    SFCB
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.linkClick">
+                                                    Link Click
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.wishlist">
+                                                    Wishlist
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.helpfulVotes">
+                                                    Helpful Votes
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.addToCart">
+                                                    Add to Cart
+                                                </mat-option>
+                                                <mat-option [value]="ActionKey.questions">
+                                                    Questions
+                                                </mat-option>
+
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- <table mat-table [dataSource]="giveawaysData">
+
+                                        <ng-container matColumnDef="giveaway">
+                                            <th mat-header-cell *matHeaderCellDef>GW</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.giveaway ? element.giveaway : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="launch_no">
+                                            <th mat-header-cell *matHeaderCellDef>Launch No</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.product_id.launch_number ? element.product_id.launch_number : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="product">
+                                            <th mat-header-cell *matHeaderCellDef>Product Name</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.product_id.product_title ? element.product_id.product_title : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="brand">
+                                            <th mat-header-cell *matHeaderCellDef>Brand</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.brand ? element.brand : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="asin">
+                                            <th mat-header-cell *matHeaderCellDef>ASIN</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.product_id.asin ? element.product_id.asin : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="amz_link">
+                                            <th mat-header-cell *matHeaderCellDef>AMZ Link</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <a class="mb-2 btn btn-info btn-sm" href="{{element.product_id.amazon_link  ? element.product_id.amazon_link  : ''}}" target="_blank"><i class="fa fa-external-link"
+                                                        aria-hidden="true"></i></a>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="first_name">
+                                            <th mat-header-cell *matHeaderCellDef>F Name</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.user_id.firstname ? element.user_id.firstname : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="last_name">
+                                            <th mat-header-cell *matHeaderCellDef>L Name</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.user_id.lastname ? element.user_id.lastname : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="memner_no">
+                                            <th mat-header-cell *matHeaderCellDef>Member No</th>
+                                            <td mat-cell nowrapn *matCellDef="let element">
+                                                {{element.user_id._id ? element.user_id._id : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="tier">
+                                            <th mat-header-cell *matHeaderCellDef>Tier</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.tier ? element.tier : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.action ? element.action : 'N/A'}}
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="orderno">
+                                            <th mat-header-cell *matHeaderCellDef>Order no</th>
+                                            <td mat-cell nowrapn *matCellDef="let element">
+                                                <a [routerLink]="['/layout/admin/reimbursement',element.amazon_orderId]">
+                                                    {{element.amazon_orderId ? element.amazon_orderId : 'N/A'}}
+                                                </a>
+
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="ord_status">
+                                            <th mat-header-cell *matHeaderCellDef>ORD?</th>
+                                            <td mat-cell *matCellDef="let element" matTooltip="{{element.ord_status ? element.ord_status : 'N/A'}}" matTooltipPosition="above">
+                                                {{element.ord_status ? element.ord_status : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="amount">
+                                            <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.product_id.price ? element.product_id.price : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="rmb_status">
+                                            <th mat-header-cell *matHeaderCellDef>RMB?</th>
+                                            <td mat-cell *matCellDef="let element">
+                                               
+                                                <i *ngIf="element.is_reimburshed" class="fa fa-check" aria-hidden="true"></i>
+                                                <i *ngIf="!element.is_reimburshed" class="fa fa-close" aria-hidden="true"></i>
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="pp_email">
+                                            <th mat-header-cell *matHeaderCellDef>PP Email</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.paypal_email ? element.paypal_email : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="gw_date">
+                                            <th mat-header-cell *matHeaderCellDef>GW Date</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.gw_date ? element.gw_date : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="ord_date">
+                                            <th mat-header-cell *matHeaderCellDef>ORD Date</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.ord_date ? element.ord_date : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="match">
+                                            <th mat-header-cell *matHeaderCellDef>Match</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.match ? element.match : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="target_kw_link">
+                                            <th mat-header-cell *matHeaderCellDef>Target kw/link</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.product_id.search_keywords[0].keyword ? element.product_id.search_keywords[0].keyword : element.product_id.special_links[0] }}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="fb">
+                                            <th mat-header-cell *matHeaderCellDef>FB</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.fb ? element.fb : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="pr">
+                                            <th mat-header-cell *matHeaderCellDef>PR</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.pr ? element.pr : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="max">
+                                            <th mat-header-cell *matHeaderCellDef>Max</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.max ? element.max : 'N/A'}}
+
+                                            </td>
+                                        </ng-container>
+
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                    </table> -->
+
+                                </div>
+                                <div class="col-md-2"><button class="export-btn" mat-button (click)="displayDialog()">Customize
+                                    Columns </button>
+                                </div>
+                                <ag-grid-angular style="width:100%" class="ag-theme-alpine" [gridOptions]="gridOptions" [rowData]="giveawaysData" [columnDefs]="columnDefs" domLayout='autoHeight'>
+                                </ag-grid-angular>
+                                <!-- <div *ngIf="noRecordFound" class="mt-3 ml-5 text-center">
+                                    No Records Found
+                                </div> -->
+                                <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count" [pageSizeOptions]="[5,10,15,20, 50, 100]" showFirstLastButtons>
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<p-dialog header="Customize Columns" (onHide)="closeViewdilog()" [(visible)]="customizedColumns" [modal]="true" baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true' dismissableMask='true' baseZIndex='0'
+    closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <!-- <form class="example-form" [formGroup]="ansFAQForm"> -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <div *ngFor="let item of data; let i = index;">
+                        <mat-checkbox [checked]="item.checked" (change)="onChange($event, i, item)">
+                            {{item.label}}
+                        </mat-checkbox>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+        <!-- </form> -->
+
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>

@@ -1,0 +1,126 @@
+<div class="create-form-wrapper">
+  <form>
+    <mat-form-field class="example-full-width">
+      <mat-label>Question title</mat-label>
+      <input
+        matInput
+        autocomplete="off"
+        placeholder="Question"
+        [formControl]="nameQuestion"
+      >
+      <mat-error *ngIf="nameQuestion.hasError('required')">
+        Field is required
+      </mat-error>
+      <mat-error *ngIf="nameQuestion.hasError('minlength')">
+        Field must min 2 symbol
+      </mat-error>
+    </mat-form-field>
+
+    <label class="answer-label">Answers:</label>
+    <div class="answer-list">
+      <mat-radio-group
+        name="rightAnswer"
+        aria-labelledby="radio-group-question"
+        class="question-radio-group"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="selectRightAnswer"
+        (ngModelChange)="isHasErrorRightAnswer = false"
+      >
+        <div
+          *ngFor="let answer of listAnswers"
+          class="answer-item"
+        >
+          <div class="answer-radio-button">
+            <mat-radio-button
+              class="question-radio-button"
+              color="primary"
+              [value]="answer.id"
+            >
+              {{ answer.title }}
+            </mat-radio-button>
+          </div>
+          <button
+            mat-mini-fab
+            color="warn"
+            aria-label="Remove answer"
+            class="answer-button"
+            (click)="removeAnswer(answer.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-radio-group>
+
+      <form
+        [formGroup]="answerForm"
+        (ngSubmit)="createNewAnswer(answerForm, formDirective)"
+        #formDirective="ngForm"
+        class="create-new-answer"
+      >
+        <div class="answer-field">
+          <mat-form-field
+            color="primary"
+            class="example-full-width"
+          >
+            <mat-label>Answer</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              name="label"
+              formControlName="label"
+            >
+            <mat-error *ngIf="answerForm.controls.label.invalid">
+              {{ getErrorMessage() }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="answer-actions">
+          <button
+            mat-button
+            mat-stroked-button
+            type="submit"
+            color="primary"
+          >Create answer</button>
+        </div>
+      </form>
+      <div
+        *ngIf="isErrorLengthAnswer"
+        class="message-error"
+      >
+        <mat-error>
+          Answers are required
+        </mat-error>
+      </div>
+      <div
+        *ngIf="isHasErrorRightAnswer"
+        class="message-error"
+      >
+        <mat-error>
+          Please select right answer
+        </mat-error>
+      </div>
+    </div>
+
+    <div class="question-actions">
+      <button
+        mat-button
+        mat-stroked-button
+        color="primary"
+        type="submit"
+        class="create-button"
+        (click)="createNewQuestion()"
+      >
+        {{ isEdit ? 'Update question' : 'Create question' }}
+      </button>
+      <button
+        mat-button
+        mat-stroked-button
+        color="warn"
+        (click)="cancelForm()"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+
+</div>

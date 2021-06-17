@@ -1,0 +1,40 @@
+.next-btn {
+    background: linear-gradient(135deg, #a1cc3e 0%, #05ad7c 100%);
+    padding: 8px 25px;
+    color: #FFF;
+    border: solid 1px transparent;
+    border-radius: 30px;
+    outline: none;
+    box-shadow: none;
+    transition: all 0.1s ease-out;
+    margin: 5px 0;
+    &:hover {
+        background: linear-gradient(135deg, #05ad7c 0%, #a1cc3e 100%);
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.back-btn {
+    background: linear-gradient(135deg, #b8b8b8 0%, #fefefe 100%);
+    padding: 8px 25px;
+    color: #000;
+    border: solid 1px transparent;
+    border-radius: 30px;
+    outline: none;
+    box-shadow: none;
+    transition: all 0.1s ease-out;
+    margin: 5px 0;
+    &:hover {
+        background: linear-gradient(135deg, #fefefe 0%, #b8b8b8 100%);
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+.disabled {
+    cursor: not-allowed;
+  }

@@ -1,0 +1,38 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+    <div class="modal_head" fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+      <!-- <img *ngIf="form.get('imageSrc').value" [src]="form.get('imageSrc').value" class="avatar mr-5"> -->
+  
+   
+      <h2
+          class="headline m-0"
+          fxFlex="auto">Staff Members</h2>
+  
+    
+      <!-- <button class="text-secondary close_btn" mat-dialog-close mat-icon-button type="button">
+        <i class="material-icons">clear</i>
+      </button> -->
+    </div>
+  
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+  
+    <mat-dialog-content fxLayout="column">
+        <div class="row">
+        <mat-form-field class="mt-3 col-sm-6" fxFlex>
+          <mat-label>Bonus code</mat-label>
+          <input cdkFocusInitial type="text" formControlName="bonusCode" matInput required>
+        </mat-form-field>
+        <mat-form-field class="mt-3 col-sm-6" fxFlex>
+          <mat-label>Discount off</mat-label>
+          <input cdkFocusInitial type="text" formControlName="discount_off" matInput required>
+        </mat-form-field>
+      
+        </div>    
+      
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" mat-button mat-dialog-close type="button" style="margin-bottom: 5px; background: linear-gradient(135deg,rgb(236, 7, 7) 0%, rgb(230, 233, 225) 100%);">CANCEL</button>
+      <button mat-raised-button color="primary" mat-button type="submit"   style="margin-bottom: 5px;">CREATE</button>
+      <!-- <button *ngIf="isUpdateMode()" mat-raised-button color="primary" mat-button type="submit" [disabled]="form.invalid">UPDATE</button> -->
+    </mat-dialog-actions>
+  </form>

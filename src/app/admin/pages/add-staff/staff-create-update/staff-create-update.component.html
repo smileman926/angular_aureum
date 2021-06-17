@@ -1,0 +1,131 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div class="modal_head" fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <!-- <img *ngIf="form.get('imageSrc').value" [src]="form.get('imageSrc').value" class="avatar mr-5"> -->
+
+ 
+    <h2
+        class="headline m-0"
+        fxFlex="auto">Staff Members</h2>
+
+  
+    <button class="text-secondary close_btn" mat-dialog-close mat-icon-button type="button">
+      <i class="material-icons">clear</i>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+     <div class="row">
+      <mat-form-field class="mt-4 col-sm-6" fxFlex>
+        <mat-label>Email</mat-label>
+        <input cdkFocusInitial type="email" formControlName="email" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-4 col-sm-6" fxFlex>
+        <mat-label>Password</mat-label>
+        <input cdkFocusInitial type="password" formControlName="password" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-4 col-sm-6" fxFlex>
+        <mat-label>Confirm Password</mat-label>
+        <input cdkFocusInitial type="password" formControlName="confirmPassword" matInput required>
+      </mat-form-field>
+      </div>
+
+      <div class="row">
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>Phone</mat-label>
+        <input cdkFocusInitial type="phone" formControlName="phone_no" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>First name</mat-label>
+        <input cdkFocusInitial type="text" formControlName="firstname" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>Last name</mat-label>
+        <input cdkFocusInitial type="text" formControlName="lastname" matInput required>
+      </mat-form-field>
+      </div>
+
+      <div class="row">
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>Address</mat-label>
+        <input cdkFocusInitial type="text" formControlName="address" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>City</mat-label>
+        <input cdkFocusInitial type="text" formControlName="city" matInput required>
+      </mat-form-field>
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>Postal Code</mat-label>
+        <input cdkFocusInitial type="number" formControlName="postalCode" matInput required>
+      </mat-form-field>
+     <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>Country Code</mat-label>
+        <input cdkFocusInitial type="text" formControlName="countryCode" matInput required>
+      </mat-form-field>
+     </div>
+
+      <div class="row">
+      <mat-form-field class="mt-3 col-sm-6" fxFlex>
+        <mat-label>State</mat-label>
+        <mat-select formControlName="state" >
+            <mat-option *ngFor="let state of stateJson" [value]="state">
+                {{ state }}
+            </mat-option>
+        </mat-select>
+     </mat-form-field>
+     
+      <div class="mt-6 col-sm-6">
+            <label >Giveaways Permission:</label>
+            <ng-multiselect-dropdown
+              [placeholder]="'Serach permission'"
+              [formControl]="f.giveaways"  
+              [data]="giveways_permission"
+              [settings]="dropdownSettings"
+              [(ngModel)]="selectedGiveways"
+            >
+            </ng-multiselect-dropdown>
+           <!--  <ng-multiselect-dropdown #multiSelect
+		      [placeholder]="'Select permission'" 
+		      [data]="giveways_permission" 
+		      [formControl]="f.giveaways" 
+		      [settings]="settings"
+		      [disabled]="false"
+		      >
+		</ng-multiselect-dropdown> -->
+        </div>
+    </div>
+    <div class="row">
+         <div class="mt-6 col-sm-6">
+            <label >Buyers Permission:</label>
+            <ng-multiselect-dropdown
+              [placeholder]="'Serach permission'"
+              [formControl]="f.buyers"  
+              [data]="buyers_permission"
+              [settings]="dropdownSettings"
+              [(ngModel)]="selectedBuyers"
+            >
+            </ng-multiselect-dropdown>
+        </div>
+         <div class="mt-6 col-sm-6">
+            <label >Sellers Permission:</label>
+           <ng-multiselect-dropdown
+              [placeholder]="'Serach permission'"
+              [formControl]="f.sellers"  
+              [data]="sellers_permission"
+              [settings]="dropdownSettings"
+              [(ngModel)]="selectedSellers"
+            >
+            </ng-multiselect-dropdown>
+        </div>
+    </div>
+     
+    
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" mat-button mat-dialog-close type="button" style="margin-bottom: 5px;">CANCEL</button>
+    <button *ngIf="isCreateMode()" mat-raised-button color="primary" mat-button type="submit"   style="margin-bottom: 5px;">CREATE</button>
+    <button *ngIf="isUpdateMode()" mat-raised-button color="primary" mat-button type="submit" [disabled]="form.invalid">UPDATE</button>
+  </mat-dialog-actions>
+</form>

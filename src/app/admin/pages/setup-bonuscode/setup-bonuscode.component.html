@@ -1,0 +1,123 @@
+<div class="content-wrapper ">
+    <section class="content ">
+
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box-admin  page-title-box-sec">
+                        <h4 class="pageTitle admin pageTitle-sec">Bonus codes</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive cases-table LawyerListTable">
+                <div class="input-group col-md-4">
+                </div>
+                <div class="notification-sec ">
+                    <div class="spinner-section" *ngIf="loader">
+                        <mat-spinner *ngIf="loader"></mat-spinner>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card cardTable">
+                                <div class="card-body add-product-list table-responsive">
+                                    <div class="cases-filter">
+                                        <div class="row">
+                                            <div class="input-group col-md-4">
+                                                <div class="col-md-1"><button class="export-btn" mat-button
+                                                        (click)="addBonusCode()">Add
+                                                        Bonus code </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <table mat-table [dataSource]="bonusCodeListData">
+                                            <ng-container matColumnDef="name">
+                                                <th mat-header-cell *matHeaderCellDef> Bonus code
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.name ? element.name : ''}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="discountoff">
+                                                <th mat-header-cell *matHeaderCellDef> Discount off
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.discount_off ? element.discount_off : ''}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="activated">
+                                                <th mat-header-cell *matHeaderCellDef> Activation status
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.activated ? 'Activated' : 'Disactivated'}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="createdAt">
+                                                <th mat-header-cell *matHeaderCellDef> Creation Data
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.createdAt ? (element.createdAt | date:'short' ): ''}}
+                                                </td>
+                                            </ng-container>                                  
+                                            <ng-container matColumnDef="action">
+                                                <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="actionIcon">
+                                                        <a class="viewI" matTooltip="Delete"
+                                                            (click)="openDialog(element._id)">
+                                                            <i class="material-icons delete-icons">delete</i>
+                                                        </a>
+                                                    </div>
+
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+                                        </table> -->
+
+                                        <div *ngIf="noRecordFound" class="mt-3 ml-5 text-center">
+                                            No Records Found
+                                        </div>
+
+                                    <div class="col-md-2"><button class="export-btn" mat-button
+                                        (click)="displayDialog()">Customize
+                                        Columns </button>
+                                </div>
+                                <ag-grid-angular style="width: 100%" class="ag-theme-alpine" [frameworkComponents]="frameworkComponents"
+                                [gridOptions]="gridOptions" [defaultColDef]="defaultColDef"
+                                [rowData]="bonusCodeListData" domLayout='autoHeight' [columnDefs]="columnDefs">
+                            </ag-grid-angular>
+                                        <mat-paginator [length]="totalCount" [pageSize]="count"
+                                            (page)="paginate($event)" [pageSizeOptions]="[5,10,15,20, 50, 100]"
+                                            showFirstLastButtons></mat-paginator>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <p-dialog header="Customize Columns" (onHide)="closeViewdilog()" [(visible)]="customizedColumns" [modal]="true"
+    baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <div *ngFor="let item of columnsData; let i = index;">
+                        <mat-checkbox [checked]="item.checked" (change)="onChange($event, i, item)">
+                            {{item.label}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>

@@ -1,0 +1,356 @@
+<div class="admin-header">
+    <div class="logo-section">
+        <a class="navbar-brand" [routerLink]="['/layout/admin/dashboard']">
+            <img class="admin-desktop-logo" src="../../../../assets/img/adminLogo.png" alt="">
+            <img class="admin-mobile-logo" src="../../assets/img/adminLogo.png" alt="">
+        </a>
+    </div>
+
+    <div class="profile-section profile-section-sec">
+        <div class="search-profile-outer">
+            <div class="toggle-button" (click)="HideShowSidebar()" [ngClass]="showHideSidebar ? 'success' : 'danger'">
+                <button>
+
+                    <img src="../../../../assets/img/toggle.png">
+                </button>
+            </div>
+          
+        </div>
+
+
+
+        <ul class="nav navbar-nav account-info-outer">
+           
+            <li class="dropdown notifications-menu">
+                <!-- Menu toggle button -->
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="./../../../../assets/img/notification.png">
+                </a>
+                <span class="label label-danger">{{notificationCount?notificationCount:0}}</span>
+                <ul class="dropdown-menu">
+                    <li class="header">
+                        <div class="not-sec">
+                            <p class="userNOtiTitle" *ngIf="notificationCount >= 1">
+                                You have {{notificationCount}} new notifications
+                            </p>
+
+                        </div>
+
+                        <span *ngIf="!notificationList?.length">
+                            <div class="dropdown-item text-center ">
+                                <p>No notifications available</p>
+                            </div>
+                        </span>
+                    </li>
+
+                    <li>
+
+                        <ul class="menu" *ngFor="let noti of notificationList">
+                            <li>
+                                <a (click)="readNotification(noti._id)" href="javascript:void(0)">
+                                    <p class="notidescription"
+                                        [ngClass]="{'content read-color': noti.isRead, 'content': !noti.isRead}">
+                                        {{noti.content | slice:0:30}}...</p>
+                                    <span class="smallTxt">{{noti.createdAt | date}} <i _ngcontent-lwa-c2=""
+                                            aria-hidden="true" class="fa fa-eye"></i></span>
+                                </a>
+                            </li>
+                            <li class="footer" *ngIf="notificationCount >= 1"><a
+                                    routerLink="/layout/seller/view-notification">View
+                                    all</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+
+                    <div class="seller-profile">
+                        <!-- <img [src]="image"
+                            onerror='this.onerror=null;this.src="../../../../assets/img/header-profile.png";'
+                            class="user-image" alt="User Image"> -->
+
+                     <img [src]="image"
+                            onerror="this.src='../../../../assets/img/header-profile.png';" 
+                            class="user-image" alt="User Image">
+
+                    </div>
+                    <span class="hidden-xs">{{username}}</span><img
+                        src="../../../assets/img/arrow-point-to-right copy 2.png" class="profile-arrow-sec">
+                </a>
+                <!-- Account -->
+                <ul class="dropdown-menu ">
+                    <div class="account-info-admin">Account</div>
+
+                    <!-- <li class="user-header"> <img src="../../../../assets/img/header-profile.png" class="img-circle" alt="User Image">
+              <p> Alexander Pierce - Web Developer <small>Member since Nov. 2012</small> </p>
+            </li>
+          
+            <li class="user-footer">
+              <div class="pull-left"> <a href="#" class="btn btn-default btn-flat">Profile</a> </div>
+              <div class="pull-right"> <a href="#" class="btn btn-default btn-flat">Sign out</a> </div>
+            </li> -->
+                    <li>
+                        <a class="dropdown-item" (click)="editProfile()">Edit Profile</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" (click)="openChangePassword()">Change Password</a>
+                    </li>
+
+
+
+                    <ul>
+                        <div class="account-info-admin">
+                            <li>
+                                <a class="logoutbtn " (click)="logOut()">Logout <i class="fa fa-sign-out"
+                                        aria-hidden="true"></i></a>
+                            </li>
+                        </div>
+
+                    </ul>
+                </ul>
+
+
+
+            </li>
+
+        </ul>
+
+
+
+    </div>
+
+    <p-dialog header="Edit Profile" (onHide)="closedilog()" [(visible)]="isEditProfile" [modal]="true" baseZIndex="1"
+    [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' baseZIndex='1'
+    class="edit-example-form-admin">
+    <div>
+        <form class="example-form" [formGroup]="editProfileForm" (ngSubmit)="submitProfile()">
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="edit-img-outer">
+                        <div class="edit-img">
+
+                            <img [src]="image" class="user-image"
+                                onerror="this.src='../../../../assets/img/header-profile.png';" 
+                                alt="User Image">
+
+                            <!-- <img *ngIf="uploader.queue[uploader.queue.length-1]?.file?.type.split('/')[0] == 'image'" src=""
+            imgPreview [media]="uploader.queue[uploader.queue.length-1]?._file"
+            [type]="uploader.queue[uploader.queue.length-1]?.file?.type" /> -->
+                            <!-- <input type="file" style="display:none" accept="image/*" class="profile-pic-upload" id='picInput'   title='Upload new picture!'
+          />
+          <div class="posrela">
+            <label class="custom-file-upload">
+              <i class="fa fa-pencil" aria-hidden="true"
+               onclick="document.getElementById('picInput').click()"></i>
+
+
+
+
+            </label>
+          </div> -->
+                            <div class="profile-pic-update-admin">
+                                <div class="profile-pic-update-inner">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <input class="profile-pic-upload" #picInput type="file" ng2FileSelect
+                                        [uploader]="uploader" accept="image/*" title='Upload new picture!'
+                                        (focus)="updateProfilePic()" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="">
+                        <mat-form-field class="example-full-width  relative-sec">
+                            <!-- <span matPrefix> <i class="material-icons">
+                          person
+                          </i></span> -->
+                            <input type="tel" matInput placeholder="Firstname" formControlName="firstname">
+
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </mat-form-field>
+                        <div class="error-msg"
+                            *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].invalid">
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('required')">
+                                Please enter firstname</p>
+                            <!-- <p class="form_error" *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('pattern')">Please enter the correct firstname.(should be of 3 to 50 characters)</p> -->
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('minlength')">
+                                Please enter atleast 3 characters</p>
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('maxlength')">
+                                Maximum 16 characters are allowed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="">
+                        <mat-form-field class="example-full-width  relative-sec">
+                            <!-- <span matPrefix> <i class="material-icons">
+                          person
+                          </i></span> -->
+                            <input type="tel" matInput placeholder="Lastname" formControlName="lastname">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </mat-form-field>
+                        <div class="error-msg"
+                            *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].invalid">
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('required')">
+                                Please enter lastname</p>
+                            <!-- <p class="form_error" *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('pattern')">Please enter the correct lastname.(should be of 3 to 16 characters)</p> -->
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('minlength')">
+                                Please enter atleast 3 characters</p>
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('maxlength')">
+                                Maximum 16 characters are allowed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="">
+                        <mat-form-field class="example-full-width  relative-sec">
+                            <!-- <span matPrefix> <i class="material-icons">
+                      email
+                  </i></span> -->
+                            <input type="email" matInput placeholder="Email" formControlName="email">
+                            <i class="fa fa-envelope" aria-hidden="true"></i> 
+                        </mat-form-field>
+                        <div class="error-msg"
+                            *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].invalid">
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].hasError('required')">
+                                Please enter email address.</p>
+                            <p class="form_error"
+                                *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].hasError('pattern')">
+                                Please enter the correct email address</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="btn-sec">
+                        <button type="submit" [disabled]="!editProfileForm.valid" mat-raised-button color="primary"
+                            class="btn-login">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- <div class="text-right">
+     
+  </div> -->
+        </form>
+        <!-- <ng-template #modal_content>
+    
+  </ng-template> -->
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>
+
+
+<p-dialog header="Change Password" (onHide)="closedilog()" [(visible)]="cPassword" [modal]="true" baseZIndex="1"
+[responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' 
+class="edit-example-form-admin">
+<div>
+    <form class="example-form" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+        <!-- <h2>Please enter new password</h2> -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="password" matInput placeholder="Old Password"
+                            formControlName="prev_password">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="changePasswordForm.controls['prev_password'].dirty && changePasswordForm.controls['prev_password'].invalid">
+                        <p class="form_error"
+                            *ngIf="changePasswordForm.controls['prev_password'].hasError('required')">Please
+                            enter
+                            old password
+                        </p>
+                        <!-- <p class="form_error" *ngIf="changePasswordForm.controls['password'].dirty && changePasswordForm.controls['password'].hasError('pattern')">
+                        Password should be of 6 letters and contain atleast one Capital letter, alphanumeric a-z,0-9 and one special character
+                    </p> -->
+                    </div>
+                    <mat-form-field class="example-full-width relative-sec">
+                        <input type="password" matInput placeholder="Password" formControlName="password">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="changePasswordForm.controls['password'].dirty && changePasswordForm.controls['password'].invalid">
+                        <p class="form_error"
+                            *ngIf="changePasswordForm.controls['password'].hasError('required')">Please enter
+                            password
+                        </p>
+                        <!-- <p class="form_error" *ngIf="changePasswordForm.controls['password'].dirty && changePasswordForm.controls['password'].hasError('pattern')">
+                            Password should be of 6 letters and contain atleast one Capital letter, alphanumeric a-z,0-9 and one special character
+                        </p> -->
+                    </div>
+                </div>
+                <!-- <h2>Confirm password</h2> -->
+                <div class=" ">
+                    <mat-form-field class="example-full-width  relative-sec">
+                        <!-- <span matPrefix> <i class="material-icons">
+                              lock
+                      </i></span> -->
+                        <input type="password" matInput placeholder="Confirm Password"
+                            formControlName="confirmPassword">
+
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+
+                    </mat-form-field>
+                    <div class="error-msg"
+                        *ngIf="changePasswordForm.controls['confirmPassword'].dirty && changePasswordForm.controls['confirmPassword'].invalid">
+                        <p class="form_error"
+                            *ngIf="changePasswordForm.controls['confirmPassword'].dirty && changePasswordForm.controls['confirmPassword'].hasError('required')">
+                            Please enter password.</p>
+                        <p class="form_error"
+                            *ngIf="(changePasswordForm.controls['confirmPassword'].dirty && changePasswordForm.controls['confirmPassword'].hasError('equalTo') && !changePasswordForm.controls['confirmPassword'].hasError('required'))">
+                            Please enter the same password.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="btn-sec">
+                    <button type="submit" [disabled]="!changePasswordForm.valid" mat-raised-button
+                        color="primary" class="btn-login">Submit</button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <div class="text-right">
+ 
+</div> -->
+    </form>
+    <!-- <ng-template #modal_content>
+
+</ng-template> -->
+</div>
+<div class="spinner-section" *ngIf="loader">
+    <mat-spinner *ngIf="loader"></mat-spinner>
+</div>
+</p-dialog>
+
+</div>

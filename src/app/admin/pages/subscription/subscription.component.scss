@@ -1,0 +1,108 @@
+.export-btn {
+    background-color: #1f2e69;
+    color: white;
+
+}
+//profile picture upload
+.profile-pic-update {
+    padding: 4px;
+    position: absolute;
+    top: 10px;
+    // left: 12px;
+    color: #fff;
+    font-size: 24px;
+    width: 100%;
+    border-radius: 50%;
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+    width: 65px;
+    .profile-pic-update-inner {
+        position: relative;
+        i {
+            position: absolute;
+            // right: -9px;
+            right: -4px;
+            top: 23px;
+            color: #fff;
+            font-size: 12px;
+            border: 1px solid #3489c6;
+            border-radius: 50%;
+            padding: 3px;
+            text-align: center;
+            background: #3489c6;
+        }
+    }
+}
+
+.edit-img-outer {
+    margin: 0 auto;
+    display: block;
+    width: 65px;
+}
+
+.profile-pic-upload {
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    left: 0;
+}
+.planImg{
+    width:100px;
+    height:100px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+
+// .export-btn {
+//     background-color: #1f2e69;
+//     color: white;
+
+// }
+table.mat-table {
+    width: 100%;
+  }
+  .notification-sec{
+    margin-top: 15px;
+    position: relative;
+    
+    .add-product-list{
+        .mat-table{
+            width: 100%;
+            th{
+                min-width: 100px;
+            }
+        }
+        .product-list{
+            height: 50px;
+            width: 50px;
+            overflow: hidden;
+            text-align: center;
+        }
+      
+    }
+    tr.mat-header-row {
+        height: 25px;
+    }
+    td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+        padding-left: 10px;
+       
+    }
+  th.mat-header-cell{
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    }
+    td.mat-cell{
+        vertical-align: middle;
+    }
+    .input-groupn{
+        position: relative;
+    }
+   
+}

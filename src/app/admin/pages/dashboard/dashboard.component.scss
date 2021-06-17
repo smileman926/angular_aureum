@@ -1,0 +1,34 @@
+.mat-dialog-container{
+    display: block;
+    padding: 24px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.mat-dialog-content {
+    display: contents;
+    margin: 0 -5px;
+    padding: 0 24px;
+    max-height: 500;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.btnPos{
+    margin-bottom: -50px;
+}
+.add-help-modal .col-sm-12{padding: 0;}
+.add-help-modal ul li{margin-bottom: 10px;}
+.dialog-btn{
+    text-align: right;
+    display: flow-root;
+}
+.cursor{
+    cursor: pointer;
+}

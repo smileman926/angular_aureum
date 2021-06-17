@@ -1,0 +1,239 @@
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box-admin page-title-box-sec">
+            <h4 class="pageTitle admin pageTitle-sec">Testimonials</h4>
+            <!-- end row -->
+          </div>
+
+          <!-- end page-title-box -->
+        </div>
+      </div>
+      <!-- <p>listproduct works!</p> -->
+      <div class="notification-sec">
+        <div class="spinner-section" *ngIf="loader">
+          <mat-spinner *ngIf="loader"></mat-spinner>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card cardTable">
+              <div class="card-body add-product-list table-responsive">
+                <div class="cases-filter">
+                  <div class="input-group col-md-4">
+                    <mat-form-field>
+                      <mat-label>Sort By</mat-label>
+                      <mat-select
+                        [(ngModel)]="sortBy.isDefault"
+                        name="notificationStatus"
+                        (selectionChange)="getsortByStatus($event)"
+                      >
+                        <mat-option [value]="sortBy.isDefault">
+                          All
+                        </mat-option>
+                        <mat-option [value]="sortBy.isApproved">
+                          Approved
+                        </mat-option>
+                        <mat-option [value]="sortBy.unApproved">
+                          Un-Approved
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <table mat-table [dataSource]="testimonialData">
+                    <ng-container matColumnDef="firstname">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>First Name</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('firstname', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('firstname', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
+                        </div>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.firstname ? element.firstname : "" }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="lastname">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Last Name</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('lastname', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('lastname', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
+                        </div>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.lastname ? element.lastname : "" }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="text">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Testimonial</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('text', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortByFun('text', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
+                        </div>
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        matTooltip="{{ element.text ? element.text : '' }}"
+                        matTooltipPosition="above"
+                      >
+                        {{ (element.text ? element.text : "") | limitTo }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="isApproved">
+                      <th mat-header-cell *matHeaderCellDef>Action</th>
+                      <td mat-cell *matCellDef="let element">
+                        <div class="actionIcon">
+                          <i
+                            *ngIf="element.isApproved"
+                            class="fa fa-check"
+                            aria-hidden="true"
+                          ></i>
+                          <a
+                            class="viewI"
+                            matTooltip="Approve"
+                            *ngIf="!element.isApproved"
+                            (click)="approveTestm(element._id)"
+                          >
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                          </a>
+
+                          <a
+                            class="viewI"
+                            matTooltip="Delete"
+                            (click)="deleteTestm(element._id)"
+                          >
+                            <i class="material-icons delete-icons">delete</i>
+                          </a>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                  </table> -->
+
+                  <div class="col-md-2">
+                    <button
+                      class="export-btn"
+                      mat-button
+                      (click)="displayCustomizeColumnsDialog()"
+                    >
+                      Customize Columns
+                    </button>
+                  </div>
+
+                  <ag-grid-angular
+                    style="width: 100%"
+                    class="ag-theme-alpine"
+                    [rowData]="testimonialData"
+                    [gridOptions]="gridOptions"
+                    [defaultColDef]="defaultColDef"
+                    [frameworkComponents]="frameworkComponents"
+                    [columnDefs]="columnDefs"
+                    domLayout="autoHeight"
+                  >
+                  </ag-grid-angular>
+
+                  <mat-paginator
+                    [length]="totalCount"
+                    (page)="paginate($event)"
+                    [pageSize]="count"
+                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                    showFirstLastButtons
+                  >
+                  </mat-paginator>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<p-dialog
+  header="Customize Columns"
+  (onHide)="closeCustomizeColumnsDialog()"
+  [(visible)]="customizedColumns"
+  [modal]="true"
+  baseZIndex="1"
+  [responsive]="true"
+  [style]="{ width: '600px', minWidth: '600px' }"
+  [minY]="700"
+  closable="true"
+  dismissableMask="true"
+  baseZIndex="0"
+  closeOnEscape="true"
+  responsive="true"
+  class="edit-example-form-admin"
+>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="">
+          <div *ngFor="let item of columnsData; let i = index">
+            <mat-checkbox
+              [checked]="item.checked"
+              (change)="onChange($event, i, item)"
+            >
+              {{ item.label }}
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spinner-section" *ngIf="loader">
+    <mat-spinner *ngIf="loader"></mat-spinner>
+  </div>
+</p-dialog>

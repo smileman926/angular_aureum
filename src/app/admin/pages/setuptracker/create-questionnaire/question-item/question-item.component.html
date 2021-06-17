@@ -1,0 +1,63 @@
+<div class="question-item">
+  <div *ngIf="!showEditQuestion" class="question-wrapper">
+    <div class="question-header">
+      <div class="question-title">
+        {{ question.title }}
+      </div>
+      <div class="remove-icon-block">
+        <button
+          mat-fab
+          mat-mini-fab
+          color="primary"
+          aria-label="Edit question"
+          class="remove-button"
+          (click)="showEditQuestion = true"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-fab
+          mat-mini-fab
+          color="warn"
+          aria-label="Remove question"
+          class="remove-button"
+          (click)="removeQuestion()"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <table class="question-table">
+      <thead>
+      <tr>
+        <th>Answers:</th>
+        <th>
+          Correct
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let answer of question.answers; let i = index;"
+      >
+        <td>{{ answer.title }}</td>
+        <td>
+          <mat-checkbox
+            color="primary"
+            [disabled]="true"
+            [checked]="question.correct.includes(answer.id)"
+          ></mat-checkbox>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <app-create-question
+    *ngIf="showEditQuestion"
+    [isEdit]="true"
+    [editQuestion]="question"
+    (handlerCreateQuestion)="updateQuestion($event)"
+    (handleCancelForm)="showEditQuestion = false"
+  ></app-create-question>
+</div>

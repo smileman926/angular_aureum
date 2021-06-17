@@ -1,0 +1,400 @@
+<div class="spinner-section" *ngIf="loader">
+  <mat-spinner *ngIf="loader"></mat-spinner>
+</div>
+
+<section class="login-section">
+  <div class="login-section-inner">
+    <div class="login-left" *ngIf="!registrationSucess">
+      <img src="../../assets/img/login-logo.png" />
+    </div>
+    <div class="login-right login-right-sec" *ngIf="!registrationSucess">
+      <form class="example-form" [formGroup]="signUpForm">
+        <h2 *ngIf="lawfirmText">Brand Expand Sign up</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Firstname"
+                  formControlName="first_name"
+                />
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  signUpForm.controls['first_name'].dirty &&
+                  signUpForm.controls['first_name'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['first_name'].dirty &&
+                    signUpForm.controls['first_name'].hasError('required')
+                  "
+                >
+                  Please enter firstname
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['first_name'].dirty &&
+                    signUpForm.controls['first_name'].hasError('minlength')
+                  "
+                >
+                  Please enter atleast 3 characters
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['first_name'].dirty &&
+                    signUpForm.controls['first_name'].hasError('maxlength')
+                  "
+                >
+                  Maximum 16 characters are allowed
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Lastname"
+                  formControlName="last_name"
+                />
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  signUpForm.controls['last_name'].dirty &&
+                  signUpForm.controls['last_name'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['last_name'].dirty &&
+                    signUpForm.controls['last_name'].hasError('required')
+                  "
+                >
+                  Please enter lastname
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['last_name'].dirty &&
+                    signUpForm.controls['last_name'].hasError('minlength')
+                  "
+                >
+                  Please enter atleast 3 characters
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['last_name'].dirty &&
+                    signUpForm.controls['last_name'].hasError('maxlength')
+                  "
+                >
+                  Maximum 16 characters are allowed
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <!-- <span matPrefix> <i class="material-icons">
+                                email
+                            </i></span> -->
+                <input
+                  type="email"
+                  matInput
+                  placeholder="Email"
+                  formControlName="email"
+                />
+                <img _ngcontent-cgc-c1="" src="../../assets/img/email.png" />
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  signUpForm.controls['email'].dirty &&
+                  signUpForm.controls['email'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['email'].dirty &&
+                    signUpForm.controls['email'].hasError('required')
+                  "
+                >
+                  Please enter email address.
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['email'].dirty &&
+                    signUpForm.controls['email'].hasError('pattern')
+                  "
+                >
+                  Please enter the correct email address
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <input
+                  type="password"
+                  matInput
+                  placeholder="Password"
+                  formControlName="password"
+                />
+                <img src="../../assets/img/password.png" class="pass-input" />
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  signUpForm.controls['password'].dirty &&
+                  signUpForm.controls['password'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="signUpForm.controls['password'].hasError('required')"
+                >
+                  Please enter password
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class=" ">
+              <mat-form-field class="example-full-width relative-sec">
+                <input
+                  type="password"
+                  matInput
+                  placeholder="Confirm Password"
+                  formControlName="confirmPassword"
+                />
+                <img src="../../assets/img/password.png" class="pass-input" />
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  signUpForm.controls['confirmPassword'].dirty &&
+                  signUpForm.controls['confirmPassword'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['confirmPassword'].dirty &&
+                    signUpForm.controls['confirmPassword'].hasError('required')
+                  "
+                >
+                  Please enter password.
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    signUpForm.controls['confirmPassword'].dirty &&
+                    signUpForm.controls['confirmPassword'].hasError(
+                      'equalTo'
+                    ) &&
+                    !signUpForm.controls['confirmPassword'].hasError('required')
+                  "
+                >
+                  Please enter the same password.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-md-12">
+                        <div class="">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="text" matInput placeholder="Address" formControlName="address1">
+                                <i class="fa fa-address-card" aria-hidden="true"></i>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="signUpForm.controls['address1'].dirty && signUpForm.controls['address1'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['address1'].dirty && signUpForm.controls['address1'].hasError('required')">
+                                    Please enter address.</p>
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['address1'].dirty && signUpForm.controls['address1'].hasError('MAXLENGTH')">
+                                    Must be 50 characters or less</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="text" matInput placeholder="City" formControlName="city">
+                                <i class="fa fa-address-card" aria-hidden="true"></i>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="signUpForm.controls['city'].dirty && signUpForm.controls['city'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['city'].dirty && signUpForm.controls['city'].hasError('required')">
+                                    Please enter city.</p>
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['city'].dirty && signUpForm.controls['city'].hasError('pattern')">
+                                    Please enter the correct city</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            <mat-form-field>
+                                <mat-label>State</mat-label>
+                                <mat-select (selectionChange)="getState($event)">
+                                    <mat-option *ngFor="let state of stateJson" [value]="state">
+                                        {{ state }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="signUpForm.controls['state'].dirty && signUpForm.controls['state'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['state'].dirty && signUpForm.controls['state'].hasError('required')">
+                                    Please enter state.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="text" matInput placeholder="Postal Code" formControlName="postalCode">
+                                <i class="fa fa-address-card" aria-hidden="true"></i>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="signUpForm.controls['postalCode'].dirty && signUpForm.controls['postalCode'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['postalCode'].dirty && signUpForm.controls['postalCode'].hasError('required')">
+                                    Please enter postal code.</p>
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['postalCode'].dirty && signUpForm.controls['postalCode'].hasError('pattern')">
+                                    Please enter the correct postal code</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            <mat-form-field class="example-full-widtha  relative-seca">
+                                <input matInput (focus)="picker.open()" (click)="picker.open()" [max]="maxDate"
+                                    (dateChange)="checkAge()" [matDatepicker]="picker" formControlName="dateOfBirth"
+                                    placeholder="Date Of Birth">
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="lessThan18 || signUpForm.controls['dateOfBirth'].dirty && signUpForm.controls['dateOfBirth'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['dateOfBirth'].dirty && signUpForm.controls['dateOfBirth'].hasError('required')">
+                                    Please enter date of birth and Must be 18 years or older.</p>
+                                <p class="form_error" *ngIf="lessThan18">
+                                    Must be 18 years or older.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            <mat-form-field class="example-full-width  relative-sec">
+                                <input type="text" matInput placeholder="SSN" formControlName="ssn">
+                                <i class="fa fa-id-card" aria-hidden="true"></i>
+                            </mat-form-field>
+                            <div class="error-msg"
+                                *ngIf="signUpForm.controls['ssn'].dirty && signUpForm.controls['ssn'].invalid">
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['ssn'].dirty && signUpForm.controls['ssn'].hasError('required')">
+                                    Please enter social security number.</p>
+                                <p class="form_error"
+                                    *ngIf="signUpForm.controls['ssn'].dirty && signUpForm.controls['ssn'].hasError('pattern')">
+                                    Please enter the correct social security number.</p>
+                            </div>
+                        </div>
+                    </div> -->
+
+          <div class="col-md-12">
+            <div class="btn-sec">
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="!signUpForm.valid || lessThan18"
+                (click)="userRegister()"
+                class="btn-sign-up btn-login"
+              >
+                SIGN UP
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="signup_text sign-up">
+              Already have an account? <a [routerLink]="['/']">LOG IN</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="" [hidden]="!registrationSucess">
+      <section class="login-section">
+        <div class="login-section-inner login-section-inner-confirm">
+          <div class="login-left">
+            <img src="../../assets/img/login-logo.png" />
+          </div>
+          <div class="login-right confirm-sign">
+            <div class="row">
+              <div class="col-md-12">
+                <h2>Thank you for registering with Brand Expand.</h2>
+                <p class="text-content-one">
+                  Shortly you will recieve a mail on <b>{{ usermail }}</b> for
+                  activation of your account. If this isn't your email, please
+                  update it.
+                </p>
+                <h4>Where's my email?</h4>
+                <p class="text-content-two">
+                  If you did not receive an email from Brand Expand, be sure to
+                  check your spam folder. Certain email providers can take
+                  longer than 20 minutes to process the message. If you still
+                  haven't received it, you can always request another email.
+                  Take me to
+                </p>
+                <div class="btn-sec">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [routerLink]="['/login']"
+                    class="btn-login"
+                  >
+                    Login
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

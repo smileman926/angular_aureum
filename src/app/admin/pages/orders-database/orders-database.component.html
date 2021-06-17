@@ -1,0 +1,243 @@
+<div class="content-wrapper ">
+    <section class="content ">
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box-admin  page-title-box-sec">
+                        <h4 class="pageTitle admin pageTitle-sec">Orders</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="notification-sec ">
+                <div class="spinner-section" *ngIf="loader">
+                    <mat-spinner *ngIf="loader"></mat-spinner>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card cardTable">
+                            <div class="card-body add-product-list table-responsive">
+                                <div class="cases-filter">
+
+                                    <mat-form-field class="example-full-width">
+                                        <span matPrefix>
+                                            <i class="material-icons">search</i>
+                                        </span>
+                                        <input type="text" matInput placeholder="Search" (input)=searchOrder($event)>
+                                    </mat-form-field>
+
+                                    <!-- <table mat-table [dataSource]="ordersData">
+                                        <ng-container matColumnDef="date">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Date</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('date',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('date',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{(element.purchase_date ? element.purchase_date : '') | date}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="firstName">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>First Name</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('firstName',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('firstName',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.firstName ? element.firstName : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="lastName">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Last Name</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('lastName',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('lastName',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.lastName ? element.lastName : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="memberNo">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Member No.</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('memberNo',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('memberNo',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.memberNumber ? element.memberNumber : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="email">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Email</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('email',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('email',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element"
+                                                matTooltip="{{element.email ? element.email : ''}}"
+                                                matTooltipPosition="above">
+                                                {{(element.email ? element.email : '')| limitTo}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="launchno">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Launch No.</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('launchno',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('launchno',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.launch_number ? element.launch_number : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="orderno">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Order No.</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('orderno',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('orderno',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.order_number ? element.order_number : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="amount">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Amount</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('amount',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('amount',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.amount ? element.amount : ''}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="confirmed">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <div>Confirmed</div>
+                                                <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('confirmed',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortByFun('confirmed',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.confirmed ? element.confirmed : ''}}
+                                            </td>
+                                        </ng-container>
+
+
+
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                    </table> -->
+
+                                    <div class="col-md-2"><button class="export-btn" mat-button
+                                        (click)="displayDialog()">Customize
+                                        Columns </button>
+                                </div>
+                                <ag-grid-angular style="width: 100%;" class="ag-theme-alpine"
+                                [gridOptions]="gridOptions"
+                                [rowData]="ordersData" domLayout='autoHeight' [columnDefs]="columnDefs">
+                            </ag-grid-angular>
+
+                                    <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count"
+                                        [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons>
+                                    </mat-paginator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<p-dialog header="Customize Columns" (onHide)="closeViewdilog()" [(visible)]="customizedColumns" [modal]="true"
+    baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
+    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form-admin">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <div *ngFor="let item of columnsData; let i = index;">
+                        <mat-checkbox [checked]="item.checked" (change)="onChange($event, i, item)">
+                            {{item.label}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+</p-dialog>

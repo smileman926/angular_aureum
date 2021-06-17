@@ -1,0 +1,79 @@
+<div class="content-wrapper">
+    <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+    <div class="wrapper-main-heading">
+        <div class="main-title">
+            <h2>Edit State</h2>
+            <div class="add_new_user">
+                <a class="backLink" title="Back" (click)="goBack()">
+                    <i class="material-icons">chevron_left</i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-background">
+        <div class="edit-info">
+            <form [formGroup]="editStateForm" class="example-form">
+                <ng-template matStepLabel>Fill State information</ng-template>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="space-btw-inputext">
+                                <mat-form-field class="example-full-width required">
+                                    <span matPrefix>
+                                        <i class="material-icons">person
+                                        </i>
+                                    </span>
+                                    <input type="text" matInput placeholder="State Name" formControlName="name">
+                                </mat-form-field>
+                                <div class="error-msg" *ngIf="editStateForm.controls['name'].dirty && editStateForm.controls['name'].invalid">
+                                    <p class="form_error" *ngIf="editStateForm.controls['name'].dirty && editStateForm.controls['name'].hasError('required')">Please enter State name</p>
+                                    <p class="form_error" *ngIf="editStateForm.controls['name'].dirty && editStateForm.controls['name'].hasError('pattern')">Please enter the correct State name.(should be of 3 to 16 characters)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="space-btw-inputext">
+                                <mat-form-field class="example-full-width required">
+                                    <span matPrefix>
+                                        <i class="material-icons">person
+                                        </i>
+                                    </span>
+                                    <input type="text" matInput placeholder="Code" formControlName="code">
+                                </mat-form-field>
+                                <div class="error-msg" *ngIf="editStateForm.controls['code'].dirty && editStateForm.controls['code'].invalid">
+                                    <p class="form_error" *ngIf="editStateForm.controls['code'].dirty && editStateForm.controls['code'].hasError('required')">Please enter Code</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="space-btw-inputext">
+                                <mat-form-field class="example-full-width required">
+                                    <span matPrefix>
+                                        <i class="material-icons"> phone</i>
+                                    </span>
+                                    <mat-select placeholder="Select country" formControlName="country_id">
+                                        <mat-option *ngFor="let country of countryListData" [value]="country._id">
+                                          {{ country.name }}
+                                        </mat-option>
+                                      </mat-select>
+                                </mat-form-field>
+                                <div class="error-msg" *ngIf="editStateForm.controls['country_id'].dirty && editStateForm.controls['country_id'].invalid">
+                                    <p class="form_error" *ngIf="editStateForm.controls['country_id'].dirty && editStateForm.controls['country_id'].hasError('required')">Please select country </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <!-- [disabled]="!editStateForm.valid" -->
+                    <button class="next-btn " (click)="editState()">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

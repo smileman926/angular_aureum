@@ -1,0 +1,164 @@
+<div class="content-wrapper ">
+    <section class="content ">
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box-admin  page-title-box-sec">
+                        <h4 class="pageTitle admin pageTitle-sec">Special Deals</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="notification-sec ">
+                <!-- <div class="spinner-section" *ngIf="loader">
+                    <mat-spinner *ngIf="loader"></mat-spinner>
+                </div> -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card cardTable">
+                            <div class="card-body add-product-list table-responsive">
+
+                                <form >
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                          Left Special Deal
+                                        </div>
+                                        <div class="col-md-6">
+                                          Right Special Deal
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 pt-2">
+                                            <mat-form-field class="example-form-field">
+                                                <mat-label>Left deal ASIN</mat-label>
+                                                <input matInput type="text" [formControl]="leftDealFormControl">
+                                                <button mat-button *ngIf="leftDealFormControl.value" matSuffix mat-icon-button aria-label="Clear"
+                                                  [disabled]="!editMode"
+                                                  (click)="leftDealFormControl.setValue('')">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                            <div class="error-msg"
+                                              *ngIf="leftDealFormControl.dirty && leftDealFormControl.invalid">
+                                              <p class="form_error" *ngIf="leftDealFormControl.hasError('required')">
+                                                ASIN is <strong>required</strong>
+                                              </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6 pt-2">
+                                            <mat-form-field class="example-form-field">
+                                                <mat-label>Right deal ASIN</mat-label>
+                                                <input matInput type="text"  [formControl]="rightDealFormControl">
+                                                <button mat-button *ngIf="rightDealFormControl.value" matSuffix mat-icon-button aria-label="Clear"
+                                                  [disabled]="!editMode"
+                                                  (click)="rightDealFormControl.setValue('')">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                            <div class="error-msg"
+                                              *ngIf="rightDealFormControl.dirty && rightDealFormControl.invalid">
+                                              <p class="form_error" *ngIf="rightDealFormControl.hasError('required')">
+                                                ASIN is <strong>required</strong>
+                                              </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="input-group col-md-2 offset-md-5">
+                                        <div class="buttons-area">
+                                          <button *ngIf="!editMode" class="save-btn" mat-button (click)="editDeals()">
+                                            Edit
+                                          </button>
+                                          <button *ngIf="editMode" class="save-btn" mat-button (click)="saveDeals()">
+                                            Save
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </form>
+
+<!--                                <div class="cases-filter">-->
+<!--                                    <div class="input-group col-md-4" style="margin: 20px 0;">-->
+<!--                                        <div class="col-md-1"><button class="export-btn" mat-button-->
+<!--                                                                      (click)="displayDialog('Add','')">-->
+<!--                                            Add Instruction-->
+<!--                                        </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+<!--                                    <table mat-table [dataSource]="instructionsData">-->
+<!--                                        <ng-container matColumnDef="name">-->
+<!--                                            <th mat-header-cell *matHeaderCellDef>-->
+<!--                                                <div>Instructions</div>-->
+<!--                                                <div>-->
+<!--                                                    <a class="up-btn" href="javascript:void(0)"-->
+<!--                                                       (click)="sortByFun('name',1)" matTooltip="Ascending">-->
+<!--                                                        <mat-icon>keyboard_arrow_up</mat-icon>-->
+<!--                                                    </a>-->
+<!--                                                    <a class="down-btn" href="javascript:void(0)"-->
+<!--                                                       (click)="sortByFun('name',-1)" matTooltip="Descending">-->
+<!--                                                        <mat-icon>keyboard_arrow_down</mat-icon>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+<!--                                            </th>-->
+<!--                                            <td mat-cell *matCellDef="let element">-->
+<!--                                                {{(element.name ? element.name : '') }}-->
+<!--                                            </td>-->
+<!--                                        </ng-container>-->
+<!--                                        <ng-container matColumnDef="description">-->
+<!--                                            <th mat-header-cell *matHeaderCellDef>-->
+<!--                                                <div>Description</div>-->
+<!--                                                <div>-->
+<!--                                                    <a class="up-btn" href="javascript:void(0)"-->
+<!--                                                       (click)="sortByFun('description',1)" matTooltip="Ascending">-->
+<!--                                                        <mat-icon>keyboard_arrow_up</mat-icon>-->
+<!--                                                    </a>-->
+<!--                                                    <a class="down-btn" href="javascript:void(0)"-->
+<!--                                                       (click)="sortByFun('description',-1)" matTooltip="Descending">-->
+<!--                                                        <mat-icon>keyboard_arrow_down</mat-icon>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+<!--                                            </th>-->
+<!--                                            <td mat-cell *matCellDef="let element"-->
+<!--                                                matTooltip="{{element.description ? element.description : ''}}"-->
+<!--                                                matTooltipPosition="above">-->
+<!--                                                {{(element.description ? element.description : '') | limitTo}}-->
+<!--                                            </td>-->
+<!--                                        </ng-container>-->
+<!--                                        <ng-container matColumnDef="action">-->
+<!--                                            <th mat-header-cell *matHeaderCellDef> ACTIONS </th>-->
+<!--                                            <td mat-cell *matCellDef="let element">-->
+<!--                                                <div class="actionIcon">-->
+<!--                                                    <a class="viewI" (click)="displayDialog('Update',element)"-->
+<!--                                                       matTooltip="Answer Faq">-->
+<!--                                                        <i class="material-icons edit-icons">edit</i>-->
+<!--                                                    </a>-->
+<!--                                                    <a class="viewI" matTooltip="Delete"-->
+<!--                                                       (click)="openDialog(element._id)">-->
+<!--                                                        <i class="material-icons delete-icons">delete</i>-->
+<!--                                                    </a>-->
+<!--                                                    <a class="viewI" matTooltip="View" (click)="viewInstruction(element)">-->
+<!--                                                        <i class="fa fa-eye" aria-hidden="true"></i>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+<!--                                            </td>-->
+<!--                                        </ng-container>-->
+
+<!--                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--                                    </table>-->
+
+<!--                                    <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count"-->
+<!--                                                   [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons>-->
+<!--                                    </mat-paginator>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

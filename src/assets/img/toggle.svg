@@ -1,0 +1,13 @@
+<svg id="toggle" xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3c4b73;
+        opacity: 0.6;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" width="20" height="2"/>
+  <rect id="Rectangle_4_copy" data-name="Rectangle 4 copy" class="cls-1" y="7" width="20" height="2"/>
+  <rect id="Rectangle_4_copy_2" data-name="Rectangle 4 copy 2" class="cls-1" y="14" width="20" height="2"/>
+</svg>

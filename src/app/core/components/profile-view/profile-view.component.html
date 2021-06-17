@@ -1,0 +1,192 @@
+<div class="content-wrapper">
+        <div class="spinner-section" *ngIf="loader">
+                <mat-spinner *ngIf="loader"></mat-spinner>
+        </div>
+    <div class="wrapper-main-heading">
+        <div class="main-title">
+            <h2>Lawfirm Profile</h2>
+            <div class="add_new_user">
+                <a class="backLink" title="Back" (click)="goBack()">
+                    <i class="material-icons">chevron_left</i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-background">
+        <div class="profile-section">
+            <form [formGroup]="editProfileForm" (ngSubmit)="profileOperation()">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="profile-pics">
+                            <div class="user-img">
+                                <img *ngIf="!url && !tempUrl" src="../../../../../assets/img/user_profile.png" alt="">
+                                <img *ngIf="url" [src]="baseimageurl+'/uploads/profileImages/'+ url" alt="">
+                                 <img *ngIf="tempUrl && !url" [src]="tempUrl">
+                            </div>
+                            <div class="user-img-edit">
+                                <span>
+                                    <mat-icon>edit</mat-icon>
+                                </span>
+                                <input type="file"  (change)="onSelectFile($event)" [disabled]="!isEdit">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="user-forms">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">person </i></span>
+                                            <input formControlName="username" type="text" matInput placeholder="User Name">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['username'].dirty && editProfileForm.controls['username'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['username'].dirty && editProfileForm.controls['username'].hasError('required')">Please
+                                                enter user name</p>
+                                            <p class="form_error" *ngIf="editProfileForm.controls['username'].dirty && editProfileForm.controls['username'].hasError('pattern')">Please
+                                                enter the correct user name.(should be of 3 to 16 characters)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">person </i></span>
+                                            <input formControlName="firstname" type="text" matInput placeholder="First Name">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('required')">Please
+                                                enter first name</p>
+                                            <p class="form_error" *ngIf="editProfileForm.controls['firstname'].dirty && editProfileForm.controls['firstname'].hasError('pattern')">Please
+                                                enter the correct First name.(should be of 3 to 16 characters)</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">person </i></span>
+                                            <input formControlName="lastname" type="text" matInput placeholder="Last Name">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('required')">Please
+                                                enter last name</p>
+                                            <p class="form_error" *ngIf="editProfileForm.controls['lastname'].dirty && editProfileForm.controls['lastname'].hasError('pattern')">Please
+                                                enter the correct last name.(should be of 3 to 16 characters)</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons"> email</i></span>
+                                            <input formControlName="email" type="text" matInput placeholder="Email">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].hasError('required')">Please
+                                                enter email address</p>
+                                            <p class="form_error" *ngIf="editProfileForm.controls['email'].dirty && editProfileForm.controls['email'].hasError('pattern')">email
+                                                is not valid</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">phone</i> </span>
+                                            <input formControlName="phone" type="text" matInput placeholder="Phone ">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['phone'].dirty && editProfileForm.controls['phone'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['phone'].dirty && editProfileForm.controls['phone'].hasError('required')">Please
+                                                enter phone number</p>
+                                            <p class="form_error" *ngIf="editProfileForm.controls['phone'].dirty && editProfileForm.controls['phone'].hasError('pattern')">
+                                                Invalid phone number
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">my_location</i></span>
+                                            <input formControlName="address" type="text" matInput placeholder="Address ">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['address'].dirty && editProfileForm.controls['address'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['address'].dirty && editProfileForm.controls['address'].hasError('required')">Please
+                                                enter address</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">location_city</i></span>
+                                            <input formControlName="city" type="text" matInput placeholder="City ">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['city'].dirty && editProfileForm.controls['city'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['city'].dirty && editProfileForm.controls['city'].hasError('required')">Please
+                                                enter city</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">code</i></span>
+                                            <input formControlName="zipcode" type="text" matInput placeholder="Zip code">
+                                        </mat-form-field>
+                                        <div class="error-msg" *ngIf="editProfileForm.controls['zipcode'].dirty && editProfileForm.controls['zipcode'].invalid">
+                                            <p class="form_error" *ngIf="editProfileForm.controls['zipcode'].dirty && editProfileForm.controls['zipcode'].hasError('required')">Please
+                                                enter zip code</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">room</i></span>
+                                            <mat-select placeholder="State" formControlName="state">
+                                                <mat-option *ngFor="let state of stateData" [value]="state._id">
+                                                    {{state.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <mat-form-field class="example-full-width">
+                                            <span matPrefix> <i class="material-icons">room</i></span>
+                                            <mat-select placeholder="Country" formControlName="country" (selectionChange)="getCountryState($event.value)">
+                                                <mat-option *ngFor="let countryData of countryData" [value]="countryData._id">{{countryData.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="text-right">
+                                            <button *ngIf="!isEdit" class="mR20 next-btn" (click)="onEdit(true)">Edit profile</button>
+                                            <button type="submit" *ngIf="isEdit" class="mR20 next-btn">Save profile</button>
+                                            <button *ngIf="isEdit" class="back-btn" (click)="onEdit(false)"> Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
