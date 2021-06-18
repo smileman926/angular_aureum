@@ -1,25 +1,13 @@
 <div class="content-wrapper">
-  <!-- <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <h1>Add a Product screen</h1>
-            </div>
-        </div>
-    </section> -->
-
   <section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
           <div class="page-title-box-admin page-title-box-sec">
             <h4 class="pageTitle admin pageTitle-sec">Buyers</h4>
-            <!-- end row -->
           </div>
-
-          <!-- end page-title-box -->
         </div>
       </div>
-      <!-- <p>listproduct works!</p> -->
       <div class="notification-sec">
         <div class="spinner-section" *ngIf="loader">
           <mat-spinner *ngIf="loader"></mat-spinner>
@@ -30,9 +18,16 @@
             <div class="card cardTable">
               <div class="card-body add-product-list table-responsive">
                 <div class="cases-filter">
+                  <mat-form-field class="searchBar" >
+                    <mat-label>Search</mat-label>
+                      <span matPrefix>
+                        <i class="material-icons">search</i>
+                      </span>
+                      <input matInput (input)="searchUser($event)" placeholder="Search">
+                  </mat-form-field>
                   <div class="container">
                     <div class="row">
-                      <!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+                      <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
                         <button
                           class="export-btn"
                           mat-button
@@ -45,13 +40,12 @@
                         <button
                           class="export-btn"
                           mat-button
-                          (click)="
-                            exporter.exportTable(exportType, ExcelOptions)
-                          "
+                          (click)="exportArray()"
                         >
-                          Export BuyerList <mat-icon> cloud_download</mat-icon>
+                          Export Buyers
+                          <mat-icon> cloud_download</mat-icon>
                         </button>
-                      </div> -->
+                      </div>
                       <div class="col-md-2">
                         <button
                           class="export-btn"
@@ -61,6 +55,11 @@
                           Customize Columns
                         </button>
                       </div>
+
+                      <div class="col-md-2">
+                        <mat-checkbox (change)="sortByBlacklisted($event)">Sort by Blacklisted</mat-checkbox>
+                      </div>
+
                     </div>
                   </div>
                   <!-- <mat-form-field class="example-full-width">
@@ -397,15 +396,8 @@
                     No Records Found
                   </div>
 
-                  <mat-paginator
-                    [length]="totalCount"
-                    (page)="paginate($event)"
-                    [pageSize]="count"
-                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
-                    showFirstLastButtons
-                  >
-                  </mat-paginator>
                 </div>
+         
                 <ag-grid-angular
                   style="width: 100%"
                   class="ag-theme-alpine"
@@ -417,6 +409,14 @@
                   domLayout="autoHeight"
                 >
                 </ag-grid-angular>
+                <mat-paginator
+                [length]="totalCount"
+                (page)="paginate($event)"
+                [pageSize]="count"
+                [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                showFirstLastButtons
+              >
+              </mat-paginator>
               </div>
             </div>
           </div>

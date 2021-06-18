@@ -1,149 +1,254 @@
 <aside class="sidebar-main">
-    <div class="sidebarBg" id="slimScrollContainer">
-        <div class="profile-sidebar-section">
-            <div class="profile-img">
-                <img [src]="image">
-            </div>
-            <div class="profile-info">
-                <h2>Welcome {{username}}
-                </h2>
-                <!-- <h3>Status:Online</h3> -->
-            </div>
-        </div>
-        <div class="sideMenu text-hide">
-            <ul id="sidebarTop">
-                <li class="act">
-                    <a [routerLink]="['/layout/admin/dashboard']" [routerLinkActive]="['router-link-active']">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-tachometer fa-2X" aria-hidden="true"></i>
-                        </span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="dropdown" *ngIf="loggedInUserDetails">
-                    <a class="dropdown-btn">
-                        <span class="sidebar-icon"> <i class="fa fa-gift fa-2X" aria-hidden="true"></i></span>
-                        <span>Giveaways</span><img src="../../../../assets/img/arrow-point-to-right copy 2.png"
-                            class="arrow-img">
-                    </a>
-                    <ul class="dropdown-container dropdown-container-sec">
-                        <li class="product-sec dropdown" *ngIf="checkPermission('setup_tracker','giveaways')">
-
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/setuptracker']">Setup Tracker</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('giveways_database','giveaways')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/giveawaysdb']">Giveaways Database</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/orders-database']">Orders Database</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('rembrusement','giveaways')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/reimbursement', 'all']">Reimbursement</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <li class="dropdown" *ngIf="loggedInUserDetails">
-                    <a class="dropdown-btn">
-                        <span class="sidebar-icon"><i class="fa fa-users fa-2X" aria-hidden="true"></i></span>
-                        <span>Buyers</span><img src="../../../../assets/img/arrow-point-to-right copy 2.png"
-                            class="arrow-img">
-                    </a>
-                    <ul class="dropdown-container dropdown-container-sec">
-                        <li class="product-sec dropdown" *ngIf="checkPermission('buyers_database','buyers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/list-buyers']">Buyers Database</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('faq_management','buyers')">
-
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/faq']">FAQ Management</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('testimonial_management','buyers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/list-testimonials']">Testimonial Management</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('deals','buyers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/list-deals']">Deals</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('instructions','buyers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/list-instructions']">Instructions</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('special_deals','buyers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/special-deals']">Special Deals</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown" *ngIf="displayStaff">
-                    <a [routerLink]="['/layout/admin/referals']" class="dropdown-btn">
-                        <span class="sidebar-icon"><i class="fa fa-line-chart fa-2X" aria-hidden="true"></i></span>
-                        <span>Referals</span>
-                    </a>
-                </li>
-
-                <!-- <div *ngIf="loggedInUserDetails.role_id.role == 'superAdmin'"> -->
-                <li class="dropdown" *ngIf="displaySellerDB">
-                    <a class="dropdown-btn">
-                        <span class="sidebar-icon"><i class="fa fa-users fa-2X" aria-hidden="true"></i></span>
-
-
-                        <span>Sellers</span><img src="../../../../assets/img/arrow-point-to-right copy 2.png"
-                            class="arrow-img">
-                    </a>
-                    <ul class="dropdown-container dropdown-container-sec">
-                        <li class="product-sec dropdown" *ngIf="checkPermission('sellers_database','sellers')">
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/list-sellers']">Sellers Database</span>
-                            </a>
-
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('subscription_management','sellers')">
-
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/subscription']">Subscription Management</span>
-                            </a>
-                        </li>
-                        <li class="product-sec dropdown" *ngIf="checkPermission('bank_details_management','sellers')">
-
-                            <a class="dropdown-btn">
-                                <span [routerLink]="['/layout/admin/bankDetails']">Bank Details Management</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <li class="dropdown" *ngIf="displayStaff">
-                    <a [routerLink]="['/layout/admin/staff']" class="dropdown-btn">
-                        <span class="sidebar-icon"><i class="fa fa-users fa-2X" aria-hidden="true"></i></span>
-                        <span>Staff member</span>
-                    </a>
-                </li>
-                <li class="dropdown" *ngIf="displayStaff">
-                    <a [routerLink]="['/layout/admin/bonuscodes']" class="dropdown-btn">
-                        <span class="sidebar-icon"><i class="fa fa-gift fa-2X" aria-hidden="true"></i></span>
-                        <span>Setup Bonus codes</span>
-                    </a>
-                </li>
-                <!-- </div> -->
-            </ul>
-        </div>
+  <div class="sidebarBg" id="slimScrollContainer">
+    <div class="profile-sidebar-section">
+      <div class="profile-img">
+        <img [src]="image" />
+      </div>
+      <div class="profile-info">
+        <h2>Welcome {{ username }}</h2>
+        <!-- <h3>Status:Online</h3> -->
+      </div>
     </div>
+    <div class="sideMenu text-hide">
+      <ul id="sidebarTop">
+        <li class="act">
+          <a
+            [routerLink]="['/layout/admin/dashboard']"
+            [routerLinkActive]="['router-link-active']"
+          >
+            <span class="sidebar-icon">
+              <i class="fa fa-tachometer fa-2X" aria-hidden="true"></i>
+            </span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li
+          class="dropdown"
+          *ngIf="
+            loggedInUserDetails && subAdminPermission.giveaways
+              ? subAdminPermission.giveaways.length
+              : false || isSuperAdmin
+          "
+        >
+          <a class="dropdown-btn">
+            <span class="sidebar-icon">
+              <i class="fa fa-gift fa-2X" aria-hidden="true"></i
+            ></span>
+            <span>Giveaways</span
+            ><img
+              src="../../../../assets/img/arrow-point-to-right copy 2.png"
+              class="arrow-img"
+            />
+          </a>
+          <ul class="dropdown-container dropdown-container-sec">
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('setup_tracker', 'giveaways')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/setuptracker']"
+                  >Setup Tracker</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('giveways_database', 'giveaways')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/giveawaysdb']"
+                  >Giveaways Database</span
+                >
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/orders-database']"
+                  >Orders Database</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('rembrusement', 'giveaways')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/reimbursement', 'all']"
+                  >Reimbursement</span
+                >
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          class="dropdown"
+          *ngIf="
+            loggedInUserDetails && subAdminPermission.buyers
+              ? subAdminPermission.buyers.length
+              : false || isSuperAdmin
+          "
+        >
+          <a class="dropdown-btn">
+            <span class="sidebar-icon"
+              ><i class="fa fa-users fa-2X" aria-hidden="true"></i
+            ></span>
+            <span>Buyers</span
+            ><img
+              src="../../../../assets/img/arrow-point-to-right copy 2.png"
+              class="arrow-img"
+            />
+          </a>
+          <ul class="dropdown-container dropdown-container-sec">
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('buyers_database', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/list-buyers']"
+                  >Buyers Database</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('faq_management', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/faq']">FAQ Management</span>
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('testimonial_management', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/list-testimonials']"
+                  >Testimonial Management</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('deals', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/list-deals']">Deals</span>
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('instructions', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/list-instructions']"
+                  >Instructions</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('special_deals', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/special-deals']"
+                  >Special Deals</span
+                >
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown" *ngIf="displayStaff">
+          <a [routerLink]="['/layout/admin/referals']" class="dropdown-btn">
+            <span class="sidebar-icon"
+              ><i class="fa fa-line-chart fa-2X" aria-hidden="true"></i
+            ></span>
+            <span>Referals</span>
+          </a>
+        </li>
 
+        <li
+          class="dropdown"
+          *ngIf="
+            subAdminPermission.sellers
+              ? subAdminPermission.sellers.length
+              : false || isSuperAdmin
+          "
+        >
+          <a class="dropdown-btn">
+            <span class="sidebar-icon"
+              ><i class="fa fa-users fa-2X" aria-hidden="true"></i
+            ></span>
+
+            <span>Sellers</span
+            ><img
+              src="../../../../assets/img/arrow-point-to-right copy 2.png"
+              class="arrow-img"
+            />
+          </a>
+          <ul class="dropdown-container dropdown-container-sec">
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('sellers_database', 'sellers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/list-sellers']"
+                  >Sellers Database</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('subscription_management', 'sellers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/subscription']"
+                  >Subscription Management</span
+                >
+              </a>
+            </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('bank_details_management', 'sellers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/bankDetails']"
+                  >Bank Details Management</span
+                >
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          class="dropdown"
+          *ngIf="
+            loggedInUserDetails && subAdminPermission.staffMembers
+              ? subAdminPermission.staffMembers.length
+              : false || isSuperAdmin
+          "
+        >
+          <a [routerLink]="['/layout/admin/staff']" class="dropdown-btn">
+            <span class="sidebar-icon"
+              ><i class="fa fa-users fa-2X" aria-hidden="true"></i
+            ></span>
+            <span>Staff member</span>
+          </a>
+        </li>
+        <li
+          class="dropdown"
+          *ngIf="
+            loggedInUserDetails && subAdminPermission.bonusCodes
+              ? subAdminPermission.bonusCodes.length
+              : false || isSuperAdmin
+          "
+        >
+          <a [routerLink]="['/layout/admin/bonuscodes']" class="dropdown-btn">
+            <span class="sidebar-icon"
+              ><i class="fa fa-gift fa-2X" aria-hidden="true"></i
+            ></span>
+            <span>Setup Bonus codes</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </aside>

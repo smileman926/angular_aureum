@@ -1,0 +1,114 @@
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box-admin page-title-box-sec">
+            <h4 class="pageTitle admin pageTitle-sec">Order History</h4>
+          </div>
+        </div>
+      </div>
+      <div class="notification-sec">
+        <div class="spinner-section" *ngIf="loader">
+          <mat-spinner *ngIf="loader"></mat-spinner>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card cardTable">
+              <div class="card-body add-product-list table-responsive">
+                <div class="cases-filter">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="exportArray()"
+                      >
+                        Export Order History
+                        <mat-icon> cloud_download</mat-icon>
+                      </button>
+                    </div>
+                    <div class="col-md-3">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="displayDialog()"
+                      >
+                        Customize Columns
+                      </button>
+                    </div>
+                    <div class="col-md-3">
+                      <button
+                        class="export-btn back-button"
+                        mat-button
+                        [routerLink]="['/layout/admin/orders-database']"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                  <ag-grid-angular
+                    style="width: 100%"
+                    class="ag-theme-alpine"
+                    [gridOptions]="gridOptions"
+                    [rowData]="ordersData"
+                    domLayout="autoHeight"
+                    [columnDefs]="columnDefs"
+                  >
+                  </ag-grid-angular>
+
+                  <mat-paginator
+                    [length]="totalCount"
+                    (page)="paginate($event)"
+                    [pageSize]="count"
+                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                    showFirstLastButtons
+                  >
+                  </mat-paginator>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<p-dialog
+  header="Customize Columns"
+  (onHide)="closeViewdilog()"
+  [(visible)]="customizedColumns"
+  [modal]="true"
+  baseZIndex="1"
+  [responsive]="true"
+  [style]="{ width: '600px', minWidth: '600px' }"
+  [minY]="700"
+  closable="true"
+  dismissableMask="true"
+  baseZIndex="0"
+  closeOnEscape="true"
+  responsive="true"
+  class="edit-example-form-admin"
+>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="">
+          <div *ngFor="let item of columnsData; let i = index">
+            <mat-checkbox
+              [checked]="item.checked"
+              (change)="onChange($event, i, item)"
+            >
+              {{ item.label }}
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spinner-section" *ngIf="loader">
+    <mat-spinner *ngIf="loader"></mat-spinner>
+  </div>
+</p-dialog>

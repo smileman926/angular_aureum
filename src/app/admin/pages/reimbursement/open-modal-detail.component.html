@@ -1,0 +1,13 @@
+<div class="wrapper-button">
+  <button
+    mat-stroked-button
+    color="primary"
+    *ngIf="data.type_payment === 'mailed_rebate'"
+    (click)="handleClick()"
+  >
+    Open info
+  </button>
+  <span *ngIf="data.type_payment !== 'mailed_rebate'">
+        {{ data.type_payment || '-' }}
+    </span>
+</div>

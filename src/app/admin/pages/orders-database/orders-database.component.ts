@@ -1,18 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { ToastrService } from "ngx-toastr";
-import { MatDialog } from "@angular/material";
-import { GridOptions } from "@ag-grid-community/all-modules";
+import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material';
+import { GridOptions } from '@ag-grid-community/all-modules';
+import { Router } from '@angular/router';
+import * as FileSaver from 'file-saver';
+import * as moment from 'moment';
 
-import { genralConfig } from "src/app/core/constant/genral-config.constant";
-import { AdminServicesService } from "../../services/admin-services.service";
-import { RequestObjectInterface } from "../../shared/models/RequestObject.model";
-import { IRowData } from "../../shared/models/IRowData.model";
-import * as moment from "moment";
+import { genralConfig } from 'src/app/core/constant/genral-config.constant';
+import { AdminServicesService } from '../../services/admin-services.service';
+import { RequestObjectInterface } from '../../shared/models/RequestObject.model';
+import { IRowData } from '../../shared/models/IRowData.model';
+import { ViewOrderHistoryButtonRenderer } from './renderers/view-order-history-button-renderer.component';
 
 @Component({
-  selector: "app-orders-database",
-  templateUrl: "./orders-database.component.html",
-  styleUrls: ["./orders-database.component.scss"],
+  selector: 'app-orders-database',
+  templateUrl: './orders-database.component.html',
+  styleUrls: ['./orders-database.component.scss'],
 })
 export class OrdersDatabaseComponent implements OnInit {
   public gridOptions: GridOptions;
@@ -20,17 +23,17 @@ export class OrdersDatabaseComponent implements OnInit {
   public columnDefs: any[];
 
   columnsData = [
-    { label: "Date", checked: true },
-    { label: "First Name", checked: true },
-    { label: "Last Name", checked: true },
-    { label: "Member No.", checked: true },
-    { label: "Email", checked: true },
-    { label: "Launch No.", checked: true },
-    { label: "Order No.", checked: true },
-    { label: "Amount", checked: true },
-    { label: "Confirmed", checked: true },
+    { label: 'Date', checked: true },
+    { label: 'First Name', checked: true },
+    { label: 'Last Name', checked: true },
+    { label: 'Member No.', checked: true },
+    { label: 'Email', checked: true },
+    { label: 'Launch No.', checked: true },
+    { label: 'Order No.', checked: true },
+    { label: 'Amount', checked: true },
+    { label: 'Status', checked: true },
   ];
-
+  frameworkComponents: any;
   count: number = genralConfig.paginator.COUNT;
   totalCount: number = 20;
   loader: boolean = false;
@@ -44,7 +47,8 @@ export class OrdersDatabaseComponent implements OnInit {
   constructor(
     private adminService: AdminServicesService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
   ) {
     this.initializeForm();
     this.rowData = [];
@@ -55,7 +59,7 @@ export class OrdersDatabaseComponent implements OnInit {
       enableFilter: true,
       unSortIcon: true,
       enableColResize: true,
-      rowSelection: "single",
+      rowSelection: 'single',
       context: {},
     };
   }
@@ -63,94 +67,124 @@ export class OrdersDatabaseComponent implements OnInit {
   ngOnInit(): void {}
 
   initializeForm(): void {
+    this.frameworkComponents = {
+      viewOrderHistoryButtonRenderer: ViewOrderHistoryButtonRenderer,
+    };
     this.columnDefs = [
       {
-        headerName: "Date",
-        field: "purchase_date",
+        headerName: 'Date',
+        field: 'purchase_date',
 
         cellRenderer: (params) => {
           var launchData;
           return (launchData = params.value
-            ? moment(params.value).format("LL")
-            : "N/A");
+            ? moment(params.value).format('LL')
+            : 'N/A');
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "First Name",
-        field: "firstName",
+        headerName: 'First Name',
+        field: 'firstName',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Last Name",
-        field: "lastName",
+        headerName: 'Last Name',
+        field: 'lastName',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Member No",
-        field: "memberNumber",
+        headerName: 'Member No',
+        field: 'memberNumber',
 
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Email",
-        field: "email",
+        headerName: 'Email',
+        field: 'email',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Launch No.",
-        field: "launch_number",
+        headerName: 'Launch No.',
+        field: 'launch_number',
         cellRenderer: (params) => {
-          return params.value ? "Yes" : "No";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Order No.",
-        field: "order_number",
+        headerName: 'Order No.',
+        field: 'order_number',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Amount",
-        field: "amount",
+        headerName: 'Product ASIN',
+        field: 'asin',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
       },
       {
-        headerName: "Confirmed",
-        field: "confirmed",
+        headerName: 'Amount',
+        field: 'amount',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return !Number.isNaN(params.value) ? params.value : 'N/A';
         },
         sortable: true,
         filter: true,
+      },
+      {
+        headerName: 'Status',
+        field: 'order_status',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+        sortable: true,
+        filter: true,
+      },
+      {
+        headerName: 'Order history',
+        cellRenderer: 'viewOrderHistoryButtonRenderer',
+        cellRendererParams: {
+          onClick: this.buttonHandler.bind(this),
+          label: 'Click 1',
+        },
+        sortable: false,
+        filter: false,
       },
     ];
+  }
+
+  buttonHandler(data): void {
+    const rowData = data.rowData;
+    if (data.event.target.textContent === 'preview') {
+      console.log('editiiiing');
+      this.router.navigate(['/layout/admin/order-history/' + rowData._id]);
+    }
   }
 
   listAllOrders(): void {
@@ -158,16 +192,16 @@ export class OrdersDatabaseComponent implements OnInit {
     const reuestOrderObj: RequestObjectInterface = {
       page: this.page,
       count: this.count,
-      searchText: this.searchText ? this.searchText : "",
+      searchText: this.searchText ? this.searchText : '',
       sort: this.sort ? this.sort : null,
       sortBy: this.sortOrder ? this.sortOrder : null,
     };
     this.adminService.getAllOrders(reuestOrderObj).subscribe((res) => {
       if (res.status === genralConfig.statusCode.ok) {
         this.ordersData = res.data;
-        this.totalCount = res.count;
+        this.totalCount = res.total;
         this.loader = false;
-        this.toastr.success(res.message);
+        //this.toastr.success(res.message);
       } else {
         this.ordersData = [];
         this.loader = false;
@@ -177,53 +211,70 @@ export class OrdersDatabaseComponent implements OnInit {
     this.loader = false;
   }
 
+  //Export all orders from data base.
+  exportArray(mode: string): void { 
+    const reuestOrderObj: RequestObjectInterface = {
+      page: this.page,
+      count: mode === 'currentPage' ? this.count : this.totalCount,
+      searchText: this.searchText ? this.searchText : '',
+      sort: this.sort ? this.sort : null,
+      sortBy: this.sortOrder ? this.sortOrder : null,
+    };
+    this.adminService.getXSLXOrders(reuestOrderObj).subscribe((result) => {
+      const blob = new Blob([result], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      FileSaver.saveAs(blob, 'orders.xlsx');
+    });
+  }
+
   onChange(event, index, item): void {
     const columns = this.gridOptions.columnApi.getAllColumns();
     let valueColumn;
-    if (item.label === "Date") {
+    if (item.label === 'Date') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Date"
+        (column) => column.getColDef().headerName === 'Date'
       )[0];
     }
-    if (item.label === "First Name") {
+    if (item.label === 'First Name') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "First Name"
+        (column) => column.getColDef().headerName === 'First Name'
       )[0];
     }
-    if (item.label === "Last Name") {
+    if (item.label === 'Last Name') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Last Name"
+        (column) => column.getColDef().headerName === 'Last Name'
       )[0];
     }
 
-    if (item.label === "Member No") {
+    if (item.label === 'Member No.') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Member No"
+        (column) => column.getColDef().headerName === 'Member No.'
       )[0];
     }
-    if (item.label === "Email") {
+    if (item.label === 'Email') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Email"
+        (column) => column.getColDef().headerName === 'Email'
       )[0];
     }
-    if (item.label === "Launch No.") {
+    if (item.label === 'Launch No.') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Launch No."
+        (column) => column.getColDef().headerName === 'Launch No.'
       )[0];
     }
-    if (item.label === "Order No.") {
+    if (item.label === 'Order No.') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Order No."
+        (column) => column.getColDef().headerName === 'Order No.'
       )[0];
     }
-    if (item.label === "Amount") {
+    if (item.label === 'Amount') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Amount"
+        (column) => column.getColDef().headerName === 'Amount'
       )[0];
     }
-    if (item.label === "Confirmed") {
+    if (item.label === 'Status') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Confirmed"
+        (column) => column.getColDef().headerName === 'Status'
       )[0];
     }
     const newState = !valueColumn.isVisible();

@@ -9,6 +9,7 @@ import { ApiService } from "src/app/shared/services/api.service";
 import * as XLSX from "xlsx";
 import { ExportType, ExcelOptions } from "mat-table-exporter";
 import * as moment from "moment";
+import { InstructionActionsButtonsRendrerComponent } from "../list-instructions/instructions-actions-buttons-renderer.component";
 
 @Component({
   selector: "app-referals",
@@ -60,6 +61,7 @@ export class ReferalsComponent implements OnInit {
   fileObj = [];
   arrToAppend = [];
   customizedColumns: boolean = false;
+  public frameworkComponents: any;
 
   constructor(
     public _adminServices: AdminServicesService,
@@ -78,6 +80,9 @@ export class ReferalsComponent implements OnInit {
       unSortIcon: true,
       rowSelection: "single",
       context: {},
+    };
+    this.frameworkComponents = {
+      instructionsActionsButtonsRenderer: InstructionActionsButtonsRendrerComponent,
     };
   }
 
@@ -159,7 +164,7 @@ export class ReferalsComponent implements OnInit {
     this.loader = true;
     let obj = {
       page: this.page,
-      limit: this.count,
+      count: this.count,
       searchText: this.searchText ? this.searchText : "",
       sort: this.sort,
       sortBy: this.sortOrder,
@@ -168,14 +173,14 @@ export class ReferalsComponent implements OnInit {
     console.log("Object : ", obj);
     this._adminServices.listAllReferals(obj).subscribe((res: any) => {
       this.loader = false;
-      if (res && res.code == genralConfig.statusCode.ok) {
+      if (res && res.status == genralConfig.statusCode.ok) {
         this.referalsData = res.data;
         this.totalCount = res.total;
         if (this.referalsData.length == 0) {
           this.referalsData = [];
           this.noRecordFound = true;
         }
-      } else if (res && res.code == genralConfig.statusCode.data_not_found) {
+      } else if (res && res.status == genralConfig.statusCode.data_not_found) {
         this.toastr.success(res.message);
         this.loader = false;
       } else {
@@ -244,12 +249,12 @@ export class ReferalsComponent implements OnInit {
     this.listAllReferals();
   }
 
-  // searchUser(event) {
-  //   console.log(" searchUser  :  ", event.target.value);
-  //   this.searchText = event.target.value;
-  //   this.page = 0;
-  //   this.listAllReferals();
-  // }
+   searchUser(event) {
+     console.log(" searchUser  :  ", event.target.value);
+     this.searchText = event.target.value;
+     this.page = 0;
+     this.listAllReferals();
+   }
 
   getsortByStatus(event) {
     console.log("sort status is=====>", event.value);

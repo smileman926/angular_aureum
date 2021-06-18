@@ -47,6 +47,20 @@
                             Please enter phone
                         </p>
                     </div>
+
+                    <mat-form-field class="example-full-width relative-sec">
+                        <mat-label>Accuracy rate</mat-label>
+                        <input
+                            matInput
+                            type="number"
+                            maxlength="3"
+                            max="100"
+                            formControlName="accuracyRate"
+                        >
+                        <mat-error *ngIf="updateUserForm.controls['accuracyRate'].dirty && updateUserForm.controls['accuracyRate'].invalid">
+                            Please enter a valid rate number
+                        </mat-error>
+                    </mat-form-field>
                 </div>
             </div>
             <div class="col-md-12">

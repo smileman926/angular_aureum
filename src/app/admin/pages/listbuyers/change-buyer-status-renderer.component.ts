@@ -1,10 +1,10 @@
-import { Component } from "@angular/core";
-import { ICellRendererAngularComp } from "ag-grid-angular";
-import * as lodash from "lodash";
-import { BuyersStatus } from "../../shared/models/BuyersStatus.model";
+import { Component } from '@angular/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
+import * as lodash from 'lodash';
+import { BuyersStatus } from '../../shared/models/BuyersStatus.model';
 
 @Component({
-  selector: "app-button-renderer",
+  selector: 'app-button-renderer',
   template: `
     <div class="status-options-wrapper">
       <ng-template [ngIf]="canChangeStatus" [ngIfElse]="statusLabel">

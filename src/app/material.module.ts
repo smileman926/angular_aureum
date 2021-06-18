@@ -1,4 +1,8 @@
-import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+  NgModule,
+  ModuleWithProviders,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PortalModule } from '@angular/cdk/portal';
@@ -26,7 +30,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,8 +44,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatFormFieldModule } from '@angular/material';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {CalendarModule} from 'primeng/calendar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   exports: [
@@ -65,6 +70,7 @@ import {CalendarModule} from 'primeng/calendar';
     MatDividerModule,
     MatExpansionModule,
     MatGridListModule,
+    MatProgressBarModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
@@ -90,17 +96,14 @@ import {CalendarModule} from 'primeng/calendar';
     ScrollingModule,
     MatFormFieldModule,
     NgxMaterialTimepickerModule,
-    CalendarModule
+    CalendarModule,
   ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA,
-  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ExpMaterialModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ExpMaterialModule
+      ngModule: ExpMaterialModule,
     };
   }
-
 }

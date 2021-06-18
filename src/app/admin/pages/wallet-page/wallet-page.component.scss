@@ -1,0 +1,97 @@
+.page-title-box-sec{
+    margin: 0 -35px;
+  }
+  
+  .history-table-wrapper {
+    position: relative;
+    padding-top: 10px;
+  }
+  
+  .action-wrapper {
+    margin-bottom: 25px;
+  
+    h4 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+  
+    .action-flex button {
+      margin-right: 20px;
+    }
+  }
+  
+  .history-wrapper {
+    h5 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: black;
+    }
+  }
+  
+  .notification-sec {
+    margin-top: 15px;
+    position: relative;
+  
+    .add-product-list {
+      .mat-table {
+        width: 100%;
+        th {
+          min-width: 100px;
+        }
+      }
+      .product-list {
+        height: 50px;
+        width: 50px;
+        overflow: hidden;
+        text-align: center;
+      }
+  
+    }
+  
+    tr.mat-header-row {
+      height: 25px;
+    }
+  
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type,
+    th.mat-header-cell:first-of-type {
+      padding-left: 10px;
+    }
+  
+    th.mat-header-cell {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+  
+    td.mat-cell {
+      vertical-align: middle;
+    }
+  
+    .input-groupn {
+      position: relative;
+    }
+  }
+  
+  .topText {
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .radio-wrapper {
+    padding-bottom: 15px;
+  
+    .radio-item {
+      margin-right: 15px;
+    }
+  }
+  
+  .icon-payment {
+    max-width: 50px;
+  
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  

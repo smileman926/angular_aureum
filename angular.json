@@ -90,6 +90,14 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "localStaging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.localStaging.ts"
+                }
+              ]
             }
           }
         },
@@ -104,6 +112,9 @@
             },
             "staging": {
               "browserTarget": "APLP:build:staging"
+            },
+            "localStaging": {
+              "browserTarget": "APLP:build:localStaging"
             }
           }
         },

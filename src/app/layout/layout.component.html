@@ -1,7 +1,4 @@
-<div *ngIf="!isAdmin">
-    <app-header></app-header>
-</div>
 <div *ngIf="isAdmin">
-    <app-adminheader></app-adminheader>
+  <app-adminheader></app-adminheader>
 </div>
 <router-outlet></router-outlet>

@@ -4,11 +4,8 @@ import { FormBuilder } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { AdminServicesService } from "../../services/admin-services.service";
 import { ActivatedRoute } from "@angular/router";
-import { RouterLinkComponent } from "../giveawaysdb/routerlinkorder.component";
-import * as moment from "moment-timezone";
-import { GridOptions } from "@ag-grid-community/all-modules";
+import { GridOptions, GridApi } from "@ag-grid-community/all-modules";
 import { RequestObjectInterface } from "../../shared/models/RequestObject.model";
-
 @Component({
   selector: "app-reimbursement",
   templateUrl: "./reimbursement.component.html",
@@ -28,9 +25,14 @@ export class ReimbursementComponent implements OnInit {
   totalCount: any;
   OrderId: any;
   sort;
+  checkedArr = [];
+  detailsUserData: any;
+
   public gridOptions: GridOptions;
+  public gridApi: GridApi;
   public columnDefs: any[];
   public defaultColDef;
+  frameworkComponents: any;
 
   columnData = [
     { label: "First Name", checked: true },
@@ -53,6 +55,7 @@ export class ReimbursementComponent implements OnInit {
     private _adminService: AdminServicesService,
     private activatedRoute: ActivatedRoute
   ) {
+    this.frameworkComponents = {};
     this.initializeForm();
   }
 
@@ -63,7 +66,29 @@ export class ReimbursementComponent implements OnInit {
   }
 
   private initializeForm(): void {
+    this.defaultColDef = {
+      filter: true,
+      sortable: true,
+      resizable: true,
+    };
+    this.gridOptions = {
+      unSortIcon: true,
+      rowSelection: "multiple",
+      context: {},
+      angularCompileHeaders: true,
+      onGridReady: this.onGridReady.bind(this),
+    };
+
     this.columnDefs = [
+      {
+        headerName: "",
+        field: "RowSelect",
+        checkboxSelection: true,
+        suppressMenu: true,
+        headerCheckboxSelection: true,
+        filter: false,
+        sortable: false,
+      },
       {
         headerName: "First Name",
         field: "firstname",
@@ -71,8 +96,6 @@ export class ReimbursementComponent implements OnInit {
           var celdata;
           return (celdata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Last Name",
@@ -81,8 +104,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Member No.",
@@ -91,8 +112,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Email",
@@ -101,8 +120,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Rebate Balance",
@@ -111,8 +128,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
 
       {
@@ -122,8 +137,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Rebate Pending",
@@ -132,8 +145,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Rebate Recieved",
@@ -142,8 +153,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Comm Balance",
@@ -152,8 +161,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Comm Payable",
@@ -162,8 +169,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Comm Pending",
@@ -172,8 +177,6 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
       {
         headerName: "Comm Recieved",
@@ -182,20 +185,15 @@ export class ReimbursementComponent implements OnInit {
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
         },
-        sortable: true,
-        filter: true,
       },
     ];
-    this.defaultColDef = {
-      filter: true,
-      sortable: true,
-      resizable: true,
-    };
-    this.gridOptions = {
-      unSortIcon: true,
-      rowSelection: "single",
-      context: {},
-    };
+  }
+
+  onGridReady(event: any) {
+    console.log("event api is ===>", event);
+    this.gridApi = event.api;
+    console.log("this.gridApi in ong grid ====>", this.gridApi);
+    this.gridApi.sizeColumnsToFit();
   }
 
   listRembursement() {
@@ -206,15 +204,16 @@ export class ReimbursementComponent implements OnInit {
       count: this.count ? this.count : null,
       page: this.page ? this.page : 1,
       sortBy: this.sortOrder ? this.sortOrder : 1,
-      sort: this.sort ? this.sort : "",
+      sort: this.sort ? this.sort : null,
     };
 
     this.loader = true;
     this._adminService.getRembursement(speclObject).subscribe((res: any) => {
       this.loader = false;
-      if (res && res.code == genralConfig.statusCode.ok) {
+      if (res && res.status == genralConfig.statusCode.ok) {
         this.rembursementListdata = [];
         this.rembursementListdata = res.data;
+
         this.totalCount = res.total;
         this.noRecordFound = false;
       } else if (res && res.code == genralConfig.statusCode.data_not_found) {
@@ -227,6 +226,24 @@ export class ReimbursementComponent implements OnInit {
       }
     });
   }
+
+  payPendingBalance() {
+    console.log(this.gridApi.getSelectedRows());
+    const rowData = this.gridApi.getSelectedRows();
+
+    this.loader = true;
+    const reqData: any[] = rowData.map((rowData) => rowData._id);
+    this._adminService.payPendingBalance(reqData).subscribe((res) => {
+      this.loader = false;
+      console.log(res);
+      if (res.status === genralConfig.statusCode.ok) {
+        this.toastr.success(res.message);
+      } else {
+        this.toastr.error(res.message);
+      }
+    });
+  }
+
   searchByOrderNo(event) {
     this.searchText = event.target.value;
 
@@ -315,5 +332,36 @@ export class ReimbursementComponent implements OnInit {
 
     const newState = !valueColumn.isVisible();
     this.gridOptions.columnApi.setColumnVisible(valueColumn, newState);
+  }
+
+  checkUncheck(val) {
+    // console.log('(click)=checkUncheck(bid)', checkUncheckData)
+    const index = this.checkedArr.indexOf(val);
+    console.log("index index", index);
+    if (index === -1) {
+      // val not found, pushing onto array
+      this.checkedArr.push(val);
+    } else {
+      // val is found, removing from array
+      this.checkedArr.splice(index, 1);
+    }
+    if (this.checkedArr.length) {
+      // this.statusdelete = true;
+    } else {
+      // this.statusdelete = false;
+    }
+    console.log("%%%%%%%%%%%%%%%%%%%", this.checkedArr);
+  }
+
+  showDetailModal() {
+
+  }
+
+  closeDetailsModal() {
+
+  }
+
+  sendPayment() {
+    
   }
 }

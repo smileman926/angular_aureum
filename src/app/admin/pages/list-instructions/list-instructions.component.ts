@@ -170,7 +170,7 @@ export class ListInstructionsComponent implements OnInit {
         this.instructionsData = res.data.data;
         this.totalCount = res.data.count;
         this.loader = false;
-        this.toastr.success(res.message);
+       // this.toastr.success(res.message);
       } else {
         this.instructionsData = [];
         this.loader = false;

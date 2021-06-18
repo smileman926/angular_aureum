@@ -237,7 +237,7 @@
 </p-dialog>
 
 <p-dialog
-  header="Testing header"
+  header="{{selectProductModal.title}}"
   [(visible)]="isOpenQuestionModal"
   [responsive]="true"
   [resizable]="true"
@@ -250,7 +250,6 @@
 >
   <div class="questions-wrapper">
     <app-create-questionnaire
-      [title]="selectProductModal.title"
       [id]="selectProductModal.id"
       [questions]="selectProductModal.questions"
       (changeProduct)="updateDataProduct($event)"

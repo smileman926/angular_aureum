@@ -13,6 +13,7 @@ import { RequestObjectInterface } from "../../shared/models/RequestObject.model"
 import { ApiService } from "src/app/shared/services/api.service";
 import { ProductCategory } from "../../shared/models/ProductCategory.model";
 import { ChangeDealCategoryRendererComponent } from "./change-deal-category-renderer.component";
+import { Subscription, timer } from "rxjs";
 
 export interface PeriodicElement {
   Date: string;
@@ -78,6 +79,7 @@ export class ListDealsComponent implements OnInit {
   fileObj = [];
   arrToAppend = [];
   customizedColumns: boolean = false;
+  private searchTimer: Subscription;
 
   constructor(
     private adminService: AdminServicesService,
@@ -89,10 +91,9 @@ export class ListDealsComponent implements OnInit {
       changeDealCategoryRenderer: ChangeDealCategoryRendererComponent,
     };
     this.getCategories();
-    // this.initializeForm();
 
     this.rowData = [];
-    this.listAllTestimonials();
+    this.listAllDeals();
 
     this.gridOptions = {
       enableSorting: true,
@@ -231,12 +232,33 @@ export class ListDealsComponent implements OnInit {
 
   getCategories(): void {
     this.adminService.listAllCategories().subscribe((res) => {
-      this.categories = res[1];
+      this.categories = [
+        ...res[1].sort((a: ProductCategory, b: ProductCategory) => {
+          const aName = a.category_name.toUpperCase();
+          const bName = b.category_name.toUpperCase();
+          if (aName < bName) {
+            return -1;
+          }
+          if (aName > bName) {
+            return 1;
+          }
+          return 0;
+        }),
+      ];
+      let pos = this.categories
+        .map(function (e) {
+          return e.category_name;
+        })
+        .indexOf("OTHER");
+      const otherCategory = this.categories.splice(pos, 1);
+      console.log(otherCategory);
+      this.categories.push(otherCategory[0]);
+      // this.categories = res[1];
       this.initializeForm();
     });
   }
 
-  listAllTestimonials() {
+  listAllDeals() {
     this.loader = true;
     const listObj: RequestObjectInterface = {
       page: this.page,
@@ -251,7 +273,7 @@ export class ListDealsComponent implements OnInit {
         this.dealsData = res.data.data;
         this.totalCount = res.data.count;
         this.loader = false;
-        this.toastr.success(res.message);
+        //this.toastr.success(res.message);
       } else {
         this.dealsData = [];
         this.loader = false;
@@ -325,18 +347,24 @@ export class ListDealsComponent implements OnInit {
   sortByFun(value, order) {
     this.sort = value;
     this.sortOrder = order;
-    this.listAllTestimonials();
+    this.listAllDeals();
   }
 
   paginate(event) {
     this.page = event.pageIndex + 1;
     this.count = event.pageSize;
-    this.listAllTestimonials();
+    this.listAllDeals();
   }
 
   searchDeal(event) {
     this.searchText = event.target.value;
-    this.listAllTestimonials();
+    if (this.searchTimer) {
+      this.searchTimer.unsubscribe();
+    }
+
+    this.searchTimer = timer(1000).subscribe(() => {
+      this.listAllDeals();
+    });
   }
 
   openImportDailog() {
@@ -405,7 +433,7 @@ export class ListDealsComponent implements OnInit {
             this.openImportDail = false;
             this.fileArr = [];
             this.arrToAppend = [];
-            this.listAllTestimonials();
+            this.listAllDeals();
           } else {
             this.toastr.error(response.message);
             this.loader = false;
@@ -417,10 +445,10 @@ export class ListDealsComponent implements OnInit {
   }
 
   exportArray() {
-    const body = {
-      searchText: this.searchText,
-    };
-    this.adminService.xlsx(body).subscribe((result) => {
+    // const body = {
+    //   searchText: this.searchText,
+    // };
+    this.adminService.getXSLXDeals().subscribe((result) => {
       const blob = new Blob([result], {
         type:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -449,7 +477,7 @@ export class ListDealsComponent implements OnInit {
 
     this.adminService.deleteDeal(obj).subscribe((result) => {
       if (result.code === 200) {
-        this.listAllTestimonials();
+        this.listAllDeals();
         // this.initializeForm();
       }
     });
@@ -457,9 +485,7 @@ export class ListDealsComponent implements OnInit {
 
   changeDealCategory(data) {
     const element = data.rowData;
-    console.log("element is ====>", element);
     const value = data.event;
-    console.log("value is ====>", value);
     this.adminService
       .updateDealCategory(element.product_id, value)
       .subscribe((res) => {
@@ -477,7 +503,7 @@ export class ListDealsComponent implements OnInit {
   //   console.log("deleting deaaals");
   //   this.adminService.deleteDeal({ dealId, isDeleted }).subscribe((result) => {
   //     if (result.code === 200) {
-  //       this.listAllTestimonials();
+  //       this.listAllDeals();
   //     }
   //   });
   // }

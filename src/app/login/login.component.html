@@ -1,114 +1,155 @@
 <div class="spinner-section" *ngIf="loader">
-    <mat-spinner *ngIf="loader"></mat-spinner>
+  <mat-spinner *ngIf="loader"></mat-spinner>
 </div>
 <section class="login-section">
-    <div class="login-section-inner">
-        <div class="login-left">
-            <img src="../../assets/img/login-logo.png">
-        </div>
-        <div class="login-right">
-
-
-            <form class="example-form" [formGroup]="loginForm">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2>Signin to access your account</h2>
-                        <div class="">
-                            <mat-form-field class="example-full-width relative-sec">
-                                <!-- <span matPrefix> <i class="material-icons">
+  <div class="login-section-inner">
+    <div class="login-left">
+      <img src="../../assets/img/Original on Transparent1.png" />
+    </div>
+    <div class="login-right">
+      <form class="example-form" [formGroup]="loginForm">
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Signin to access your account</h2>
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <!-- <span matPrefix> <i class="material-icons">
                                     person
                                     </i></span> -->
-                                <input type="tel" matInput placeholder="Email" formControlName="email">
-                                <!-- <i class="fa fa-envelope-o" aria-hidden="true"></i> -->
-                                <img src="../../assets/img/email.png">
-                            </mat-form-field>
-                            <div class="error-msg"
-                                *ngIf="loginForm.controls['email'].dirty && loginForm.controls['email'].invalid">
-                                <p class="form_error"
-                                    *ngIf="loginForm.controls['email'].dirty && loginForm.controls['email'].hasError('required')">
-                                    Please enter email address.</p>
-                                <p class="form_error"
-                                    *ngIf="loginForm.controls['email'].dirty && loginForm.controls['email'].hasError('pattern')">
-                                    Please enter the correct email address.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-
-                        <div class="">
-                            <mat-form-field class="example-full-width  relative-sec">
-                                <!-- <span matPrefix> <i class="material-icons">
+                <input
+                  type="tel"
+                  matInput
+                  placeholder="Email"
+                  formControlName="email"
+                />
+                <!-- <i class="fa fa-envelope-o" aria-hidden="true"></i> -->
+                <img src="../../assets/img/email.png" />
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  loginForm.controls['email'].dirty &&
+                  loginForm.controls['email'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="
+                    loginForm.controls['email'].dirty &&
+                    loginForm.controls['email'].hasError('required')
+                  "
+                >
+                  Please enter email address.
+                </p>
+                <p
+                  class="form_error"
+                  *ngIf="
+                    loginForm.controls['email'].dirty &&
+                    loginForm.controls['email'].hasError('pattern')
+                  "
+                >
+                  Please enter the correct email address.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="">
+              <mat-form-field class="example-full-width relative-sec">
+                <!-- <span matPrefix> <i class="material-icons">
                                     lock
                                     </i></span> -->
-                                <input type="password" matInput placeholder="Password" formControlName="password">
-                                <!-- <i class="fa fa-unlock-alt" aria-hidden="true"></i> -->
-                                <img src="../../assets/img/password.png" class="pass-input">
-                            </mat-form-field>
-                            <div class="error-msg"
-                                *ngIf="loginForm.controls['password'].dirty && loginForm.controls['password'].invalid">
-                                <p class="form_error" *ngIf="loginForm.controls['password'].hasError('required')">Please
-                                    enter password.</p>
+                <input
+                  type="password"
+                  matInput
+                  placeholder="Password"
+                  formControlName="password"
+                />
+                <!-- <i class="fa fa-unlock-alt" aria-hidden="true"></i> -->
+                <img src="../../assets/img/password.png" class="pass-input" />
+              </mat-form-field>
+              <div
+                class="error-msg"
+                *ngIf="
+                  loginForm.controls['password'].dirty &&
+                  loginForm.controls['password'].invalid
+                "
+              >
+                <p
+                  class="form_error"
+                  *ngIf="loginForm.controls['password'].hasError('required')"
+                >
+                  Please enter password.
+                </p>
 
-                                <!-- <ul class="form_error" *ngIf="loginForm.controls['password'].dirty && loginForm.controls['password'].hasError('pattern')">
+                <!-- <ul class="form_error" *ngIf="loginForm.controls['password'].dirty && loginForm.controls['password'].hasError('pattern')">
                                     <li>Password should be of 6 letters.</li>
                                     <li>contain atleast one Capital letter</li>
                                     <li>alphanumeric a-z,0-9</li>
                                     <li>one special character</li>
                                 </ul> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="option_text text-right">
-                            <div class="forgot_password">
-                                <span>Forgot your<a [routerLink]="['/forget-password']">Password?</a></span>
-                            </div>
-                            <!-- <div class="signup_text">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="option_text text-right">
+              <div class="forgot_password">
+                <span
+                  >Forgot your<a [routerLink]="['/forget-password']"
+                    >Password?</a
+                  ></span
+                >
+              </div>
+              <!-- <div class="signup_text">
                                 <span>Don’t have an account? <a [routerLink]="['/signup']">Sign up</a></span>
                             </div> -->
-
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <section class="example-section">
-                            <mat-checkbox [checked]="isRemember" (change)="isRemChange($event)">Remember Me
-                            </mat-checkbox>
-
-                        </section>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="forgot-pass-sec">
-                            <!-- <div class="custom-control custom-checkbox">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <section class="example-section">
+              <mat-checkbox
+                [checked]="isRemember"
+                (change)="isRemChange($event)"
+                >Remember Me
+              </mat-checkbox>
+            </section>
+          </div>
+          <div class="col-md-12">
+            <div class="forgot-pass-sec">
+              <!-- <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customCheck" name="example1">
                                 <label class="custom-control-label" for="customCheck">Remember me</label>
                                 
                             </div> -->
 
-                            <div class="forgot-pass">
-                                <h3><a [routerLink]="['/forget-password']">Forgot Password?</a></h3>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <div class="btn-sec">
-                            <button type="submit" (click)="login()" mat-raised-button color="primary"
-                                [disabled]="!loginForm.valid" class="btn-login">SIGN IN</button>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <!-- <div class="sign-up">
+              <div class="forgot-pass">
+                <h3>
+                  <a [routerLink]="['/forget-password']">Forgot Password?</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="btn-sec">
+              <button
+                type="submit"
+                (click)="login()"
+                mat-raised-button
+                color="primary"
+                [disabled]="!loginForm.valid"
+                class="btn-login"
+              >
+                SIGN IN
+              </button>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <!-- <div class="sign-up">
                             Don't have an account ? <a href="" [routerLink]="['/signup']">SIGN UP NOW</a>
                         </div> -->
-                    </div>
-                </div>
-
-            </form>
-
-
-
-
+          </div>
         </div>
+      </form>
     </div>
-
+  </div>
 </section>

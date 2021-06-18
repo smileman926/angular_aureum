@@ -1,15 +1,22 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { GridOptions } from "@ag-grid-community/all-modules";
+import * as moment from "moment-timezone";
+import { ToastrService } from "ngx-toastr";
+
 import { genralConfig } from "src/app/core/constant/genral-config.constant";
 import { AdminServicesService } from "../../services/admin-services.service";
-import { ToastrService } from "ngx-toastr";
-import * as moment from "moment-timezone";
-import { ButtonRendererComponent } from "./button-renderer.component";
-import { GridOptions } from "@ag-grid-community/all-modules";
-import { PendindLaunchButtonComponent } from "./pendinglaunchbutton.component";
+import { ButtonRendererComponent } from "./renderers/button-renderer.component";
+import { PendindLaunchButtonComponent } from "./renderers/pendinglaunchbutton.component";
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { GenralService } from "src/app/core/services/sharedservices/genralservice/genral.service";
-import { QuestionButtonRendererComponent } from "./question-button-renderer.component";
+import { QuestionButtonRendererComponent } from "./renderers/question-button-renderer.component";
 import { IRowData } from "../../shared/models/IRowData.model";
+import { EditDeleteLaunchButtonsRendererComponent } from "./renderers/edit-delete-launch-button-renderer.component";
+import { GoToWalletButtonComponent } from "./renderers/go-to-wallet.component";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { ProductLaunchStatus } from "../../shared/models/ProductLaunchStatus.model";
 
 @Component({
   selector: "app-setuptracker",
@@ -33,6 +40,7 @@ export class SetuptrackerComponent implements OnInit {
     { label: "Start date", checked: true },
     { label: "End date", checked: true },
     { label: "Type of Payment", checked: true },
+    { label: "Seller Wallet", checked: true },
     { label: "Status", checked: true },
     { label: "Pending Launch", checked: true },
     { label: "Approve Launch Product", checked: true },
@@ -88,12 +96,29 @@ export class SetuptrackerComponent implements OnInit {
     private adminService: AdminServicesService,
     private general_service: GenralService,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService // private http: HttpClient
-  ) {
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.initializeForm();
+
+    this.instForm = this.formBuilder.group({
+      keyword: this.formBuilder.array([]),
+      link: this.formBuilder.array([]),
+      special_link_INS4: ["", Validators.required],
+      rotaryLink: ["", Validators.required],
+    });
+  }
+
+  initializeForm(): void {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
       questionButtonRenderer: QuestionButtonRendererComponent,
       pendinglaunchbuttonRenderer: PendindLaunchButtonComponent,
+      editDeleteLaunchButtonsRenderer: EditDeleteLaunchButtonsRendererComponent,
+      goToWalletRenderer: GoToWalletButtonComponent,
     };
     this.columnDefs = [
       {
@@ -137,7 +162,7 @@ export class SetuptrackerComponent implements OnInit {
       },
       {
         headerName: "Item Name",
-        field: "product_title",
+        field: "product_id.product_title",
         cellRenderer: (params) => {
           return params.value ? params.value : "N/A";
         },
@@ -146,7 +171,7 @@ export class SetuptrackerComponent implements OnInit {
       },
       {
         headerName: "ASIN",
-        field: "asin",
+        field: "product_id.asin",
         cellRenderer: (params) => {
           return params.value ? params.value : "N/A";
         },
@@ -157,14 +182,16 @@ export class SetuptrackerComponent implements OnInit {
         headerName: "Giveaways",
         field: "giveaway_quantity",
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value
+            ? params.value + params.data.evergreen_giveaway_quantity
+            : "N/A";
         },
         sortable: true,
         filter: true,
       },
       {
         headerName: "AMZ Link",
-        field: "amazon_link",
+        field: "product_id.amazon_link",
 
         cellRenderer: (params) =>
           `<a href="${params.value}" target="_blank"><i class="fa fa-external-link"
@@ -185,7 +212,19 @@ export class SetuptrackerComponent implements OnInit {
         headerName: "End date",
         field: "end_date",
         cellRenderer: (params) => {
-          return params.value ? moment(params.value).format("LL") : "N/A";
+          return params.data.evergreen_end_date
+            ? moment(params.value)
+                .add(
+                  moment(params.data.evergreen_end_date).diff(
+                    params.value,
+                    "days"
+                  ),
+                  "days"
+                )
+                .format("LL")
+            : params.value
+            ? moment(params.value).format("LL")
+            : "N/A";
         },
         sortable: true,
         filter: true,
@@ -200,6 +239,16 @@ export class SetuptrackerComponent implements OnInit {
         filter: true,
       },
       {
+        headerName: "Seller Wallet",
+        cellRenderer: "goToWalletRenderer",
+        cellRendererParams: {
+          onClick: this.goToWallet.bind(this),
+          label: "Seller Wallet",
+        },
+        sortable: false,
+        filter: false,
+      },
+      {
         headerName: "Status",
         field: "launch_isActive",
         cellRenderer: (params) => {
@@ -208,7 +257,7 @@ export class SetuptrackerComponent implements OnInit {
             return "";
           }
           if (!this.displayLiveStatus) {
-            if (params.data.isPaymentDone === false) {
+            if (params.data.isSubmitedBySeller === false) {
               status = '<i aria-hidden="true">Not Submitted</i>';
             } else {
               status = params.value
@@ -251,6 +300,17 @@ export class SetuptrackerComponent implements OnInit {
         sortable: false,
         filter: false,
       },
+
+      {
+        headerName: "Actions",
+        cellRenderer: "editDeleteLaunchButtonsRenderer",
+        cellRendererParams: {
+          onClick: this.buttonHandler.bind(this),
+          label: "Click 1",
+        },
+        sortable: false,
+        filter: false,
+      },
     ];
     this.rowData = [];
     this.getSetupTrackerData();
@@ -264,20 +324,7 @@ export class SetuptrackerComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    this.getSetupTrackerData();
-
-    this.instForm = this.formBuilder.group({
-      keyword: this.formBuilder.array([]),
-      link: this.formBuilder.array([]),
-      special_link_INS4: ["", Validators.required],
-      rotaryLink: ["", Validators.required],
-    });
-  }
-
   openConfirmationDialog(obj, rowData) {
-    console.log("This row object is ====>", rowData);
-
     const confirmObj = {
       title: "Are you sure?",
       html: `
@@ -304,7 +351,6 @@ export class SetuptrackerComponent implements OnInit {
         });
       } else {
         this.loader = false;
-        console.log("Canceleee");
       }
     });
   }
@@ -321,16 +367,13 @@ export class SetuptrackerComponent implements OnInit {
       if (res.code === genralConfig.statusCode.ok) {
         this.setupData = res.data;
         this.totalCount = res.total;
-        console.log("Setup data is ========>", this.setupData);
         this.loader = false;
         this.noRecordFound = false;
         this.displayLiveStatus = this.launchSort === "live";
-        // this.toastr.success(res.message);
       } else {
         this.loader = false;
         this.setupData = [];
         this.noRecordFound = true;
-        // this.toastr.error(res.message);
       }
     });
   }
@@ -343,7 +386,6 @@ export class SetuptrackerComponent implements OnInit {
 
   searchData(event) {
     this.searchText = event.target.value;
-    // this.page = 0;
     this.getSetupTrackerData();
   }
 
@@ -353,6 +395,27 @@ export class SetuptrackerComponent implements OnInit {
     this.getSetupTrackerData();
 
     // this.getNotification();
+  }
+
+  buttonHandler(data): void {
+    const rowData = data.rowData;
+    if (data.event.target.textContent === "edit") {
+      console.log("editiiiing");
+      this.router.navigate(["/layout/admin/edit-launch/" + rowData._id]);
+    } else if (data.event.target.textContent === "refresh") {
+      this.openReturnDialog(rowData._id);
+    } else {
+      this.openCancelDialog(rowData._id);
+    }
+  }
+
+  goToWallet(data): void {
+    const seller = data && data.rowData && data.rowData.seller_id && data.rowData.seller_id.user_id;
+    this.router.navigate([`/layout/admin/wallet`], {
+      queryParams: {
+        seller_id: seller && (seller._id || seller[0]._id),
+      },
+    });
   }
 
   approveProductLaunch(data) {
@@ -373,17 +436,69 @@ export class SetuptrackerComponent implements OnInit {
         id: data.rowData._id,
       };
       this.openConfirmationDialog(obj, data.rowData);
-      // this.adminService.approveProductLaunch(obj).subscribe(res => {
-      //     if (res.code === genralConfig.statusCode.ok) {
-      //         this.loader = false;
-      //         this.getSetupTrackerData();
+    }
+  }
 
-      //         this.toastr.success(res.message);
-      //     } else {
-      //         this.loader = false;
-      //         this.toastr.error(res.message);
-      //     }
-      // });
+  openCancelDialog(id: string): void {
+    if (id.length) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: "350px",
+        data: "Do you confirm the cancel of this product launch?",
+      });
+      const productLaunchStatus: ProductLaunchStatus = {
+        launch_isApproved: false,
+        isSubmitedBySeller: true,
+      };
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loader = true;
+          this.adminService
+            .cancelProductLaunchByAdmin(id, productLaunchStatus)
+            .subscribe((res: any) => {
+              this.loader = false;
+              if (res && res.code == genralConfig.statusCode.ok) {
+                this.toastr.success(res.message);
+                this.getSetupTrackerData();
+              } else {
+                this.toastr.error(res.message);
+              }
+            });
+        }
+      });
+    }
+  }
+
+  openReturnDialog(id: string): void {
+    if (id.length) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: "350px",
+        data: "Do you want ot return this product launch to seller?",
+      });
+      const productLaunchStatus: ProductLaunchStatus = {
+        launch_isApproved: false,
+        isSubmitedBySeller: false,
+      };
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loader = true;
+          this.adminService
+            .cancelProductLaunchByAdmin(id, productLaunchStatus)
+            .subscribe(
+              (res: any) => {
+                this.loader = false;
+                if (res && res.code == genralConfig.statusCode.ok) {
+                  this.toastr.success(res.message);
+                  this.getSetupTrackerData();
+                } else {
+                  this.toastr.error(res.message);
+                }
+              },
+              (error) => {
+                this.toastr.error(error.message);
+              }
+            );
+        }
+      });
     }
   }
 
@@ -452,8 +567,6 @@ export class SetuptrackerComponent implements OnInit {
     }
     const newState = !valueColumn.isVisible();
     this.gridOptions.columnApi.setColumnVisible(valueColumn, newState);
-    // this.gridOptions.api.sizeColumnsToFit();
-    // this.customizedColumns = false
   }
 
   displayDialog() {
@@ -475,7 +588,7 @@ export class SetuptrackerComponent implements OnInit {
       ? data.rowData.questionary.questions
       : [];
     this.selectProductModal = {
-      title: data.rowData.product_title,
+      title: data.rowData.product_id.product_title,
       id: data.rowData._id,
       questions,
     };
@@ -514,7 +627,6 @@ export class SetuptrackerComponent implements OnInit {
     });
     this.viewInst = true;
     this.productData = data.rowData;
-    console.log(data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
   }
 
   get keywordArr() {
@@ -526,7 +638,6 @@ export class SetuptrackerComponent implements OnInit {
   }
 
   updateINS() {
-    console.log(this.instForm.value, "++++++++++++++++++++++++++++++++");
     this.loader = true;
     const obj = {
       id: this.productData._id,

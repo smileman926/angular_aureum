@@ -66,6 +66,8 @@ export class GiveawaysdbComponent implements OnInit {
   totalCount: any;
   // pageCountLink: any;
   page = genralConfig.paginator.PAGE;
+  displayDialogue: boolean = false;
+  searchKeyword: string = "";
   searchText: "";
   giveawaysData = [];
   loader: boolean = false;
@@ -101,7 +103,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "GW",
         field: 'giveaway?giveaway:"NA"',
         width: 120,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var celdata;
           console.log("params ga", params.node.childIndex);
           return (celdata = params ? params.node.childIndex + 1 : "N/A");
@@ -113,7 +115,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Launch No",
         field: "product_id.launch_number",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var launchData;
           return (launchData = params.value ? params.value : "N/A");
         },
@@ -123,7 +125,7 @@ export class GiveawaysdbComponent implements OnInit {
       {
         headerName: "Product Name",
         field: "product_id.product_title",
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var title;
           return (title = params.value ? params.value : "N/A");
         },
@@ -134,7 +136,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Brand",
         field: "brand.brand_name",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           console.log("params", params);
           var celldata;
           return (celldata = params.value ? params.value : "N/A");
@@ -152,7 +154,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "AMZ Link",
         field: "product_id.amazon_link",
         width: 150,
-        cellRenderer: (params) =>
+        cellRenderer: params =>
           `<a href="${params.value}" target="_blank"><i class="fa fa-external-link"
       aria-hidden="true"></i></a>`,
         sortable: true,
@@ -162,7 +164,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "F Name",
         field: "user_id.firstname",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var fName;
           return (fName = params.value ? params.value : "N/A");
         },
@@ -173,7 +175,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "L Name",
         field: "user_id.lastname",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var lname;
           return (lname = params.value ? params.value : "N/A");
         },
@@ -184,7 +186,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Member No",
         field: "user_id._id",
         width: 140,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var memberNO;
           return (memberNO = params.value ? params.value : "N/A");
         },
@@ -195,7 +197,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Tier",
         field: "tier_id.name",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var tier;
           return (tier = params.value ? params.value : "N/A");
         },
@@ -212,7 +214,7 @@ export class GiveawaysdbComponent implements OnInit {
         width: 150,
         cellRendererFramework: RouterLinkComponent,
         //  cellRenderer: 'linkRenderer',
-        cellRendererParams: (params) => {
+        cellRendererParams: params => {
           return {
             inRouterLink: "/layout/admin/reimbursement",
             customValue: params.value,
@@ -225,7 +227,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Order Status",
         field: "order_status",
         width: 200,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var ord;
           return (ord = params.value ? params.value : "N/A");
         },
@@ -236,7 +238,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "Amount",
         field: "product_id.price",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var amt;
           return (amt = params.value ? params.value : "N/A");
         },
@@ -247,7 +249,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "RMB?",
         field: "is_reimburshed",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var fName;
 
           // `<i *ngIf="!element.is_reimburshed" class="fa fa-close"
@@ -265,7 +267,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "PP Email",
         field: "paypal_email",
         width: 130,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var ppemail;
           return (ppemail = params.value ? params.value : "N/A");
         },
@@ -276,7 +278,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "GW Date",
         field: "gw_date",
         width: 200,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var gw;
           //  return gw = params.value?params.value:'N/A'
           return (gw = params.value
@@ -290,7 +292,7 @@ export class GiveawaysdbComponent implements OnInit {
         headerName: "ORD Date",
         field: "createdAt",
         width: 200,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           var ord;
           return (ord = params.value
             ? moment(params.value).format("LL")
@@ -305,14 +307,37 @@ export class GiveawaysdbComponent implements OnInit {
       // }, sortable: true, filter: true },
       {
         headerName: "Target kw/link",
-        field: "product_id",
+        field: "productsLaunched",
         width: 150,
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           console.log("target link params", params);
-          var match;
-          return (match = params.value
-            ? params.value.search_keywords[0].keyword
-            : "N/A");
+
+          if (params.value !== null)
+          {
+            if (params.value.search_method !== null)
+            {
+              const method = params.value.search_method;
+
+              if (method === "keywords")
+              {
+                const search_keywords = params.value.search_keywords[0].keyword;
+
+                return search_keywords;
+
+              } else if (method === "link")
+              {
+                const special_links = params.value.special_links[0].link;
+
+                return `<a href="${special_links}" target="_blank"> ${special_links}</a>`;
+              } else
+              {
+                return "N/A";
+              }
+            }
+          } else
+          {
+            return "N/A"
+          }
         },
         sortable: true,
         filter: true,
@@ -377,7 +402,7 @@ export class GiveawaysdbComponent implements OnInit {
     this.loader = true;
     let obj = {
       page: this.page,
-      limit: this.count,
+      count: this.count,
       searchText: this.searchText ? this.searchText : "",
       order_no: this.orderNo,
       sort: this.sort,
@@ -385,24 +410,38 @@ export class GiveawaysdbComponent implements OnInit {
     console.log("Object : ", obj);
     this._adminServices.listAllGiveawayData(obj).subscribe((res: any) => {
       // console.log("listAllGiveawayData  ", res.data[0].amazon_orderId)
+      console.log(res.data);
       this.loader = false;
-      if (res && res.code == genralConfig.statusCode.ok) {
+      if (res && res.code == genralConfig.statusCode.ok)
+      {
         this.noRecordFound = false;
         this.giveawaysData = res.data;
         this.totalCount = res.total;
         console.log("total ccccc...", this.totalCount);
-        if (this.giveawaysData.length == 0) {
+        if (this.giveawaysData.length == 0)
+        {
           this.giveawaysData = [];
           this.noRecordFound = true;
         }
-      } else if (res && res.code == genralConfig.statusCode.data_not_found) {
+      } else if (res && res.code == genralConfig.statusCode.data_not_found)
+      {
         this.noRecordFound = true;
         this.giveawaysData = [];
         // this.toastr.success(res.message);
-      } else {
+      } else
+      {
         this.toastr.error(res.message);
       }
     });
+  }
+
+  DisplayDialogue(data, keyword) {
+    this.searchKeyword = keyword;
+    this.displayDialogue = true;
+  }
+
+  closedilog() {
+    this.displayDialogue = false;
   }
 
   paginate(event) {
@@ -433,94 +472,112 @@ export class GiveawaysdbComponent implements OnInit {
   onChange(event, index, item): void {
     const columns = this.gridOptions.columnApi.getAllColumns();
     var valueColumn;
-    if (item.label === "GW") {
+    if (item.label === "GW")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "GW"
+        column => column.getColDef().headerName === "GW"
       )[0];
     }
-    if (item.label === "Launch No") {
+    if (item.label === "Launch No")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Launch No"
+        column => column.getColDef().headerName === "Launch No"
       )[0];
     }
-    if (item.label === "Product Name") {
+    if (item.label === "Product Name")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Product Name"
+        column => column.getColDef().headerName === "Product Name"
       )[0];
     }
-    if (item.label === "Brand") {
+    if (item.label === "Brand")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Brand"
+        column => column.getColDef().headerName === "Brand"
       )[0];
     }
-    if (item.label === "ASIN") {
+    if (item.label === "ASIN")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "ASIN"
+        column => column.getColDef().headerName === "ASIN"
       )[0];
     }
-    if (item.label === "AMZ Link") {
+    if (item.label === "AMZ Link")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "AMZ Link"
+        column => column.getColDef().headerName === "AMZ Link"
       )[0];
     }
-    if (item.label === "F Name") {
+    if (item.label === "F Name")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "F Name"
+        column => column.getColDef().headerName === "F Name"
       )[0];
     }
-    if (item.label === "L Name") {
+    if (item.label === "L Name")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "L Name"
+        column => column.getColDef().headerName === "L Name"
       )[0];
     }
-    if (item.label === "Member No") {
+    if (item.label === "Member No")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Member No"
+        column => column.getColDef().headerName === "Member No"
       )[0];
     }
-    if (item.label === "Tier") {
+    if (item.label === "Tier")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Tier"
+        column => column.getColDef().headerName === "Tier"
       )[0];
     }
-    if (item.label === "Order no") {
+    if (item.label === "Order no")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Order no"
+        column => column.getColDef().headerName === "Order no"
       )[0];
     }
-    if (item.label === "ORD?") {
+    if (item.label === "ORD?")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "ORD?"
+        column => column.getColDef().headerName === "ORD?"
       )[0];
     }
-    if (item.label === "Amount") {
+    if (item.label === "Amount")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Amount"
+        column => column.getColDef().headerName === "Amount"
       )[0];
     }
-    if (item.label === "RMB?") {
+    if (item.label === "RMB?")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "RMB?"
+        column => column.getColDef().headerName === "RMB?"
       )[0];
     }
-    if (item.label === "PP Email") {
+    if (item.label === "PP Email")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "PP Email"
+        column => column.getColDef().headerName === "PP Email"
       )[0];
     }
-    if (item.label === "GW Date") {
+    if (item.label === "GW Date")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "GW Date"
+        column => column.getColDef().headerName === "GW Date"
       )[0];
     }
-    if (item.label === "ORD Date") {
+    if (item.label === "ORD Date")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "ORD Date"
+        column => column.getColDef().headerName === "ORD Date"
       )[0];
     }
-    if (item.label === "Target kw/link") {
+    if (item.label === "Target kw/link")
+    {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Target kw/link"
+        column => column.getColDef().headerName === "Target kw/link"
       )[0];
     }
     const newState = !valueColumn.isVisible();

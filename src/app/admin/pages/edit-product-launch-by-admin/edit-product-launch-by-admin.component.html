@@ -1,0 +1,1340 @@
+<div class="content-wrapper">
+  <section class="content">
+    <!-- <div class="container-fluid" *ngIf="!productList.length">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box page-title-box-sec">
+            <h4 class="pageTitle pageTitle-sec">Add a Launch</h4>
+          </div>
+          <div class="container-fluid">
+            <div class="mt-3 ml-5 text-center no-rec">
+              Please add a product before adding a launch. product to launch
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="container-fluid" *ngIf="productList.length">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box page-title-box-sec">
+            <h4 class="pageTitle pageTitle-sec">Add a launch</h4>
+          </div>
+        </div>
+      </div>
+      <div class="total-cost">
+        <ul>
+          <li>
+            <div *ngIf="isEvergreenLaunch">
+              <span>
+                PRODUCT COSTS
+                <i
+                  class="fa fa-question-circle"
+                  matTooltip="Product Cost Calc:
+                                ({{ totalUnits ? totalUnits : '0' }} units + {{
+                    evergreenTotalUnits ? evergreenTotalUnits : '0'
+                  }} evergreen units) x {{
+                    product_actual_price ? (product_actual_price | currency) : 0
+                  }} = 
+                                {{
+                    productDetailsPrice
+                      ? (productDetailsPrice + evergreenProductDetailsPrice
+                        | currency)
+                      : '$0.00'
+                  }}"
+                ></i
+              ></span>
+
+              <div class="total-cost-inner">
+                {{
+                  product_actual_price
+                    ? (productDetailsPrice + evergreenProductDetailsPrice
+                      | currency)
+                    : '$0.00'
+                }}
+              </div>
+            </div>
+            <div *ngIf="!isEvergreenLaunch">
+              <span>
+                PRODUCT COSTS
+                <i
+                  class="fa fa-question-circle"
+                  matTooltip="Product Cost Calc:
+                                {{ totalUnits ? totalUnits : '0' }} 
+                                units x {{
+                    product_actual_price ? (product_actual_price | currency) : 0
+                  }} = 
+                                {{
+                    productDetailsPrice
+                      ? (productDetailsPrice | currency)
+                      : productDetails
+                      ? product_actual_price
+                        ? (product_actual_price | currency)
+                        : '$0.00'
+                      : '$0.00'
+                  }}"
+                ></i
+              ></span>
+
+              <div class="total-cost-inner">
+                {{
+                  product_actual_price
+                    ? (product_actual_price * (totalUnits || 1) | currency)
+                    : product_actual_price
+                    ? product_actual_price.price
+                      ? (product_actual_price.price | currency)
+                      : '$0.00'
+                    : '$0.00'
+                }}
+              </div>
+            </div>
+          </li>
+          <li>
+            <span>
+              GIVEAWAY FEES
+              <i
+                class="fa fa-question-circle"
+                matTooltip="Giveaway Fee Calc:
+                            {{ totalUnits ? totalUnits : '0' }} - {{
+                  remainingFreeGiveaways ? remainingFreeGiveaways : '0'
+                }} (subscription) = {{ paidUnits }} paid units x 4.95 = {{
+                  giveAwayPrice ? (giveAwayPrice | currency) : '$0.00'
+                }} "
+              ></i
+            ></span>
+            <div class="total-cost-inner">
+              {{ giveAwayPrice | currency }}
+            </div>
+          </li>
+          <li>
+            <div *ngIf="isEvergreenLaunch">
+              <span>
+                REBATE FEES + TAXES
+                <i
+                  class="fa fa-question-circle"
+                  matTooltip="Rebate Fees + Taxes Calc:
+                            {{
+                    productDetailsPrice
+                      ? (productDetailsPrice + evergreenProductDetailsPrice
+                        | currency)
+                      : '$0.00'
+                  }} x 5% = {{
+                    additionalFee
+                      ? (additionalFee + evergeenAdditionalFee | currency)
+                      : '$0.00'
+                  }} "
+                ></i
+              ></span>
+              <div class="total-cost-inner">
+                {{ additionalFee + evergeenAdditionalFee | currency }}
+              </div>
+            </div>
+            <div *ngIf="!isEvergreenLaunch">
+              <span>
+                REBATE FEES + TAXES
+                <i
+                  class="fa fa-question-circle"
+                  matTooltip="Rebate Fees + Taxes Calc:
+                            {{
+                    productDetailsPrice
+                      ? (productDetailsPrice | currency)
+                      : '$0.00'
+                  }} x 5% = {{
+                    additionalFee ? (additionalFee | currency) : '$0.00'
+                  }} "
+                ></i
+              ></span>
+              <div class="total-cost-inner">
+                {{ additionalFee | currency }}
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="make_it_blue"> TOTAL LAUNCH COST</span>
+            <div class="total-cost-inner make_it_blue">
+              {{ totalLaunchCost | currency }}
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <p-progressBar [value]="value"></p-progressBar>
+
+      <div class="add-launch-stepper">
+        <div class="spinner-section" *ngIf="loader">
+          <mat-spinner></mat-spinner>
+        </div>
+        <mat-horizontal-stepper linear #stepper>
+          <mat-step [stepControl]="addLaunchForm">
+            <form [formGroup]="addLaunchForm">
+              <ng-template matStepLabel> General Information </ng-template>
+
+              <h2>Launch Setup - General Information</h2>
+
+              <div class="add-launch">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="add-launch-img">
+                      <img
+                        [src]="product_image_url"
+                        class="product-image"
+                        onerror='this.onerror=null;this.src="../../../../assets/img/default_img.png";'
+                        alt="Product Image"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field>
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="product"
+                              placeholder="PRODUCT NAME"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field
+                            class="example-full-width relative-sec"
+                          >
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="brand_name"
+                              placeholder="BRAND NAME"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field
+                            class="example-full-width relative-sec"
+                          >
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="product_asin"
+                              placeholder="PRODUCT ASIN"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field
+                            class="example-full-width relative-sec"
+                          >
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="price"
+                              placeholder="PRODUCT PRICE"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field>
+                            <mat-label>LAUNCH PLATFORM</mat-label>
+                            <mat-select
+                              formControlName="launchPlatform"
+                              (selectionChange)="getLaunchPlatform($event)"
+                            >
+                              <mat-option disabled value="">
+                                Select Platform
+                              </mat-option>
+                              <mat-option
+                                *ngFor="let option of launchPlatformOptionList"
+                                [value]='option.type'
+                                [disabled]='option.disabled'
+                              >
+                                {{
+                                  option.title
+                                }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6" *ngIf="displayOtherPlatform">
+                        <div class="add-launch-input">
+                          <mat-form-field
+                            class="example-full-width relative-sec"
+                          >
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="otherPlatform"
+                              placeholder="Other Launch Platform"
+                            />
+                          </mat-form-field>
+                          <div
+                            class="error-msg"
+                            *ngIf="
+                              addLaunchForm.controls['otherPlatform'].dirty &&
+                              addLaunchForm.controls['otherPlatform'].invalid
+                            "
+                          >
+                            <p
+                              class="form_error"
+                              *ngIf="
+                                addLaunchForm.controls[
+                                  'otherPlatform'
+                                ].hasError('pattern')
+                              "
+                            >
+                              Please enter a valid platform
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="add-launch-input">
+                          <mat-form-field
+                            class="example-full-width relative-sec"
+                          >
+                            <input
+                              autocomplete="off"
+                              type="number"
+                              matInput
+                              formControlName="giveaway_price"
+                              placeholder="GIVEAWAY PRICE"
+                              (input)="setProdCost($event)"
+                            />
+                          </mat-form-field>
+                          <div
+                            class="error-msg"
+                            *ngIf="
+                              addLaunchForm.controls['giveaway_price']
+                                .invalid &&
+                              addLaunchForm.controls['giveaway_price'].touched
+                            "
+                          >
+                            <p
+                              class="form_error"
+                              *ngIf="
+                                addLaunchForm.controls[
+                                  'giveaway_price'
+                                ].hasError('required')
+                              "
+                            >
+                              Please enter giveaway price
+                            </p>
+                            <p
+                              class="form_error"
+                              *ngIf="
+                                addLaunchForm.controls[
+                                  'giveaway_price'
+                                ].hasError('max')
+                              "
+                            >
+                              Giveaway Price must be at least 90% off Product
+                              Price
+                            </p>
+                            <p
+                              class="form_error"
+                              *ngIf="
+                                addLaunchForm.controls[
+                                  'giveaway_price'
+                                ].hasError('min')
+                              "
+                            >
+                              Please enter correct giveaway price
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="first-step-next">
+                <button
+                  mat-button
+                  matStepperNext
+                  (click)="firstStepOver($event)"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Launch Setup - Giveaway Details -->
+
+          <!-- second step -->
+
+          <mat-step [completed]="canMoveToStepThree">
+            <form [formGroup]="addGiveawayForm">
+              <ng-template matStepLabel>Giveaway Details </ng-template>
+
+              <h2>Launch Setup - Giveaway Details</h2>
+              <div class="add-launch">
+                <div class="row">
+                  <div class="col-md-12">
+                    <label>UNIT GIVEAWAYS AND ADDITIONAL BOOSTS</label>
+                    <p>
+                      DID YOU KNOW: Brand Expand uses a proprietary, data-driven
+                      giveaway method to construct a safe and effective product
+                      launch that supercharges product ranking and positions
+                      your product for success post-launch?!
+                    </p>
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="row">
+                          <div class="col-md-5">
+                            <label>HOW MANY UNITS ARE YOU GIVING AWAY?</label>
+                            <div
+                              class="error-msg"
+                              *ngIf="
+                                addGiveawayForm.controls['units'].dirty &&
+                                addGiveawayForm.controls['units'].invalid
+                              "
+                            >
+                              <p
+                                class="form_error"
+                                *ngIf="
+                                  addGiveawayForm.controls['units'].hasError(
+                                    'required'
+                                  )
+                                "
+                              >
+                                Please enter number of units
+                              </p>
+                              <p
+                                class="form_error"
+                                *ngIf="
+                                  addGiveawayForm.controls['units'].hasError(
+                                    'pattern'
+                                  )
+                                "
+                              >
+                                Please enter valid units
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="add-launch-input">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <label for="no-of-units"
+                                  >No of units<span class="red-asterix">
+                                    *</span
+                                  ></label
+                                >
+                                <input
+                                  id="no-of-units"
+                                  autocomplete="off"
+                                  type="text"
+                                  maxlength="5"
+                                  min="1"
+                                  max="99999"
+                                  matInput
+                                  formControlName="units"
+                                  (change)="setTotalUnit($event)"
+                                />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-5">
+                            <label>WHEN IS THE START DATE?</label>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="add-launch-input">
+                              <mat-form-field
+                                class="example-full-widtha relative-seca"
+                              >
+                                <label for="startDate"
+                                  >Start date<span class="red-asterix"> *</span>
+                                </label>
+                                <input
+                                  id="startDate"
+                                  matInput
+                                  (focus)="picker.open()"
+                                  (click)="picker.open()"
+                                  [min]="minDate"
+                                  [max]="maxDate"
+                                  [matDatepicker]="picker"
+                                  formControlName="start_date"
+                                />
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-5">
+                            <label>Enter regular launch duration</label>
+                            <div
+                              class="error-msg"
+                              *ngIf="
+                                addGiveawayForm.controls['duration'].dirty &&
+                                addGiveawayForm.controls['duration'].invalid
+                              "
+                            >
+                              <p
+                                class="form_error"
+                                *ngIf="
+                                  addGiveawayForm.controls['duration'].hasError(
+                                    'pattern'
+                                  )
+                                "
+                              >
+                                Please enter correct launch duration (days)
+                              </p>
+                              <p
+                                class="form_error"
+                                *ngIf="
+                                  addGiveawayForm.controls['duration'].hasError(
+                                    'min'
+                                  )
+                                "
+                              >
+                                The duration of the giveaway show cannot be less
+                                than one day
+                              </p>
+                              <p
+                                class="form_error"
+                                *ngIf="
+                                  addGiveawayForm.controls['duration'].hasError(
+                                    'max'
+                                  )
+                                "
+                              >
+                                The duration of the giveaway show cannot be more
+                                than 90 day
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="add-launch-input">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <label for="launchDuration"
+                                  >Launch duration (days)<span
+                                    class="red-asterix"
+                                  >
+                                    *</span
+                                  ></label
+                                >
+                                <input
+                                  id="launchDuration"
+                                  autocomplete="off"
+                                  type="number"
+                                  matInput
+                                  formControlName="duration"
+                                  (change)="setLaunchDuration($event)"
+                                />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="daily-giveaway">
+                              <div>ENTER DAILY GIVEAWAYS</div>
+                              <div class="daily-giveaway">(max 90 days)</div>
+                              <span style="margin-top: -5px">
+                                <i
+                                  *ngIf="advanceDailyGiveaway"
+                                  class="fa fa-check-circle-o fa-2x"
+                                  style="color: green"
+                                  aria-hidden="true"
+                                ></i>
+                                <i
+                                  *ngIf="!advanceDailyGiveaway"
+                                  class="fa fa-ban fa-2x"
+                                  style="color: red"
+                                  aria-hidden="true"
+                                ></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          *ngIf="showLaunchDailySchedule"
+                          class="advance-giveaway"
+                        >
+                          <form [formGroup]="advanceGiveawayForm">
+                            <p class="custom-padding">
+                              Units Remaining:
+                              <span style="font-weight: bold">{{
+                                remain
+                              }}</span>
+                            </p>
+                            <div
+                              formArrayName="day"
+                              class="advance-giveaway-inner"
+                            >
+                              <div
+                                *ngFor="
+                                  let day of daysArr.controls;
+                                  let i = index
+                                "
+                                [formGroupName]="i"
+                              >
+                                <div>
+                                  <div class="add-launch-input">
+                                    <mat-form-field
+                                      class="example-full-width relative-sec"
+                                    >
+                                      <input
+                                        autocomplete="off"
+                                        type="number"
+                                        min="0"
+                                        matInput
+                                        placeholder="Day {{ i + 1 }}"
+                                        (input)="eval($event, i, remain)"
+                                        formControlName="day"
+                                      />
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="first-step-next">
+                <button
+                  mat-button
+                  matStepperPrevious
+                  (click)="backToFirstStep()"
+                >
+                  Back
+                </button>
+
+                <button
+                  type="button"
+                  mat-button
+                  [disabled]="isSecondStepNextButtonDisabled()"
+                  (click)="openSecondStepOverDialog(stepper)"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- third step -->
+
+          <mat-step [stepControl]="addLaunchSetup">
+            <form [formGroup]="addLaunchSetup">
+              <ng-template matStepLabel>Launch Details</ng-template>
+
+              <h2>Launch Setup - Giveaway Details</h2>
+              <div class="add-launch">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h4>HOW WOULD YOU LIKE CUSTOMERS TO FIND YOUR PRODUCT?</h4>
+                    <div class="radio-sec" *ngIf="isKeyMethod">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label class="container"
+                            >KEYWORD(S) (INTERACTIVE BUYS)
+                            <input
+                              checked
+                              type="radio"
+                              name="radio"
+                              (click)="keyWordMethodSelected()"
+                            />
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <div class="col-md-12">
+                          <label class="container"
+                            >SPECIAL LINK
+                            <input
+                              type="radio"
+                              name="radio"
+                              (click)="linkMethodSelected()"
+                            />
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="radio-sec" *ngIf="!isKeyMethod">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label class="container"
+                            >KEYWORD(S) (INTERACTIVE BUYS)
+                            <input
+                              type="radio"
+                              name="radio"
+                              (click)="keyWordMethodSelected()"
+                            />
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <div class="col-md-12">
+                          <label class="container"
+                            >SPECIAL LINK
+                            <input
+                              checked
+                              type="radio"
+                              name="radio"
+                              (click)="linkMethodSelected()"
+                            />
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-11" *ngIf="isKeyMethod">
+                    <div class="add-launch-input">
+                      <div class="row">
+                        <div class="col-md-7">
+                          <label
+                            >PLEASE ENTER YOUR KEYWORD(S) BELOW (MAX: 5)
+                          </label>
+                        </div>
+                        <div class="col-md-5">
+                          <label>ENTER WEIGHT OF EACH KEYWORD </label>
+                        </div>
+                      </div>
+
+                      <div formArrayName="keyword">
+                        <div
+                          *ngFor="
+                            let keyword of keywordArr.controls;
+                            let i = index
+                          "
+                          [formGroupName]="i"
+                        >
+                          <div class="row">
+                            <div class="col-md-7">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <input
+                                  type="text"
+                                  matInput
+                                  formControlName="keyword"
+                                  placeholder="keyword"
+                                />
+                              </mat-form-field>
+                              <div
+                                class="error-msg"
+                                *ngIf="
+                                  keyword.controls['keyword'].dirty &&
+                                  keyword.controls['keyword'].invalid
+                                "
+                              >
+                                <p
+                                  class="form_error"
+                                  *ngIf="
+                                    keyword.controls['keyword'].hasError(
+                                      'required'
+                                    )
+                                  "
+                                >
+                                  Please enter Keyword
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <input
+                                  type="number"
+                                  matInput
+                                  placeholder="KW{{ i + 1 }}"
+                                  (change)="evalKeyWeight()"
+                                  formControlName="keywordWeight"
+                                />
+                              </mat-form-field>
+                              <div
+                                class="error-msg"
+                                *ngIf="
+                                  keyword.controls['keywordWeight'].dirty &&
+                                  keyword.controls['keywordWeight'].invalid
+                                "
+                              >
+                                <p
+                                  class="form_error"
+                                  *ngIf="
+                                    keyword.controls['keywordWeight'].hasError(
+                                      'required'
+                                    )
+                                  "
+                                >
+                                  Please enter keyword weight
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div style="clear: both"></div>
+                              <a
+                                class="pull-right mb-2 btn btn-success btn-sm"
+                                href="javascript:void(0)"
+                                (click)="deleteKeyword(i)"
+                                ><i class="fa fa-trash" aria-hidden="true"></i
+                                >Delete KEYWORD
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        class="btn btn-success btn-sm"
+                        href="javascript:void(0)"
+                        (click)="addNewKeyword()"
+                        ><i class="fa fa-plus" aria-hidden="true"></i>ADD
+                        KEYWORD
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="col-md-11" *ngIf="isLinkMethod">
+                    <div class="add-launch-input">
+                      <div class="row">
+                        <div class="col-md-7">
+                          <label
+                            >PLEASE ENTER YOUR LINK(S) BELOW (MAX: 5)
+                          </label>
+                        </div>
+                        <div class="col-md-5">
+                          <label>ENTER WEIGHT OF EACH LINK </label>
+                        </div>
+                      </div>
+
+                      <div formArrayName="link">
+                        <div
+                          *ngFor="let link of linkArr.controls; let i = index"
+                          [formGroupName]="i"
+                        >
+                          <div class="row">
+                            <div class="col-md-7">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <input
+                                  type="text"
+                                  matInput
+                                  formControlName="link"
+                                  placeholder="link"
+                                />
+                              </mat-form-field>
+                              <div
+                                class="error-msg"
+                                *ngIf="
+                                  link.controls['link'].dirty &&
+                                  link.controls['link'].invalid
+                                "
+                              >
+                                <p
+                                  class="form_error"
+                                  *ngIf="
+                                    link.controls['link'].hasError('required')
+                                  "
+                                >
+                                  Please enter link
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <mat-form-field
+                                class="example-full-width relative-sec"
+                              >
+                                <input
+                                  type="number"
+                                  matInput
+                                  formControlName="linkWeight"
+                                  (change)="evalLinkWeight()"
+                                  placeholder="LINK{{ i + 1 }}"
+                                />
+                              </mat-form-field>
+                              <div
+                                class="error-msg"
+                                *ngIf="
+                                  link.controls['linkWeight'].dirty &&
+                                  link.controls['linkWeight'].invalid
+                                "
+                              >
+                                <p
+                                  class="form_error"
+                                  *ngIf="
+                                    link.controls['linkWeight'].hasError(
+                                      'required'
+                                    )
+                                  "
+                                >
+                                  Please enter link weight
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <a
+                                class="pull-right mb-2 btn btn-success btn-sm"
+                                href="javascript:void(0)"
+                                (click)="deleteLink(i)"
+                                ><i class="fa fa-trash" aria-hidden="true"></i>
+                                Delete LINK
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        class="btn btn-success btn-sm"
+                        href="javascript:void(0)"
+                        (click)="addNewLink()"
+                        ><i class="fa fa-plus" aria-hidden="true"></i>
+                        ADD LINK
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="first-step-next">
+                <button mat-button matStepperPrevious (click)="thirdStepBack()">
+                  Back
+                </button>
+
+                <button
+                  [disabled]="
+                    (!keywordArr || keywordArr.length <= 0) &&
+                    (!linkArr || linkArr.length <= 0)
+                  "
+                  mat-button
+                  matStepperNext
+                  (click)="thirdStepNext()"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- fourth step -->
+          <mat-step [stepControl]="addEvergreenLaunchSetup">
+            <form [formGroup]="addEvergreenLaunchSetup">
+              <ng-template matStepLabel>Evergreen Details</ng-template>
+              <div class="promo-section">
+                <div class="d-flex">
+                  <h2>EvergreenBX</h2>
+                  <h4 style="padding-left: 20px; padding-bottom: 10px">
+                    <a (click)="showVideo()">HOW IT WORKS</a>
+                  </h4>
+                </div>
+
+                <p>
+                  Our EvergreenBX tool allows you to extend launches up to 365
+                  days with NO GIVEAWAY FEES. During this period (after
+                </p>
+                <p>
+                  initial launch completion) we will giveaway up to six (6)
+                  units daily for up to 365 days targeting up to three (3)
+                  keywords.
+                </p>
+
+                <h4 *ngIf="showSubscriptionUpgradeSelect">
+                  THIS FEATURE ONLY AVAILABLE TO
+                  <a>BRAND EXPANDER </a>
+                  AND HIGHER TIERS
+                </h4>
+                <h4 *ngIf="showNeedMoreRegularLaunches">
+                  TO START EVERGREEN LAUNCH YOUR TOTAL GIVEAWAYS MUST BE AT
+                  LEAST 100.
+                </h4>
+              </div>
+
+              <div class="add-launch">
+                <div
+                  class="d-flex flex-column align-items-start"
+                  *ngIf="showEvergreenSelect"
+                >
+                  <h4 class="d-flex" style="margin-bottom: 10px">
+                    WOULD YOU LIKE TO FOLLOW THIS UP WITH A FREE EVERGREEN
+                    LAUNCH?
+                  </h4>
+                  <div *ngIf="!isEvergreenLaunch">
+                    <div class="d-flex">
+                      <label class="container"
+                        >YES
+                        <input
+                          type="radio"
+                          name="radio"
+                          (click)="evergreenLaunchIsSelected()"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="d-flex">
+                      <label class="container"
+                        >NO
+                        <input
+                          type="radio"
+                          name="radio"
+                          (click)="usualLaunchIsSelected()"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div *ngIf="isEvergreenLaunch">
+                    <div class="d-flex">
+                      <label class="container"
+                        >YES
+                        <input
+                          checked
+                          type="radio"
+                          name="radio"
+                          (click)="evergreenLaunchIsSelected()"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="d-flex">
+                      <label class="container"
+                        >NO
+                        <input
+                          type="radio"
+                          name="radio"
+                          (click)="usualLaunchIsSelected()"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isEvergreenLaunch" class="d-flex flex-column">
+                  <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column">
+                      <div class="daily-giveaway">
+                        TOTAL EVERGREEN GIVEAWAYS (MAX: {{ totalUnits }})
+                      </div>
+                      <div class="add-launch-input">
+                        <mat-form-field>
+                          <input
+                            type="text"
+                            maxlength="5"
+                            matInput
+                            formControlName="evergreen_giveaways"
+                            placeholder="Enter Total Giveaways"
+                            (change)="setTotalEvergreenUnits($event)"
+                          />
+                        </mat-form-field>
+                        <div
+                          class="error-msg"
+                          *ngIf="
+                            addEvergreenLaunchSetup.controls[
+                              'evergreen_giveaways'
+                            ].dirty &&
+                            addEvergreenLaunchSetup.controls[
+                              'evergreen_giveaways'
+                            ].invalid
+                          "
+                        >
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_giveaways'
+                              ].hasError('required')
+                            "
+                          >
+                            Please Enter Total Evergreen Giveaways
+                          </p>
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_giveaways'
+                              ].hasError('max')
+                            "
+                          >
+                            You can set no more than {{ totalUnits }} giveaways
+                          </p>
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_giveaways'
+                              ].hasError('min')
+                            "
+                          >
+                            You can set no less than 1 giveaway
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="daily-giveaway">
+                        MAX DAILY GIVEAWAYS (MAX: 6)
+                      </div>
+                      <div class="add-launch-input">
+                        <mat-form-field>
+                          <input
+                            type="text"
+                            maxlength="1"
+                            matInput
+                            formControlName="evergreen_daily_giveaways"
+                            placeholder="Enter Daily Giveaways"
+                            (change)="setMaxDailyGiveaways($event)"
+                          />
+                        </mat-form-field>
+                        <div
+                          class="error-msg"
+                          *ngIf="
+                            addEvergreenLaunchSetup.controls[
+                              'evergreen_daily_giveaways'
+                            ].invalid &&
+                            addEvergreenLaunchSetup.controls[
+                              'evergreen_daily_giveaways'
+                            ].touched
+                          "
+                        >
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_daily_giveaways'
+                              ].hasError('required')
+                            "
+                          >
+                            Please enter giveaway price
+                          </p>
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_daily_giveaways'
+                              ].hasError('max')
+                            "
+                          >
+                            You can set no more than 6 daily giveaways
+                          </p>
+                          <p
+                            class="form_error"
+                            *ngIf="
+                              addEvergreenLaunchSetup.controls[
+                                'evergreen_daily_giveaways'
+                              ].hasError('min')
+                            "
+                          >
+                            You can set no less than 1 daily giveaways
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex flex-column justify-content-star"
+                      style="margin-right: 20%"
+                    >
+                      <div class="d-flex flex-column justify-content-around">
+                        <div class="d-flex flex-column justify-content-around">
+                          <div class="row">
+                            <div>
+                              <label
+                                >PLEASE ENTER YOUR KEYWORD(S) BELOW (MAX: 3)
+                              </label>
+                            </div>
+                          </div>
+
+                          <div formArrayName="everGreenKeyword">
+                            <div
+                              *ngFor="
+                                let everGreenKeyword of everGreenKeywordArr.controls;
+                                let i = index
+                              "
+                              [formGroupName]="i"
+                            >
+                              <div class="row">
+                                <div class="col-md-7">
+                                  <mat-form-field
+                                    class="example-full-width relative-sec"
+                                  >
+                                    <input
+                                      type="text"
+                                      matInput
+                                      formControlName="everGreenKeyword"
+                                      placeholder="everGreenKeyword"
+                                    />
+                                  </mat-form-field>
+                                  <div
+                                    class="error-msg"
+                                    *ngIf="
+                                      everGreenKeyword.controls[
+                                        'everGreenKeyword'
+                                      ].dirty &&
+                                      everGreenKeyword.controls[
+                                        'everGreenKeyword'
+                                      ].invalid
+                                    "
+                                  >
+                                    <p
+                                      class="form_error"
+                                      *ngIf="
+                                        everGreenKeyword.controls[
+                                          'everGreenKeyword'
+                                        ].hasError('required')
+                                      "
+                                    >
+                                      Please enter Keyword
+                                    </p>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <mat-form-field>
+                                    <input
+                                      type="number"
+                                      matInput
+                                      placeholder="KW{{ i + 1 }}"
+                                      (change)="evalKeyWeight()"
+                                      formControlName="everGreenKeywordWeight"
+                                    />
+                                  </mat-form-field>
+                                  <div
+                                    class="error-msg"
+                                    *ngIf="
+                                      everGreenKeyword.controls[
+                                        'everGreenKeywordWeight'
+                                      ].dirty &&
+                                      everGreenKeyword.controls[
+                                        'everGreenKeywordWeight'
+                                      ].invalid
+                                    "
+                                  >
+                                    <p
+                                      class="form_error"
+                                      *ngIf="
+                                        everGreenKeyword.controls[
+                                          'everGreenKeywordWeight'
+                                        ].hasError('required')
+                                      "
+                                    >
+                                      Please enter keyword weight
+                                    </p>
+                                  </div>
+                                </div>
+                                <div class="col-md-3">
+                                  <div style="clear: both"></div>
+                                  <div
+                                    class="
+                                      pull-right
+                                      mb-2
+                                      btn btn-success btn-sm
+                                    "
+                                    (click)="deleteEvergreenKeyword(i)"
+                                  >
+                                    <div class="d-flex">
+                                      <i
+                                        class="fa fa-trash pr-2"
+                                        aria-hidden="true"
+                                      >
+                                      </i>
+                                      <span>
+                                        <p
+                                          style="font-size: 12px; color: white"
+                                        >
+                                          Delete KEYWORD
+                                        </p>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="btn btn-success btn-sm"
+                            style="width: 200px"
+                            (click)="addNewEverGreenKeyWord()"
+                          >
+                            <i class="fa fa-plus pr-2" aria-hidden="true"></i>
+                            <span>ADD KEYWORD</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- (click)="thirdStepBack($event)" -->
+              <div *ngIf="!isEvergreenLaunch" class="first-step-next">
+                <button mat-button matStepperPrevious (click)="finaStepBack()">
+                  Back
+                </button>
+                <button mat-button (click)="editLaunch(false)">
+                  SAVE FOR LATER
+                </button>
+              </div>
+              <div *ngIf="isEvergreenLaunch" class="first-step-next">
+                <button mat-button matStepperPrevious (click)="finaStepBack()">
+                  Back
+                </button>
+                <button mat-button (click)="editEvergreenLaunch(false)">
+                  SAVE FOR LATER
+                </button>
+              </div>
+
+              <!-- subscription dialog -->
+
+              <p-dialog
+                header="Evergreen. How it works."
+                (onHide)="closeVideoDialog()"
+                [(visible)]="showVideoTab"
+                [modal]="true"
+                baseZIndex="1"
+                [responsive]="true"
+                [style]="{ width: '600px', minWidth: '600px', height: 'auto' }"
+                closable="true"
+                dismissableMask="true"
+                baseZIndex="0"
+                closeOnEscape="true"
+                responsive="true"
+                baseZIndex="1"
+                class="edit-example-form mws-connection"
+              >
+                <div class="video-info">
+                  <video controls muted>
+                    <source
+                      src="../../../../assets/video/tutorial_test.mp4"
+                      type="video/mp4"
+                    />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </p-dialog>
+            </form>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </div>
+    </div>
+  </section>
+</div>

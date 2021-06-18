@@ -1,22 +1,26 @@
-import { Component, OnInit } from "@angular/core";
-import { GridOptions } from "@ag-grid-community/all-modules";
-import { ToastrService } from "ngx-toastr";
-import { ExportType } from "mat-table-exporter";
-import { Subscription, timer } from "rxjs";
-import { MatDialog } from "@angular/material";
+import { Component, OnInit } from '@angular/core';
+import { GridOptions } from '@ag-grid-community/all-modules';
+import { ToastrService } from 'ngx-toastr';
+import { ExportType } from 'mat-table-exporter';
+import { Subscription, timer } from 'rxjs';
+import { MatCheckboxChange, MatDialog } from '@angular/material';
+import * as FileSaver from 'file-saver';
 
-import { genralConfig } from "src/app/core/constant/genral-config.constant";
-import { AdminServicesService } from "../../services/admin-services.service";
-import { GenralService } from "../../../core";
-import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
-import { BuyersStatus } from "../../shared/models/BuyersStatus.model";
-import { IRowData } from "../../shared/models/IRowData.model";
-import { EditDeleteBuyerButtonRendererComponent } from "./edit-delete-buyer-button-renderer.component";
-import { ChangeBuyerStatusRendererComponent } from "./change-buyer-status-renderer.component";
+import { genralConfig } from 'src/app/core/constant/genral-config.constant';
+import { AdminServicesService } from '../../services/admin-services.service';
+import { GenralService } from '../../../core';
+import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
+import { BuyersStatus } from '../../shared/models/BuyersStatus.model';
+import { IRowData } from '../../shared/models/IRowData.model';
+import { EditDeleteBuyerButtonRendererComponent } from './edit-delete-buyer-button-renderer.component';
+import { ChangeBuyerStatusRendererComponent } from './change-buyer-status-renderer.component';
+import { ChangeTierRendererComponent } from './change-tier-renderer.component';
+import { TierModel } from '../../shared/models/Tier.model';
+
 @Component({
-  selector: "app-listbuyers",
-  templateUrl: "./listbuyers.component.html",
-  styleUrls: ["./listbuyers.component.scss"],
+  selector: 'app-listbuyers',
+  templateUrl: './listbuyers.component.html',
+  styleUrls: ['./listbuyers.component.scss'],
 })
 export class ListbuyersComponent implements OnInit {
   public gridOptions: GridOptions;
@@ -26,22 +30,25 @@ export class ListbuyersComponent implements OnInit {
   frameworkComponents: any;
 
   columnsData = [
-    { label: "Member No", checked: true },
-    { label: "First Name", checked: true },
-    { label: "Last Name", checked: true },
-    { label: "Actions", checked: true },
-    { label: "Email", checked: true },
-    { label: "OTP Phone", checked: true },
-    { label: "Address", checked: true },
-    { label: "apt.ste/bid", checked: true },
-    { label: "City", checked: true },
-    { label: "State", checked: true },
-    { label: "ZipCode", checked: true },
-    { label: "Country", checked: true },
-    { label: "Verification Code", checked: true },
-    { label: "Verify Status", checked: true },
-    { label: "Member Tier", checked: true },
-    { label: "Statuses", checked: true },
+    { label: 'Member No', checked: true },
+    { label: 'First Name', checked: true },
+    { label: 'Last Name', checked: true },
+    { label: 'Actions', checked: true },
+    { label: 'Email', checked: true },
+    { label: 'OTP Phone', checked: true },
+    { label: 'Address', checked: true },
+    { label: 'apt.ste/bid', checked: true },
+    { label: 'City', checked: true },
+    { label: 'State', checked: true },
+    { label: 'ZipCode', checked: true },
+    { label: 'Country', checked: true },
+    { label: 'Verify Status', checked: true },
+    { label: 'Member Tier', checked: true },
+    { label: 'Statuses', checked: true },
+    { label: 'Rebate Orders', checked: true },
+    { label: 'Order Accuracy Rate', checked: true },
+    { label: 'Referrals', checked: true },
+    { label: 'Update Tier', checked: true },
   ];
 
   public columnDefs = [];
@@ -54,7 +61,7 @@ export class ListbuyersComponent implements OnInit {
   noRecordFound = false;
   loader = false;
 
-  private searchText: "";
+  private searchText: '';
   private searchTimer: Subscription;
 
   public showUpdateUserDialogue: boolean;
@@ -73,9 +80,9 @@ export class ListbuyersComponent implements OnInit {
   arrToAppend = [];
 
   ExcelOptions = {
-    fileName: "buyerlist",
-    sheet: "sheet_name",
-    Props: { Author: "BrandExpand" },
+    fileName: 'buyerlist',
+    sheet: 'sheet_name',
+    Props: { Author: 'BrandExpand' },
     columnWidths: [25, 12, 12, 25, 12, 12, 12, 12, 12],
   };
 
@@ -83,20 +90,22 @@ export class ListbuyersComponent implements OnInit {
   public canChangeStatus = false;
   loggedInUserDetails: any;
   userRole: string;
-  customizedColumns: boolean = false;
+  customizedColumns = false;
   exportType = ExportType.XLSX;
   sortValue: any;
   sortOrder: any;
   sortBy: any = {
-    isLastAsc: "lastnameAsc",
-    isLastDsc: "lastnameDsc",
-    isMemberAsc: "memberAsc",
-    isMemberDsc: "memberDsc",
-    isTierAsc: "tierAsc",
-    isTierDsc: "tierDsc",
-    isAll: "all",
-    isDefault: "all",
+    isLastAsc: 'lastnameAsc',
+    isLastDsc: 'lastnameDsc',
+    isMemberAsc: 'memberAsc',
+    isMemberDsc: 'memberDsc',
+    isTierAsc: 'tierAsc',
+    isTierDsc: 'tierDsc',
+    isAll: 'all',
+    isDefault: 'all',
   };
+  listTiers: TierModel[] = [];
+  public userStatus: string;
 
   constructor(
     private adminServices: AdminServicesService,
@@ -104,11 +113,13 @@ export class ListbuyersComponent implements OnInit {
     public dialog: MatDialog,
     private _general_service: GenralService
   ) {
+    this.getListTiers();
     this.setBuyersStatuses();
     this.getUserDetails();
     this.frameworkComponents = {
       editDeleteBuyerButtonsRenderer: EditDeleteBuyerButtonRendererComponent,
       changeBuyerStatusRenderer: ChangeBuyerStatusRendererComponent,
+      updateTierRenderer: ChangeTierRendererComponent,
     };
     this.rowData = [];
     this.listAllBuyers();
@@ -119,7 +130,7 @@ export class ListbuyersComponent implements OnInit {
     };
     this.gridOptions = {
       unSortIcon: true,
-      rowSelection: "single",
+      rowSelection: 'single',
       context: {},
     };
   }
@@ -129,49 +140,49 @@ export class ListbuyersComponent implements OnInit {
   initializeForm(): void {
     this.columnDefs = [
       {
-        headerName: "Member No",
-        field: "_id",
+        headerName: 'Member No',
+        field: '_id',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "First Name",
-        field: "firstname",
+        headerName: 'First Name',
+        field: 'firstname',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "Last Name",
-        field: "lastname",
+        headerName: 'Last Name',
+        field: 'lastname',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "Actions",
-        cellRenderer: "editDeleteBuyerButtonsRenderer",
+        headerName: 'Actions',
+        cellRenderer: 'editDeleteBuyerButtonsRenderer',
         cellRendererParams: {
           onClick: this.buttonHandler.bind(this),
-          label: "Click 1",
+          label: 'Click 1',
           canDelete: this.canDeleteBuyer,
         },
         sortable: false,
         filter: false,
       },
       {
-        headerName: "Email",
-        field: "email",
+        headerName: 'Email',
+        field: 'email',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "OTP Phone",
-        field: "phone_no",
+        headerName: 'OTP Phone',
+        field: 'phone_no',
         cellRenderer: (params) => {
-          let phoneNumber = "";
+          let phoneNumber = '';
           if (params.value) {
             phoneNumber = `<div>
             ${params.data.countryCode}
@@ -182,61 +193,54 @@ export class ListbuyersComponent implements OnInit {
         },
       },
       {
-        headerName: "Address",
-        field: "address_id.address",
+        headerName: 'Address',
+        field: 'address_id.address',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "apt.ste/bid",
-        field: "address_id.care_of",
+        headerName: 'apt.ste/bid',
+        field: 'address_id.care_of',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
 
       {
-        headerName: "City",
-        field: "address_id.city",
+        headerName: 'City',
+        field: 'address_id.city',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "State",
-        field: "address_id.state",
+        headerName: 'State',
+        field: 'address_id.state',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "ZipCode",
-        field: "address_id.zipcode",
+        headerName: 'ZipCode',
+        field: 'address_id.zipcode',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "Country",
-        field: "address_id.country",
+        headerName: 'Country',
+        field: 'address_id.country',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "Verification Code",
-        field: "address_id.verifyCode",
+        headerName: 'Verify Status',
+        field: 'isActive',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
-        },
-      },
-      {
-        headerName: "Verify Status",
-        field: "address_id.isVerified",
-        cellRenderer: (params) => {
-          let vereficationStatus = "";
-          if (params) {
+          let vereficationStatus = '';
+          if (params.value) {
             vereficationStatus =
               '<i class="fa fa-check" aria-hidden="true"></i>';
           } else {
@@ -248,18 +252,52 @@ export class ListbuyersComponent implements OnInit {
         },
       },
       {
-        headerName: "Member Tier",
-        field: "tier_id.name",
+        headerName: 'Member Tier',
+        field: 'tier_id.name',
         cellRenderer: (params) => {
-          return params.value ? params.value : "N/A";
+          return params.value ? params.value : 'N/A';
         },
       },
       {
-        headerName: "Statuses",
-        cellRenderer: "changeBuyerStatusRenderer",
+        headerName: 'Rebate Orders',
+        field: 'rebate_orders',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+      },
+      {
+        headerName: 'Order Accuracy Rate',
+        field: 'accuracy_rate',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+      },
+      {
+        headerName: 'Referrals',
+        field: 'referal',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+      },
+      {
+        headerName: 'Update Tier',
+        cellRenderer: 'updateTierRenderer',
+        field: 'tier_id.name',
+        cellRendererParams: {
+          onChange: this.updateMemberTier.bind(this),
+          listTiers: this.listTiers,
+          label: 'Click 2',
+          canChangeStatus: this.canChangeStatus,
+        },
+        sortable: false,
+        filter: false,
+      },
+      {
+        headerName: 'Statuses',
+        cellRenderer: 'changeBuyerStatusRenderer',
         cellRendererParams: {
           onChange: this.changeBuyerStatus.bind(this),
-          label: "Click 1",
+          label: 'Click 1',
           buyersStatuses: this.buyersStatuses,
           canChangeStatus: this.canChangeStatus,
         },
@@ -269,87 +307,109 @@ export class ListbuyersComponent implements OnInit {
     ];
   }
 
+  updateMemberTier(data: any) {
+    this.adminServices
+      .updateTierInUser(data.id_tier, data.rowData._id)
+      .subscribe((res) => {
+        if (res.status === genralConfig.statusCode.ok) {
+          this.toastr.success(res.message);
+        } else {
+          this.toastr.error(res.message);
+        }
+      });
+  }
+
   onChange(event, index, item): void {
     const columns = this.gridOptions.columnApi.getAllColumns();
     let valueColumn;
-    if (item.label === "Member No") {
+    if (item.label === 'Member No') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Member No"
+        (column) => column.getColDef().headerName === 'Member No'
       )[0];
     }
-    if (item.label === "First Name") {
+    if (item.label === 'First Name') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "First Name"
+        (column) => column.getColDef().headerName === 'First Name'
       )[0];
     }
-    if (item.label === "Last Name") {
+    if (item.label === 'Last Name') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Last Name"
+        (column) => column.getColDef().headerName === 'Last Name'
       )[0];
     }
-    if (item.label === "Actions") {
+    if (item.label === 'Actions') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Actions"
+        (column) => column.getColDef().headerName === 'Actions'
       )[0];
     }
-    if (item.label === "Email") {
+    if (item.label === 'Email') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Email"
+        (column) => column.getColDef().headerName === 'Email'
       )[0];
     }
-    if (item.label === "OTP Phone") {
+    if (item.label === 'OTP Phone') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "OTP Phone"
+        (column) => column.getColDef().headerName === 'OTP Phone'
       )[0];
     }
-    if (item.label === "Address") {
+    if (item.label === 'Address') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Address"
+        (column) => column.getColDef().headerName === 'Address'
       )[0];
     }
-    if (item.label === "apt.ste/bid") {
+    if (item.label === 'apt.ste/bid') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "apt.ste/bid"
+        (column) => column.getColDef().headerName === 'apt.ste/bid'
       )[0];
     }
-    if (item.label === "City") {
+    if (item.label === 'City') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "City"
+        (column) => column.getColDef().headerName === 'City'
       )[0];
     }
-    if (item.label === "State") {
+    if (item.label === 'State') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "State"
+        (column) => column.getColDef().headerName === 'State'
       )[0];
     }
-    if (item.label === "ZipCode") {
+    if (item.label === 'ZipCode') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "ZipCode"
+        (column) => column.getColDef().headerName === 'ZipCode'
       )[0];
     }
-    if (item.label === "Country") {
+    if (item.label === 'Country') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Country"
+        (column) => column.getColDef().headerName === 'Country'
       )[0];
     }
-    if (item.label === "Verification Code") {
+    if (item.label === 'Verify Status') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Verification Code"
+        (column) => column.getColDef().headerName === 'Verify Status'
       )[0];
     }
-    if (item.label === "Verify Status") {
+    if (item.label === 'Rebate Orders') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Verify Status"
+        (column) => column.getColDef().headerName === 'Rebate Orders'
       )[0];
     }
-    if (item.label === "Member Tier") {
+    if (item.label === 'Order Accuracy Rate') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Member Tier"
+        (column) => column.getColDef().headerName === 'Order Accuracy Rate'
       )[0];
     }
-    if (item.label === "Statuses") {
+    if (item.label === 'Referrals') {
       valueColumn = columns.filter(
-        (column) => column.getColDef().headerName === "Statuses"
+        (column) => column.getColDef().headerName === 'Referrals'
+      )[0];
+    }
+    if (item.label === 'Member Tier') {
+      valueColumn = columns.filter(
+        (column) => column.getColDef().headerName === 'Member Tier'
+      )[0];
+    }
+    if (item.label === 'Statuses') {
+      valueColumn = columns.filter(
+        (column) => column.getColDef().headerName === 'Statuses'
       )[0];
     }
 
@@ -358,21 +418,21 @@ export class ListbuyersComponent implements OnInit {
   }
 
   getUserDetails(): void {
-    console.log("can delete in list buers ====>", this.canDeleteBuyer);
+    console.log('can delete in list buers ====>', this.canDeleteBuyer);
     this._general_service.getUserDetails().subscribe((res) => {
       if (res.code == genralConfig.statusCode.ok) {
         this.loggedInUserDetails = res.data;
-        console.log("login user inf ssso", this.loggedInUserDetails);
+        console.log('login user inf ssso', this.loggedInUserDetails);
 
         this.userRole =
           this.loggedInUserDetails && this.loggedInUserDetails.role_id
-            ? this.loggedInUserDetails.role_id.role || ""
-            : "";
+            ? this.loggedInUserDetails.role_id.role || ''
+            : '';
 
-        if (this.userRole === "superAdmin") {
+        if (this.userRole === 'superAdmin') {
           this.canDeleteBuyer = true;
           this.canChangeStatus = true;
-        } else if (this.userRole === "subAdmin") {
+        } else if (this.userRole === 'subAdmin') {
           this.canDeleteBuyer = false;
           this.canChangeStatus = false;
         } else {
@@ -389,9 +449,10 @@ export class ListbuyersComponent implements OnInit {
     const obj = {
       page: this.page,
       count: this.count,
-      searchText: this.searchText ? this.searchText : "",
+      searchText: this.searchText ? this.searchText : '',
       sort: this.sort,
       sortBy: this.sortOrder,
+      status: this.userStatus
     };
 
     this.adminServices.listAllBuyers(obj).subscribe((res: any) => {
@@ -400,7 +461,7 @@ export class ListbuyersComponent implements OnInit {
       let errorMessage: string = null;
       if (res) {
         if (res.code === genralConfig.statusCode.ok) {
-          this.toastr.success(res.message);
+          //this.toastr.success(res.message);
           this.buyersData = res.data || [];
           this.totalCount = res.total || 0;
         }
@@ -413,10 +474,10 @@ export class ListbuyersComponent implements OnInit {
           res.code !== genralConfig.statusCode.ok &&
           res.code !== genralConfig.statusCode.data_not_found
         ) {
-          errorMessage = res.message || res.code + " Error occured";
+          errorMessage = res.message || res.code + ' Error occured';
         }
       } else {
-        errorMessage = "Something went wrong!";
+        errorMessage = 'Something went wrong!';
         this.noRecordFound = true;
       }
 
@@ -449,7 +510,7 @@ export class ListbuyersComponent implements OnInit {
           }
           return el;
         });
-        this.toastr.success("Changed status buyer");
+        this.toastr.success('Changed status buyer');
       });
   }
 
@@ -466,14 +527,13 @@ export class ListbuyersComponent implements OnInit {
       this.searchTimer.unsubscribe();
     }
 
-    this.searchTimer = timer(600).subscribe(() => {
-      console.log(" searchUser  :  ", this.searchText);
+    this.searchTimer = timer(1000).subscribe(() => {
+      console.log(' searchUser  :  ', this.searchText);
       this.listAllBuyers();
     });
   }
 
   getsortByStatus(event) {
-    console.log("sort status is=====>", event.value);
     this.sort = event.value;
     this.listAllBuyers();
   }
@@ -501,20 +561,28 @@ export class ListbuyersComponent implements OnInit {
     this.upload(event.dataTransfer.files);
   }
 
+  exportArray() {
+    this.adminServices.getXSLXBuyers().subscribe((result) => {
+      const blob = new Blob([result], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      FileSaver.saveAs(blob, 'deals.xls');
+    });
+  }
+
   upload(e) {
     this.fileArr = [];
     console.log(e);
     const fileListAsArray = Array.from(e);
     fileListAsArray.forEach((item: File, i) => {
-      const fileImage = item.type.split("/");
+      const fileImage = item.type.split('/');
       const fileExt = fileImage[1];
       const fileType = fileImage[0];
       const size = item.size;
-      console.log(fileExt, fileType, size, "dssssssssssssssssssssssssssssss");
       // if (fileType === 'text' || fileType === 'csv' || fileType === 'application') {
       //   if ('|csv|text|vnd.openxmlformats-officedocument.spreadsheetml.sheet|'.indexOf(fileExt) === -1) {
-      if (fileType === "text" || fileType === "csv") {
-        if ("|csv|text|".indexOf(fileExt) === -1) {
+      if (fileType === 'text' || fileType === 'csv') {
+        if ('|csv|text|'.indexOf(fileExt) === -1) {
           this.toastr.error(genralConfig.CSV.CSV_FORMAT_NOT_SUPPORTED);
           return false;
         } else if (size >= 20185920) {
@@ -523,7 +591,7 @@ export class ListbuyersComponent implements OnInit {
           return false;
         } else {
           this.fileArr.push({ item });
-          console.log(this.fileArr, " this.fileArr");
+          console.log(this.fileArr, ' this.fileArr');
           return true;
         }
       } else {
@@ -542,16 +610,16 @@ export class ListbuyersComponent implements OnInit {
         this.fileObj.push(item.item);
       });
       this.arrToAppend.push(this.fileObj);
-      console.log(this.arrToAppend, "arrToAppend");
+      console.log(this.arrToAppend, 'arrToAppend');
       await this.arrToAppend[0].forEach((item, i) => {
-        formData.append("csv", item);
+        formData.append('csv', item);
       });
 
       this.adminServices
         .importUsersIntoBuyerCollection(formData)
         .subscribe((response) => {
           if (response.code === genralConfig.statusCode.ok) {
-            console.log("add product response========>", response);
+            console.log('add product response========>', response);
 
             this.toastr.success(response.message);
             this.loader = false;
@@ -570,7 +638,7 @@ export class ListbuyersComponent implements OnInit {
 
   buttonHandler(data): void {
     const rowData = data.rowData;
-    if (data.event.target.textContent === "edit") {
+    if (data.event.target.textContent === 'edit') {
       this.showUpdateUserDialog(rowData);
     } else {
       this.openDeleteDialog(rowData._id);
@@ -588,12 +656,10 @@ export class ListbuyersComponent implements OnInit {
   }
 
   openDeleteDialog(id) {
-    console.log("openDialog", id);
-
     if (id.length) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        width: "350px",
-        data: "Do you confirm the deletion of this buyer?",
+        width: '350px',
+        data: 'Do you confirm the deletion of this buyer?',
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
@@ -621,5 +687,21 @@ export class ListbuyersComponent implements OnInit {
 
   closeViewdilog(): void {
     this.customizedColumns = false;
+  }
+
+  getListTiers() {
+    this.adminServices.getListTiers().subscribe((res) => {
+      if (res.status === genralConfig.statusCode.ok) {
+        this.listTiers = res.data;
+      } else {
+        this.toastr.error(res.message);
+      }
+    });
+  }
+//sort table by blacklisted user status 
+  public sortByBlacklisted(e: MatCheckboxChange) {
+    console.log(e)
+    e.checked ? this.userStatus = 'blacklisting' : this.userStatus = '';
+    this.listAllBuyers();
   }
 }

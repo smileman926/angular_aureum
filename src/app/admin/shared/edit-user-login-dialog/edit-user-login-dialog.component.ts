@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ForgetpasswordService } from 'src/app/forgetpassword/service/forgetpassword.service';
 import { genralConfig } from 'src/app/core/constant/genral-config.constant';
@@ -12,7 +12,7 @@ import { countriesPhoneCodes } from '../countries-phone-codes';
   styleUrls: ['./edit-user-login-dialog.component.scss']
 })
 export class EditUserLoginDialogComponent implements OnInit {
-  public loader: boolean = false;
+  public loader = false;
   public countriesPhoneCodes = [];
 
   private _item: any;
@@ -28,6 +28,7 @@ export class EditUserLoginDialogComponent implements OnInit {
       phone_no: this._item.phone_no ? this._item.phone_no : '',
       countryCode: this._item.countryCode ? this._item.countryCode : '',
       country: this._item.countryCode ? this.findCountryByCode(this._item.countryCode) : '',
+      accuracyRate: this._item.accuracy_rate ? this._item.accuracy_rate : '',
     });
   }
 
@@ -46,7 +47,7 @@ export class EditUserLoginDialogComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private _forgetpasswordService : ForgetpasswordService,
+    private _forgetpasswordService: ForgetpasswordService,
     private _toastr: ToastrService,
     private _adminservice: AdminServicesService,
   ) { }
@@ -58,7 +59,12 @@ export class EditUserLoginDialogComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(genralConfig.pattern.EMAIL)]],
       phone_no: ['', [Validators.required, Validators.pattern(genralConfig.pattern.PHONE_NO)]],
       countryCode: ['', [Validators.required]],
-      country: ['', [Validators.required]]
+      country: ['', [Validators.required]],
+      accuracyRate: ['', [
+        Validators.required,
+        Validators.maxLength(3),
+        Validators.max(100),
+      ]],
     });
   }
 
@@ -93,16 +99,17 @@ export class EditUserLoginDialogComponent implements OnInit {
       email: this.updateUserForm.value.email,
       countryCode: this.updateUserForm.value.countryCode,
       phone_no: this.updateUserForm.value.phone_no,
+      accuracy_rate: this.updateUserForm.value.accuracyRate,
     };
 
     this.loader = true;
     this._adminservice.updateUser(data).subscribe(userUpResp => {
       this.loader = false;
-      if(userUpResp){
+      if (userUpResp) {
         if (typeof userUpResp.message === 'string') {
           this._toastr.success(userUpResp.message);
           this.displayUpdateUserDialogue = false;
-        } else{
+        } else {
           if (userUpResp.message.errmsg) {
             this._toastr.error(userUpResp.message.errmsg);
           } else {

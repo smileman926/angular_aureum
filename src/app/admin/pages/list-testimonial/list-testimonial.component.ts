@@ -31,7 +31,7 @@ export class ListTestimonialComponent implements OnInit {
   public columnDefs = [];
 
   count: any = genralConfig.paginator.COUNT;
-  totalCount: any = 20;
+  totalCount: number;
   loader: Boolean = false;
   page = genralConfig.paginator.PAGE;
   testimonialData = [];
@@ -169,7 +169,8 @@ export class ListTestimonialComponent implements OnInit {
       if (res.code == genralConfig.statusCode.ok) {
         this.testimonialData = res.data;
         this.loader = false;
-        this.toastr.success(res.message);
+       // this.toastr.success(res.message);
+        this.totalCount = res.total;
       } else {
         this.testimonialData = [];
         this.loader = false;

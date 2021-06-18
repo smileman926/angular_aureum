@@ -18,24 +18,13 @@
                         <div class="card cardTable">
                             <div class="card-body add-product-list table-responsive">
                                 <div class="cases-filter">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
-                                                <button class="export-btn" mat-button (click)="openImportDailog()">
-                                                    Import Deals <mat-icon> cloud_upload</mat-icon></button>
-                                            </div>
-                                            <div class="col-md-2"><button class="export-btn" mat-button
-                                                    (click)="exportArray()">
-                                                    Export Deals <mat-icon> cloud_download</mat-icon></button>
-                                            </div>
-                                        </div>
-                                    </div>
+    
 
                                     <mat-form-field class="example-full-width">
                                         <span matPrefix>
                                             <i class="material-icons">search</i>
                                         </span>
-                                        <input type="text" matInput placeholder="Search" (input)=searchDeal($event)>
+                                        <input type="text" matInput placeholder="Search" (input)="searchDeal($event)">
                                     </mat-form-field>
 
                                     <!-- <table mat-table [dataSource]="dealsData">
@@ -263,11 +252,21 @@
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                     </table> -->
-                                    
-                                    <div class="col-md-2"><button class="export-btn" mat-button
-                                        (click)="displayDialog()">Customize
-                                        Columns </button>
-                                </div>
+                                    <div class="container">
+                                        <div class="row">
+                                            <button class="export-btn" mat-button (click)="displayDialog()">Customize
+                                                Columns
+                                            </button>
+                                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+                                                <button class="export-btn" mat-button (click)="openImportDailog()">
+                                                    Import Deals <mat-icon> cloud_upload</mat-icon></button>
+                                            </div>
+                                            <div class="col-md-2"><button class="export-btn" mat-button (click)="exportArray()">
+                                                    Export Deals <mat-icon> cloud_download</mat-icon></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 <ag-grid-angular style="width: 100%;" class="ag-theme-alpine"
                                 [frameworkComponents]="frameworkComponents" [gridOptions]="gridOptions"
                                 [rowData]="dealsData" domLayout='autoHeight' [columnDefs]="columnDefs">

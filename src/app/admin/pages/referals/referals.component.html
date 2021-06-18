@@ -23,21 +23,20 @@
                         <div class="card cardTable">
                             <div class="card-body add-product-list table-responsive">
                                 <div class="cases-filter">
-                                    <!-- <mat-form-field class="example-full-width">
+                                     <mat-form-field class="example-full-width">
                                         <span matPrefix>
                                             <i class="material-icons">search</i>
                                         </span>
-                                        <input type="text" matInput placeholder="Search" (input)=searchUser($event)>
-                                    </mat-form-field> -->
+                                        <input type="text" matInput placeholder="Search" (input)="searchUser($event)">
+                                    </mat-form-field> 
 
                                     <div class="col-md-2"><button class="export-btn" mat-button
                                         (click)="displayDialog()">Customize
                                         Columns </button>
                                 </div>
-                                <ag-grid-angular style="width: 100%;" class="ag-theme-alpine"
-                                [gridOptions]="gridOptions"
-                                [rowData]="referalsData" domLayout='autoHeight' [defaultColDef]="defaultColDef" [columnDefs]="columnDefs">
-                            </ag-grid-angular>
+                                <ag-grid-angular style="width: 100%;" class="ag-theme-alpine" [gridOptions]="gridOptions" [rowData]="referalsData"
+                                    domLayout='autoHeight' [defaultColDef]="defaultColDef" [columnDefs]="columnDefs" [frameworkComponents]="frameworkComponents">
+                                </ag-grid-angular>
 
                                     <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count"
                                         [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons>

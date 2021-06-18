@@ -1,13 +1,20 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpResponse } from "@angular/common/http";
-import * as Rx from "rxjs";
+import { Injectable } from '@angular/core';
+import * as Rx from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { HttpClient } from "@angular/common/http";
 import { ApiUrlConstant } from "src/app/core/constant/api-url.constant";
-import { map } from "rxjs/operators";
 import { BuyersStatus } from "../shared/models/BuyersStatus.model";
 import { RequestObjectInterface } from "../shared/models/RequestObject.model";
+import { TiersResponse, BaseTierResponse } from "../shared/models/Tier.model";
+import {
+  IWalletResponse,
+  IWalletHistoryResponse,
+} from "../pages/wallet-page/wallet.interface";
+import { ProductLaunchStatus } from "../shared/models/ProductLaunchStatus.model";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AdminServicesService {
   constructor(private http: HttpClient) {}
@@ -16,12 +23,38 @@ export class AdminServicesService {
     return this.http.post(ApiUrlConstant.LISTALLSELLERS, data);
   }
 
+  getXSLXSellers(): any {
+    return this.http.get(ApiUrlConstant.XSLXSellers, {
+      responseType: 'blob',
+    });
+  }
+
   listAllReferals(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.LISTALLREFERALS, data);
   }
 
   listAllBuyers(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.LISTALLBUYERS, data);
+  }
+
+  getXSLXBuyers(): any {
+    return this.http.get(ApiUrlConstant.XSLXBuyers, {
+      responseType: 'blob',
+    });
+  }
+
+  getListTiers(): Rx.Observable<TiersResponse> {
+    return this.http.get<TiersResponse>(ApiUrlConstant.GET_LIST_TIERS);
+  }
+
+  updateTierInUser(
+    idTier: string,
+    idUser: string
+  ): Rx.Observable<BaseTierResponse> {
+    return this.http.put<BaseTierResponse>(ApiUrlConstant.UPDATE_TIER, {
+      user_id: idUser,
+      tier_id: idTier,
+    });
   }
 
   getListStatusesBuyers(): Rx.Observable<BuyersStatus[]> {
@@ -51,23 +84,113 @@ export class AdminServicesService {
     return this.http.post(ApiUrlConstant.LISTALLORDERSFORSETUPT, data);
   }
 
+  cancelProductLaunchByAdmin(
+    id: string,
+    data: ProductLaunchStatus
+  ): Rx.Observable<any> {
+    return this.http.patch(
+      ApiUrlConstant.CANCELPRODUCTLAUNCHBYADMIN + id,
+      data
+    );
+  }
+
+  editProductLaunchByAdmin(data: any, launchId: string): Rx.Observable<any> {
+    return this.http.put(
+      ApiUrlConstant.EDITPRODUCTLAUNCHBYADMIN + launchId,
+      data
+    );
+  }
+
+  getProductLaunchDetailsForAdmin(data: string): Rx.Observable<any> {
+    return this.http.get(ApiUrlConstant.GETPRODUCTLAUNCHDETAILSFORADMIN + data);
+  }
+
   getAllOrders(data: RequestObjectInterface): Rx.Observable<any> {
     return this.http.get(
       ApiUrlConstant.GETALLORDERS +
-        "page=" +
+        'page=' +
         data.page +
-        "&" +
-        "count=" +
+        '&' +
+        'count=' +
         data.count +
-        "&" +
-        "searchText=" +
+        '&' +
+        'searchText=' +
         data.searchText +
-        "&" +
-        "sort=" +
+        '&' +
+        'sort=' +
         data.sort +
-        "&" +
-        "sortBy=" +
+        '&' +
+        'sortBy=' +
         data.sortBy
+    );
+  }
+
+  getXSLXOrders(data: RequestObjectInterface): any {
+    return this.http.get(
+      ApiUrlConstant.XSLXORDERS +
+        'page=' +
+        data.page +
+        '&' +
+        'count=' +
+        data.count +
+        '&' +
+        'searchText=' +
+        data.searchText +
+        '&' +
+        'sort=' +
+        data.sort +
+        '&' +
+        'sortBy=' +
+        data.sortBy,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  getAllOrderHistory(
+    data: RequestObjectInterface,
+    orderId: string
+  ): Rx.Observable<any> {
+    return this.http
+      .get(
+        ApiUrlConstant.GETALLORDERHISTORY +
+          orderId +
+          '/order-history?' +
+          'page=' +
+          data.page +
+          '&' +
+          'count=' +
+          data.count +
+          '&' +
+          'searchText=' +
+          data.searchText +
+          '&' +
+          'sort=' +
+          data.sort +
+          '&' +
+          'sortBy=' +
+          data.sortBy
+      )
+      .pipe(
+        map((orderHistoryData: any) => {
+          const preparedOrderData = {
+            data: orderHistoryData.data[0].data,
+            total: orderHistoryData.total,
+            status: orderHistoryData.status,
+            message: orderHistoryData.message,
+          };
+          return preparedOrderData;
+        })
+      );
+  }
+
+  getXLSXOrderHistory(data: RequestObjectInterface, orderId: string): any {
+    return this.http.get(
+      ApiUrlConstant.GETALLORDERHISTORY + orderId + '/XLSXOrderHistory',
+      {
+        responseType: 'blob',
+      }
     );
   }
 
@@ -108,22 +231,29 @@ export class AdminServicesService {
   getRembursement(data: RequestObjectInterface): Rx.Observable<any> {
     return this.http.get(
       ApiUrlConstant.GETREMBURSEMENT +
-        "page=" +
+        'page=' +
         data.page +
-        "&" +
-        "count=" +
+        '&' +
+        'count=' +
         data.count +
-        "&" +
-        "searchText=" +
+        '&' +
+        'searchText=' +
         data.searchText +
-        "&" +
-        "sort=" +
+        '&' +
+        'sort=' +
         data.sort +
-        "&" +
-        "sortBy=" +
+        '&' +
+        'sortBy=' +
         data.sortBy
     );
   }
+
+  payPendingBalance(data: any[]): Rx.Observable<any> {
+    return this.http.post(`${ApiUrlConstant.PAYPENDINGBALANCE}`, {
+      data,
+    });
+  }
+
   getBuyersCount(): Rx.Observable<any> {
     return this.http.get(ApiUrlConstant.GETBUYERSCOUNT);
   }
@@ -180,6 +310,11 @@ export class AdminServicesService {
   addStaff(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.ADDSTAFF, data);
   }
+  getXSLXStaff(): any {
+    return this.http.get(ApiUrlConstant.XLSXSTAFF, {
+      responseType: 'blob',
+    });
+  }
 
   // Bonus codes service section
 
@@ -190,9 +325,6 @@ export class AdminServicesService {
   deleteBonuCode(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.DELETEBONUSCODE, data);
   }
-  // updateBonuCode(data: any): Rx.Observable<any> {
-  //   return this.http.post(ApiUrlConstant.UPDATESTAFF, data);
-  // }
 
   addBonusCode(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.ADDBONUSCODE, data);
@@ -210,8 +342,10 @@ export class AdminServicesService {
     return this.http.post(ApiUrlConstant.DELETEDEAL, data);
   }
 
-  xlsx(data: any): any {
-    return this.http.post(ApiUrlConstant.XSLX, data, { responseType: "blob" });
+  getXSLXDeals(): any {
+    return this.http.get(ApiUrlConstant.XSLXDeals, {
+      responseType: 'blob',
+    });
   }
 
   getSpecialDeals(): Rx.Observable<any> {
@@ -220,5 +354,34 @@ export class AdminServicesService {
 
   setSpecialDeals(data: any): Rx.Observable<any> {
     return this.http.post(ApiUrlConstant.SETSPECIALDEALS, data);
+  }
+
+  // dump orders service
+  dumpAllOrders(): Rx.Observable<any> {
+    return this.http.post(ApiUrlConstant.DUMP_ALL_ORDERS, {});
+  }
+
+  // wallet service
+
+  getWallet(userId: string): Rx.Observable<IWalletResponse> {
+    return this.http.get<IWalletResponse>(
+      `${ApiUrlConstant.GET_WALLET}/${userId}`
+    );
+  }
+
+  getWalletHistory(
+    userId: string,
+    params: any = {}
+  ): Rx.Observable<IWalletHistoryResponse> {
+    return this.http.get<IWalletHistoryResponse>(
+      `${ApiUrlConstant.GET_WALLET_BASE_HISTORY}/${userId}/history`,
+      { params }
+    );
+  }
+
+  getWalletSettings(userId: string): Rx.Observable<any> {
+    return this.http.get<IWalletResponse>(
+      `${ApiUrlConstant.GET_WALLET}/${userId}`
+    );
   }
 }

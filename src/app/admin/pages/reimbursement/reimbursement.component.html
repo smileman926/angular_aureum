@@ -16,7 +16,7 @@
           <div class="col-md-12">
             <div class="card cardTable">
               <div class="card-body add-product-list table-responsive">
-                <div class="cases-filter">
+                <div class="cases-filter">showDetailModal
                   <div class="table-responsive cases-table LawyerListTable">
                     <mat-form-field class="example-full-width">
                       <span matPrefix>
@@ -30,20 +30,33 @@
                       />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-2">
-                    <button
-                      class="export-btn"
-                      mat-button
-                      (click)="displayDialog()"
-                    >
-                      Customize Columns
-                    </button>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="displayDialog()"
+                      >
+                        Customize Columns
+                      </button>
+                    </div>
+                    <div class="col-md-2">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="payPendingBalance()"
+                      >
+                        Pay Balance
+                      </button>
+                    </div>
                   </div>
+
                   <ag-grid-angular
                     style="width: 100%"
                     class="ag-theme-alpine"
                     [gridOptions]="gridOptions"
                     [defaultColDef]="defaultColDef"
+                    [frameworkComponents]="frameworkComponents"
                     [rowData]="rembursementListdata"
                     [columnDefs]="columnDefs"
                     domLayout="autoHeight"
@@ -99,5 +112,57 @@
   </div>
   <div class="spinner-section" *ngIf="loader">
     <mat-spinner *ngIf="loader"></mat-spinner>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="Details user info"
+  (onHide)="closeDetailsModal()"
+  [(visible)]="showDetailModal"
+  [modal]="true"
+  baseZIndex="1"
+  [responsive]="true"
+  [style]="{ width: '550px', minWidth: '550px' }"
+  [minY]="700"
+  closable="true"
+  dismissableMask="true"
+  closeOnEscape="true"
+  responsive="true"
+  class="edit-example-form-admin not-overflow"
+>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="item-data">
+          <label>Email:</label>
+          <span>{{ detailsUserData?.email }}</span>
+        </div>
+        <div class="item-data">
+          <label>City:</label>
+          <span>{{ detailsUserData?.city }}</span>
+        </div>
+        <div class="item-data">
+          <label>Address:</label>
+          <span>{{ detailsUserData?.address }}</span>
+        </div>
+        <div class="item-data">
+          <label>Postal code:</label>
+          <span>{{ detailsUserData?.postalCode }}</span>
+        </div>
+        <div class="item-data">
+          <label>Rebate pending:</label>
+          <span>{{ detailsUserData?.rebate_pending }}</span>
+        </div>
+        <div class="actions">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="sendPayment()"
+          >
+            Completed payment
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </p-dialog>

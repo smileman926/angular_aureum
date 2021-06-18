@@ -1,5 +1,0 @@
-export * from './add-clinic/add-clinic.component'
-export * from './clinic.component'
-export * from './clinic-view/clinic-view.component'
-export * from './clinic-list/clinic-list.component'
-export * from './clinic-edit/clinic-edit.component'

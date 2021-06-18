@@ -1,623 +1,723 @@
-<div class="content-wrapper ">
-    <!-- <section class="content "> -->
+<div class="content-wrapper">
+  <!-- <section class="content "> -->
 
-    <div class="container-fluid ">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-title-box-admin  page-title-box-sec">
-                    <h4 class="pageTitle admin pageTitle-sec">Subscription Plan</h4>
-                    <!-- end row -->
-                </div>
-
-                <!-- end page-title-box -->
-            </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="page-title-box-admin page-title-box-sec">
+          <h4 class="pageTitle admin pageTitle-sec">Subscription Plan</h4>
+          <!-- end row -->
         </div>
-        <!-- <p>listproduct works!</p> -->
-        <div class="notification-sec ">
 
-            <div class="spinner-section" *ngIf="loader">
-                <mat-spinner *ngIf="loader"></mat-spinner>
+        <!-- end page-title-box -->
+      </div>
+    </div>
+    <!-- <p>listproduct works!</p> -->
+    <div class="notification-sec">
+      <div class="spinner-section" *ngIf="loader">
+        <mat-spinner *ngIf="loader"></mat-spinner>
+      </div>
 
-            </div>
-
-
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card cardTable">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card cardTable">
-
-                        <div class="row">
-                            <div class="pull-right input-group col-md-4">
-                                <!-- <mat-form-field>
+              <div class="pull-right input-group col-md-4">
+                <!-- <mat-form-field>
                                     <mat-label>Sort By</mat-label>
                                     <mat-select [(ngModel)]="sort" (selectionChange)="getsortByStatus($event)">
                                         <mat-option *ngFor="let sort of sortList" [value]="sort">{{ sort }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field> -->
-                                <div class="col-md-2" style="margin: 15px;">
-                                    <button class="export-btn" mat-button (click)="DisplaySubscription('add','')">Add
-                                        Subscription Plan </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-body add-product-list table-responsive">
-
-                            <div class="cases-filter">
-
-                                <mat-form-field class="example-full-width">
-                                    <span matPrefix>
-                                        <i class="material-icons">search</i>
-                                    </span>
-                                    <input type="text" matInput placeholder="Search" (input)=searchPrice($event)>
-                                </mat-form-field>
-
-                                <div class="container" style="margin-right: 18%;">
-                                    <table mat-table [dataSource]="subscriptionListdata">
-                                        <ng-container matColumnDef="Image" sticky>
-                                            <th mat-header-cell *matHeaderCellDef>Image
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <!-- {{element.month_launch_limit ? element.month_launch_limit : ''}} -->
-                                                <img class="planImg"
-                                                    src='{{element.image ? path+element.image : planPicPath}}'>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="subscription_name">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div> Subscription Level </div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('subscription_name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('subscription_name',-1)"
-                                                        matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.subscription_name ? element.subscription_name :
-                                                'N/A'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="per_month">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div> Monthly Price </div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('per_month',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('per_month',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.subscription_price ? element.subscription_price.per_month ?
-                                                ('$ ' + element.subscription_price.per_month) :
-                                                'N/A':'N/A'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="per_year">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Yearly Price</div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.subscription_price ? element.subscription_price.per_year ?
-                                                ('$ ' + element.subscription_price.per_year) :
-                                                'N/A':'N/A'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="year_off_discount">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Price Off % </div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('year_off_discount',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('year_off_discount',-1)"
-                                                        matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.subscription_price ?
-                                                element.subscription_price.year_off_discount ?
-                                                ('$ ' + element.subscription_price.year_off_discount) :
-                                                'N/A':'N/A'}}
-                                            </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="allowed_unit_giveaways">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Giveaways per Month</div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('allowed_unit_giveaways',1)"
-                                                        matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('allowed_unit_giveaways',-1)"
-                                                        matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.allowed_unit_giveaways ?
-                                                element.allowed_unit_giveaways : 'N/A'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="proprietary_interactive_product_giveaways">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div> Product Giveaways</div>
-                                                <!-- <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div> -->
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.proprietary_interactive_product_giveaways ? '✔' : ''}}
-                                            </td>
-
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="premium_launch_dashboard">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Premium Launch Dashboard</div>
-                                                <!-- <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div> -->
-                                            </th>
-                                            <td mat-cell *matCellDef=" let element">
-                                                {{element.premium_launch_dashboard ? '✔' : ''}}
-                                            </td>
-
-                                        </ng-container>
-                                        <ng-container matColumnDef="keyword_rank_tracking">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Keyword Rank Tracking</div>
-                                                <!-- <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div> -->
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.keyword_rank_tracking ? '✔' : ''}}
-                                            </td>
-
-                                        </ng-container>
-                                        <ng-container matColumnDef="expert_live_support">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Expert Live Support</div>
-                                                <!-- <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div> -->
-                                            </th>
-                                            <td mat-cell *matCellDef=" let element">
-                                                {{element.expert_live_support ? '✔' : ''}}
-                                            </td>
-
-                                        </ng-container>
-                                        <ng-container matColumnDef="additional_analytics">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>Additional Analytics</div>
-                                                <!-- <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div> -->
-                                            </th>
-                                            <td mat-cell *matCellDef=" let element">
-                                                {{element.additional_analytics ? '✔' : ''}}
-                                            </td>
-
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="evergreenBX">
-                                            <th mat-header-cell *matHeaderCellDef>
-                                                <div>EvergreenBX™</div>
-                                                <div>
-                                                    <a class="up-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
-                                                        <mat-icon>keyboard_arrow_up</mat-icon>
-                                                    </a>
-                                                    <a class="down-btn" href="javascript:void(0)"
-                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
-                                                        <mat-icon>keyboard_arrow_down</mat-icon>
-                                                    </a>
-                                                </div>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                {{element.evergreenBX ?'Yes': 'No'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="action">
-                                            <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <div class="actionIcon">
-                                                    <a class="viewI" (click)="DisplaySubscription('edit', element)"
-                                                        matTooltip="Edit Plan">
-                                                        <i class="material-icons edit-icons">edit</i>
-                                                        <!-- <i class="fa fa-reply" aria-hidden="true"></i> -->
-
-                                                    </a>
-                                                    <a class="viewI" matTooltip="Delete Plan"
-                                                        (click)="openDialog(element._id)">
-                                                        <i class="material-icons delete-icons">delete</i>
-                                                    </a>
-
-
-                                                </div>
-
-                                            </td>
-                                        </ng-container>
-
-                                        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
-                                    </table>
-
-                                    <div *ngIf="noRecordFound" class="mt-3 ml-5 text-center">
-                                        No Records Found
-                                    </div>
-
-                                    <mat-paginator [length]="totalCount" [pageSize]="count" (page)="paginate($event)"
-                                        [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons></mat-paginator>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
+                <div class="col-md-2" style="margin: 15px">
+                  <button
+                    class="export-btn"
+                    mat-button
+                    (click)="DisplaySubscription('add', '')"
+                  >
+                    Add Subscription Plan
+                  </button>
                 </div>
-
+              </div>
             </div>
-        </div>
-        <!-- </div> -->
-        <!-- </section> -->
-    </div>
-    <p-dialog header="{{header_title}} Subscription Plan" (onHide)="closedilog()" [(visible)]="displayDialogue"
-        [modal]="true" baseZIndex="10000" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700"
-        closable='true' dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true'
-        class="edit-example-form-admin">
-        <div>
-            <form class="example-form" [formGroup]="subscriptionPlanForm">
 
+            <div class="card-body add-product-list table-responsive">
+              <div class="cases-filter">
+                <mat-form-field class="example-full-width">
+                  <span matPrefix>
+                    <i class="material-icons">search</i>
+                  </span>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Search"
+                    (input)="searchPrice($event)"
+                  />
+                </mat-form-field>
 
+                <div class="container" style="margin-right: 18%">
+                  <table mat-table [dataSource]="subscriptionListdata">
+                    <ng-container matColumnDef="Image" sticky>
+                      <th mat-header-cell *matHeaderCellDef>Image</th>
+                      <td mat-cell *matCellDef="let element">
+                        <!-- {{element.month_launch_limit ? element.month_launch_limit : ''}} -->
+                        <img
+                          class="planImg"
+                          src="{{
+                            element.image ? path + element.image : planPicPath
+                          }}"
+                        />
+                      </td>
+                    </ng-container>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="edit-img-outer">
-                            <div class="edit-img">
-                                <img class="user-image" [src]="imageUrl" alt="User Image"
-                                    onerror='this.onerror=null;this.src="planPicPath";'>
-                                <div class="profile-pic-update">
-                                    <div class="profile-pic-update-inner">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        <input type="file" class="profile-pic-upload" name="imagePath" id="imagePath"
-                                            (change)="onSelectFile($event)" #imageInput>
-                                    </div>
-                                </div>
-                            </div>
+                    <ng-container matColumnDef="subscription_name">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Subscription Level</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('subscription_name', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('subscription_name', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.subscription_name
+                            ? element.subscription_name
+                            : 'N/A'
+                        }}
+                      </td>
+                    </ng-container>
 
-                    <div class="col-md-12">
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="text" matInput placeholder="Subscription Plan Name"
-                                formControlName="subscription_name">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['subscription_name'].dirty && subscriptionPlanForm.controls['subscription_name'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['subscription_name'].hasError('required')">
-                                Please enter subscription Plan Name
-                            </p>
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['subscription_name'].hasError('pattern')">
-                                Please enter valid subscription Plan Name
-                            </p>
+                    <ng-container matColumnDef="per_month">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Monthly Price</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('per_month', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('per_month', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.subscription_price
+                            ? element.subscription_price.per_month
+                              ? '$ ' + element.subscription_price.per_month
+                              : 'N/A'
+                            : 'N/A'
+                        }}
+                      </td>
+                    </ng-container>
 
-                    <div class="col-md-12">
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Giveaways per Month"
-                                formControlName="allowed_unit_giveaways">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['allowed_unit_giveaways'].dirty && subscriptionPlanForm.controls['allowed_unit_giveaways'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['allowed_unit_giveaways'].hasError('required')">
-                                Please enter projected unit giveaways </p>
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['allowed_unit_giveaways'].hasError('pattern')">
-                                Please enter valid projected unit giveaways </p>
+                    <ng-container matColumnDef="per_year">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Yearly Price</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('name', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('name', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.subscription_price
+                            ? element.subscription_price.per_year
+                              ? '$ ' + element.subscription_price.per_year
+                              : 'N/A'
+                            : 'N/A'
+                        }}
+                      </td>
+                    </ng-container>
 
-                    <div class="col-md-4">
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Price / month" formControlName="per_month">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['per_month'].dirty && subscriptionPlanForm.controls['per_month'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['per_month'].hasError('required')">
-                                Please enter monthly price
-                            </p>
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['per_month'].hasError('pattern')">
-                                Please enter valid monthly price
-                            </p>
+                    <ng-container matColumnDef="year_off_discount">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Price Off %</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('year_off_discount', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('year_off_discount', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Price / year" formControlName="per_year">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['per_year'].dirty && subscriptionPlanForm.controls['per_year'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['per_year'].hasError('required')">
-                                Please enter yearly price
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['per_year'].hasError('pattern')">
-                                Please enter valid yearly price
-                            </p>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.subscription_price
+                            ? element.subscription_price.year_off_discount
+                              ? '$ ' +
+                                element.subscription_price.year_off_discount
+                              : 'N/A'
+                            : 'N/A'
+                        }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="allowed_unit_giveaways">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Giveaways per Month</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('allowed_unit_giveaways', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('allowed_unit_giveaways', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.allowed_unit_giveaways
+                            ? element.allowed_unit_giveaways
+                            : 'N/A'
+                        }}
+                      </td>
+                    </ng-container>
 
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Price / year Off %"
-                                formControlName="year_off_discount">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['year_off_discount'].dirty && subscriptionPlanForm.controls['year_off_discount'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['year_off_discount'].hasError('required')">
-                                Please enter yearly price offer percentage
-                            </p>
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['year_off_discount'].hasError('pattern')">
-                                Please enter valid yearly price offer percentage
-                            </p>
+                    <ng-container
+                      matColumnDef="proprietary_interactive_product_giveaways"
+                    >
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Product Giveaways</div>
+                        <!-- <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{
+                          element.proprietary_interactive_product_giveaways
+                            ? '✔'
+                            : ''
+                        }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="premium_launch_dashboard">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Premium Launch Dashboard</div>
+                        <!-- <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.premium_launch_dashboard ? '✔' : '' }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="keyword_rank_tracking">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Keyword Rank Tracking</div>
+                        <!-- <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.keyword_rank_tracking ? '✔' : '' }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="expert_live_support">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Expert Live Support</div>
+                        <!-- <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.expert_live_support ? '✔' : '' }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="additional_analytics">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>Additional Analytics</div>
+                        <!-- <div>
+                                                    <a class="up-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',1)" matTooltip="Ascending">
+                                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                                    </a>
+                                                    <a class="down-btn" href="javascript:void(0)"
+                                                        (click)="sortBy('name',-1)" matTooltip="Descending">
+                                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                                    </a>
+                                                </div> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.additional_analytics ? '✔' : '' }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="evergreenBX">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div>EvergreenBX™</div>
+                        <div>
+                          <a
+                            class="up-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('name', 1)"
+                            matTooltip="Ascending"
+                          >
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                          </a>
+                          <a
+                            class="down-btn"
+                            href="javascript:void(0)"
+                            (click)="sortBy('name', -1)"
+                            matTooltip="Descending"
+                          >
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                          </a>
                         </div>
-                    </div>
-                    <!-- <div class="col-md-2">
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.evergreenBX ? 'Yes' : 'No' }}
+                      </td>
+                    </ng-container>
 
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 1" formControlName="tier1">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier1'].dirty && subscriptionPlanForm.controls['tier1'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier1'].hasError('required')">
-                                Please enter tier 1
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier1'].hasError('pattern')">
-                                Please enter valid tier 1
-                            </p>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                      <td mat-cell *matCellDef="let element">
+                        <div class="actionIcon">
+                          <a
+                            class="viewI"
+                            (click)="DisplaySubscription('edit', element)"
+                            matTooltip="Edit Plan"
+                          >
+                            <i class="material-icons edit-icons">edit</i>
+                            <!-- <i class="fa fa-reply" aria-hidden="true"></i> -->
+                          </a>
+                          <a
+                            class="viewI"
+                            matTooltip="Delete Plan"
+                            (click)="openDialog(element._id)"
+                          >
+                            <i class="material-icons delete-icons">delete</i>
+                          </a>
                         </div>
-                    </div>
-                    <div class="col-md-2">
+                      </td>
+                    </ng-container>
 
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 2" formControlName="tier2">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier2'].dirty && subscriptionPlanForm.controls['tier2'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier2'].hasError('required')">
-                                Please enter tier 2
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier2'].hasError('pattern')">
-                                Please enter valid tier 2
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+                    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayColumns"
+                    ></tr>
+                  </table>
 
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 3" formControlName="tier3">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier3'].dirty && subscriptionPlanForm.controls['tier3'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier3'].hasError('required')">
-                                Please enter tier 3
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier3'].hasError('pattern')">
-                                Please enter valid tier 3
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+                  <div *ngIf="noRecordFound" class="mt-3 ml-5 text-center">
+                    No Records Found
+                  </div>
 
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 4" formControlName="tier4">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier4'].dirty && subscriptionPlanForm.controls['tier4'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier4'].hasError('required')">
-                                Please enter tier 4 </p>
-                        </div>
-                        <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier4'].hasError('pattern')">
-                            Please enter valid tier 4 </p>
-                    </div>
-                    <div class="col-md-2">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 5" formControlName="tier5">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier5'].dirty && subscriptionPlanForm.controls['tier5'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier5'].hasError('required')">
-                                Please enter tier 5
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier5'].hasError('pattern')">
-                                Please enter valid tier 5
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Tier 6" formControlName="tier6">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['tier6'].dirty && subscriptionPlanForm.controls['tier6'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier6'].hasError('required')">
-                                Please enter tier 6
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['tier6'].hasError('pattern')">
-                                Please enter valid tier 6
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Basic Boosts" formControlName="basic_boosts">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['basic_boosts'].dirty && subscriptionPlanForm.controls['basic_boosts'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['basic_boosts'].hasError('required')">
-                                Please enter basic boosts
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['basic_boosts'].hasError('pattern')">
-                                Please enter valid basic boosts
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Intermediate Boosts" formControlName="intermediate_boosts">
-                        </mat-form-field>
-                        <div class="error-msg" *ngIf="subscriptionPlanForm.controls['intermediate_boosts'].dirty && subscriptionPlanForm.controls['intermediate_boosts'].invalid">
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['intermediate_boosts'].hasError('required')">
-                                Please enter intermediate boosts
-                            </p>
-                            <p class="form_error" *ngIf="subscriptionPlanForm.controls['intermediate_boosts'].hasError('pattern')">
-                                Please enter valid intermediate boosts
-                            </p>
-                        </div>
-                    </div> -->
-                    <!-- <div class="col-md-4">
-
-                        <mat-form-field class="example-full-width relative-sec">
-                            <input type="number" matInput placeholder="Advanced Boosts"
-                                formControlName="advanced_boosts">
-                        </mat-form-field>
-                        <div class="error-msg"
-                            *ngIf="subscriptionPlanForm.controls['advanced_boosts'].dirty && subscriptionPlanForm.controls['advanced_boosts'].invalid">
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['advanced_boosts'].hasError('required')">
-                                Please enter advanced boosts
-                            </p>
-                            <p class="form_error"
-                                *ngIf="subscriptionPlanForm.controls['advanced_boosts'].hasError('pattern')">
-                                Please enter valid advanced boosts
-                            </p>
-                        </div>
-                    </div> -->
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="evergreenBX" (change)="checkMarkChanged($event, 'evergreenBX')">
-                            EvergreenBX™
-                        </mat-checkbox>
-                    </div>
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="proprietaryInteractiveProductGiveaways"
-                            (change)="checkMarkChanged($event, 'proprietaryInteractiveProductGiveaways')">
-                            Product Giveaways
-                        </mat-checkbox>
-                    </div>
-
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="premiumLaunchDashboard"
-                            (change)="checkMarkChanged($event,'premiumLaunchDashboard')">
-                            Premium Launch Dashboard
-                        </mat-checkbox>
-                    </div>
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="keywordRankTracking"
-                            (change)="checkMarkChanged($event,'keywordRankTracking')">
-                            Keyword Rank Tracking
-                        </mat-checkbox>
-                    </div>
-
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="expertLiveSupport"
-                            (change)="checkMarkChanged($event,'expertLiveSupport')">
-                            Expert Live Support
-                        </mat-checkbox>
-                    </div>
-                    <div class="col-md-4">
-                        <mat-checkbox [checked]="additionalAnalytics"
-                            (change)="checkMarkChanged($event,'additionalAnalytics')">
-                            Additional Analytics
-                        </mat-checkbox>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="btn-sec">
-                            <button type="submit" [disabled]="!subscriptionPlanForm.valid"
-                                (click)="header_title=='Add' ? AddSubscription() : updateSubscription()"
-                                mat-raised-button color="primary" class="btn-login">Submit</button>
-                        </div>
-                    </div>
+                  <mat-paginator
+                    [length]="totalCount"
+                    [pageSize]="count"
+                    (page)="paginate($event)"
+                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                    showFirstLastButtons
+                  ></mat-paginator>
                 </div>
-            </form>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="spinner-section" *ngIf="loader">
-            <mat-spinner *ngIf="loader"></mat-spinner>
+      </div>
+    </div>
+    <!-- </div> -->
+    <!-- </section> -->
+  </div>
+  <p-dialog
+    header="{{ header_title }} Subscription Plan"
+    (onHide)="closedilog()"
+    [(visible)]="displayDialogue"
+    [modal]="true"
+    baseZIndex="10000"
+    [responsive]="true"
+    [style]="{ width: '600px', minWidth: '600px' }"
+    [minY]="700"
+    closable="true"
+    dismissableMask="true"
+    baseZIndex="0"
+    closeOnEscape="true"
+    responsive="true"
+    class="edit-example-form-admin"
+  >
+    <div>
+      <form class="example-form" [formGroup]="subscriptionPlanForm">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="edit-img-outer">
+              <div class="edit-img">
+                <img
+                  class="user-image"
+                  [src]="imageUrl"
+                  alt="User Image"
+                  onerror='this.onerror=null;this.src="planPicPath";'
+                />
+                <div class="profile-pic-update">
+                  <div class="profile-pic-update-inner">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <input
+                      type="file"
+                      class="profile-pic-upload"
+                      name="imagePath"
+                      id="imagePath"
+                      (change)="onSelectFile($event)"
+                      #imageInput
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <mat-form-field class="example-full-width relative-sec">
+              <input
+                type="text"
+                matInput
+                placeholder="Subscription Plan Name"
+                formControlName="subscription_name"
+              />
+            </mat-form-field>
+            <div
+              class="error-msg"
+              *ngIf="
+                subscriptionPlanForm.controls['subscription_name'].dirty &&
+                subscriptionPlanForm.controls['subscription_name'].invalid
+              "
+            >
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['subscription_name'].hasError(
+                    'required'
+                  )
+                "
+              >
+                Please enter subscription Plan Name
+              </p>
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['subscription_name'].hasError(
+                    'pattern'
+                  )
+                "
+              >
+                Please enter valid subscription Plan Name
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <mat-form-field class="example-full-width relative-sec">
+              <input
+                type="number"
+                matInput
+                placeholder="Giveaways per Month"
+                formControlName="allowed_unit_giveaways"
+              />
+            </mat-form-field>
+            <div
+              class="error-msg"
+              *ngIf="
+                subscriptionPlanForm.controls['allowed_unit_giveaways'].dirty &&
+                subscriptionPlanForm.controls['allowed_unit_giveaways'].invalid
+              "
+            >
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls[
+                    'allowed_unit_giveaways'
+                  ].hasError('required')
+                "
+              >
+                Please enter projected unit giveaways
+              </p>
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls[
+                    'allowed_unit_giveaways'
+                  ].hasError('pattern')
+                "
+              >
+                Please enter valid projected unit giveaways
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width relative-sec">
+              <input
+                type="number"
+                matInput
+                placeholder="Price / month"
+                formControlName="per_month"
+              />
+            </mat-form-field>
+            <div
+              class="error-msg"
+              *ngIf="
+                subscriptionPlanForm.controls['per_month'].dirty &&
+                subscriptionPlanForm.controls['per_month'].invalid
+              "
+            >
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['per_month'].hasError(
+                    'required'
+                  )
+                "
+              >
+                Please enter monthly price
+              </p>
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['per_month'].hasError('pattern')
+                "
+              >
+                Please enter valid monthly price
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width relative-sec">
+              <input
+                type="number"
+                matInput
+                placeholder="Price / year"
+                formControlName="per_year"
+              />
+            </mat-form-field>
+            <div
+              class="error-msg"
+              *ngIf="
+                subscriptionPlanForm.controls['per_year'].dirty &&
+                subscriptionPlanForm.controls['per_year'].invalid
+              "
+            >
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['per_year'].hasError('required')
+                "
+              >
+                Please enter yearly price
+              </p>
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['per_year'].hasError('pattern')
+                "
+              >
+                Please enter valid yearly price
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width relative-sec">
+              <input
+                type="number"
+                matInput
+                placeholder="Price / year Off %"
+                formControlName="year_off_discount"
+              />
+            </mat-form-field>
+            <div
+              class="error-msg"
+              *ngIf="
+                subscriptionPlanForm.controls['year_off_discount'].dirty &&
+                subscriptionPlanForm.controls['year_off_discount'].invalid
+              "
+            >
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['year_off_discount'].hasError(
+                    'required'
+                  )
+                "
+              >
+                Please enter yearly price offer percentage
+              </p>
+              <p
+                class="form_error"
+                *ngIf="
+                  subscriptionPlanForm.controls['year_off_discount'].hasError(
+                    'pattern'
+                  )
+                "
+              >
+                Please enter valid yearly price offer percentage
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="evergreenBX"
+              (change)="checkMarkChanged($event, 'evergreenBX')"
+            >
+              EvergreenBX™
+            </mat-checkbox>
+          </div>
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="proprietaryInteractiveProductGiveaways"
+              (change)="
+                checkMarkChanged(
+                  $event,
+                  'proprietaryInteractiveProductGiveaways'
+                )
+              "
+            >
+              Product Giveaways
+            </mat-checkbox>
+          </div>
+
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="premiumLaunchDashboard"
+              (change)="checkMarkChanged($event, 'premiumLaunchDashboard')"
+            >
+              Premium Launch Dashboard
+            </mat-checkbox>
+          </div>
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="keywordRankTracking"
+              (change)="checkMarkChanged($event, 'keywordRankTracking')"
+            >
+              Keyword Rank Tracking
+            </mat-checkbox>
+          </div>
+
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="expertLiveSupport"
+              (change)="checkMarkChanged($event, 'expertLiveSupport')"
+            >
+              Expert Live Support
+            </mat-checkbox>
+          </div>
+          <div class="col-md-4">
+            <mat-checkbox
+              [checked]="additionalAnalytics"
+              (change)="checkMarkChanged($event, 'additionalAnalytics')"
+            >
+              Additional Analytics
+            </mat-checkbox>
+          </div>
+
+          <div class="col-md-12">
+            <div class="btn-sec">
+              <button
+                type="submit"
+                [disabled]="!subscriptionPlanForm.valid"
+                (click)="
+                  header_title == 'Add'
+                    ? AddSubscription()
+                    : updateSubscription()
+                "
+                mat-raised-button
+                color="primary"
+                class="btn-login"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
         </div>
-    </p-dialog>
+      </form>
+    </div>
+    <div class="spinner-section" *ngIf="loader">
+      <mat-spinner *ngIf="loader"></mat-spinner>
+    </div>
+  </p-dialog>
+</div>

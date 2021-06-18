@@ -1,0 +1,83 @@
+table {
+  width: 100%;
+}
+
+.notification-sec {
+  margin-top: 15px;
+  position: relative;
+
+  .add-product-list {
+    .mat-table {
+      width: 100%;
+
+      th {
+        min-width: 100px;
+      }
+    }
+
+    .product-list {
+      height: 50px;
+      width: 50px;
+      overflow: hidden;
+      text-align: center;
+    }
+  }
+
+  tr.mat-header-row {
+    height: 25px;
+  }
+
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type,
+  th.mat-header-cell:first-of-type {
+    padding-left: 10px;
+  }
+
+  th.mat-header-cell {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  td.mat-cell {
+    vertical-align: middle;
+  }
+
+  .input-groupn {
+    position: relative;
+  }
+}
+
+.export-btn {
+  background-color: #1f2e69;
+  color: white;
+  margin-bottom: 10px;
+  float: left;
+}
+
+.fileupload {
+  background-image: url('../../../../assets/img/upload1.png');
+  background-repeat: no-repeat;
+  background-size: 75px;
+  width: 100%;
+  cursor: pointer;
+  border: 2px dashed #a0a1a2;
+  height: 115px;
+  border-radius: 6px;
+  background-position: center 28px;
+}
+
+.ddinfo {
+  display: block;
+  text-align: center;
+  padding-top: 85px;
+  color: #a0a1a2;
+}
+
+.profile {
+  padding: 5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

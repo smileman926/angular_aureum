@@ -53,3 +53,17 @@ table {
     color: white;
     margin-bottom:10px;
 }
+
+.item-data {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 10px;
+
+    label {
+        display: block;
+        min-width: 150px;
+        font-weight: 700;
+        margin-right: 15px;
+    }
+}

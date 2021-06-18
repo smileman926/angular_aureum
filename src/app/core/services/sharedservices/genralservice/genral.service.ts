@@ -1,18 +1,20 @@
-import { Injectable } from "@angular/core";
-import { Location } from "@angular/common";
-import { Observable, BehaviorSubject, Observer } from "rxjs";
-import { LocalStorageService } from "ngx-webstorage";
-import * as Rx from "rxjs";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { ApiUrlConstant } from "../../../constant/api-url.constant";
-import { FormGroup } from "@angular/forms";
-import { WebStorage } from "src/app/core/web.storage";
-import { Router } from "@angular/router";
-import { genralConfig } from "src/app/core/constant/genral-config.constant";
-import Swal from "sweetalert2";
-import { ToastrService } from "ngx-toastr";
+import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { Observable, Observer } from 'rxjs';
+import { LocalStorageService } from 'ngx-webstorage';
+import * as Rx from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+
+import { ApiUrlConstant } from '../../../constant/api-url.constant';
+import { WebStorage } from 'src/app/core/web.storage';
+import { genralConfig } from 'src/app/core/constant/genral-config.constant';
+
 const HttpUploadOptions = {
-  headers: new HttpHeaders({ "Content-Type": "multipart/form-data" }),
+  headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' }),
 };
 @Injectable()
 export class GenralService {
@@ -30,46 +32,45 @@ export class GenralService {
     public router: Router,
     private _webStorage: WebStorage,
     private toster: ToastrService
-  ) {
-    // this.getDetails();
-  }
+  ) {}
 
   goBack() {
     this.location.back();
   }
 
   isloggedInRedirect() {
-    this.isLoggedin = this._webStorage.get("token") ? true : false;
+    this.isLoggedin = this._webStorage.get('token') ? true : false;
 
     if (this.isLoggedin) {
       this.getUserDetails().subscribe((res) => {
         if (res.code == genralConfig.statusCode.ok) {
           this.loggedInUserDetails = res.data;
-          // console.log("@@@@@@@@@@@@@@@role@@@@@@@@@@@@@@@", this.loggedInUserDetails.role_id.role);
           switch (this.loggedInUserDetails.role_id.role) {
-            case "seller": {
-              this.router.navigate(["/layout/seller/dashboard"]);
-              break;
-            }
-            case "buyer": {
+            case 'seller': {
               this.toster.info(
-                "Sorry! You are trying to login on seller platform"
+                'Sorry! You are trying to login on seller platform'
               );
               break;
             }
-            case "admin": {
-              this.router.navigate(["/layout/admin/dashboard"]);
+            case 'buyer': {
+              this.toster.info(
+                'Sorry! You are trying to login on buyer platform'
+              );
+              break;
+            }
+            case 'admin': {
+              this.router.navigate(['/layout/admin/dashboard']);
               break;
             }
 
-            case "superAdmin": {
-              this.router.navigate(["/layout/admin/dashboard"]);
+            case 'superAdmin': {
+              this.router.navigate(['/layout/admin/dashboard']);
               break;
             }
           }
         } else {
           this.loggedInUserDetails = {};
-          this.router.navigate(["/"]);
+          this.router.navigate(['/']);
           this._webStorage.clearAll();
         }
       });
@@ -85,8 +86,8 @@ export class GenralService {
         ? this.loggedInUserDetails.image
         : this.globalImage;
       if (
-        this.loggedInUserDetails.userType == "user" ||
-        this.loggedInUserDetails.userType == "staff"
+        this.loggedInUserDetails.userType == 'user' ||
+        this.loggedInUserDetails.userType == 'staff'
       ) {
         this.headerUserName =
           this.loggedInUserDetails.firstName +
@@ -116,17 +117,13 @@ export class GenralService {
     return this.tempUserDetails;
   }
 
-  countryList(data: any): Rx.Observable<any> {
-    return this.http.get(ApiUrlConstant.GETCOUNTRIES, data);
-  }
-
   getUserDetails(): Rx.Observable<any> {
     return this.http.get(ApiUrlConstant.GETUSERDETAILS);
   }
 
   getImageLink(profilePice: string): Rx.Observable<any> {
     return this.http.get(ApiUrlConstant.GETIMAGE + profilePice, {
-      responseType: "text",
+      responseType: 'text',
     });
   }
 
@@ -141,22 +138,9 @@ export class GenralService {
       HttpUploadOptions
     );
   }
-  stateList(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.GETSTATES, data);
-  }
 
-  getDetail(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.GETDETAIL, data);
-  }
-
-  getNotifications(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.GETNOTIFICATIONS, data);
-  }
   getSubscriptionPlans(): Rx.Observable<any> {
     return this.http.get(ApiUrlConstant.GETSUBSCRIPTIONPLANS);
-  }
-  addContactDetails(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.ADDCONTACTDETAILS, data);
   }
 
   //for creating password
@@ -179,23 +163,19 @@ export class GenralService {
     return this.http.post(ApiUrlConstant.READNOTIFICATION, data);
   }
 
-  updateUserVideoTutorial(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.UPDATEUSERVIDEOTUTORIAL, data);
-  }
-
   IDGenerate(digitValue) {
     if (!digitValue) {
       digitValue = 11;
     }
-    var text = "";
-    var hdntxt = "";
-    var captchatext = "";
+    var text = '';
+    var hdntxt = '';
+    var captchatext = '';
     var possible =
-      "ABCDEFGHIkLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      'ABCDEFGHIkLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     for (var i = 0; i < digitValue; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
       if (i == 5) {
-        text = text + "-";
+        text = text + '-';
       }
     }
     return text;

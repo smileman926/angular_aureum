@@ -1,0 +1,120 @@
+<div class="content-wrapper">
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="page-title-box page-title-box-sec">
+              <h4 class="pageTitle pageTitle-sec">Wallet</h4>
+            </div>
+          </div>
+        </div>
+  
+        <div class="notification-sec">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card cardTable">
+                <div class="card-body add-product-list table-responsive">
+                  <div class="history-wrapper">
+                    <h5>Operation history:</h5>
+                    <div class="history-table-wrapper">
+                      <div class="spinner-section" *ngIf="loader">
+                        <mat-spinner *ngIf="loader"></mat-spinner>
+                      </div>
+                      <table
+                        mat-table
+                        matSort
+                        [dataSource]="history"
+                        class="tb-wid"
+                      >
+                        <ng-container matColumnDef="operation_name">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Operation name
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.displayData.operationName }}
+                          </td>
+                        </ng-container>
+  
+                        <ng-container matColumnDef="operation_datetime">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Operation date time
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.displayData.date | date: 'medium' }}
+                          </td>
+                        </ng-container>
+  
+                        <ng-container matColumnDef="operation_status">
+                          <th mat-header-cell *matHeaderCellDef>Status</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.displayData.status }}
+                          </td>
+                        </ng-container>
+  
+                        <ng-container matColumnDef="balance_change">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Balance change
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.displayData.amount >= 0 ? '+' : '-' }}
+                            {{
+                              (element.displayData.amount < 0
+                                ? -element.displayData.amount
+                                : element.displayData.amount
+                              ) | currency
+                            }}
+                          </td>
+                        </ng-container>
+  
+                        <ng-container matColumnDef="payment_method">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Payment method
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            <div class="icon-payment">
+                              <img
+                                *ngIf="
+                                  element.displayData.paymentOperator !== 'admin';
+                                  else admin_payment
+                                "
+                                src="{{
+                                  paymentOperatorMap[
+                                    element.displayData.paymentOperator
+                                  ]
+                                }}"
+                                alt=""
+                              />
+                              <ng-template #admin_payment>Admin</ng-template>
+                            </div>
+                          </td>
+                        </ng-container>
+  
+                        <tr
+                          mat-header-row
+                          *matHeaderRowDef="displayedColumns"
+                        ></tr>
+                        <tr
+                          mat-row
+                          *matRowDef="let row; columns: displayedColumns"
+                        ></tr>
+                      </table>
+                    </div>
+  
+                    <mat-paginator
+                      [length]="totalCount"
+                      (page)="paginate($event)"
+                      [pageSize]="count"
+                      [pageSizeOptions]="[5, 10, 15, 20, 50]"
+                      showFirstLastButtons
+                    >
+                    </mat-paginator>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  

@@ -56,6 +56,13 @@ table {
     margin-bottom: 10px;
 }
 
+.dump-orders-btn {
+    background-color: #EEA507;
+    color: white;
+    margin-bottom: 10px;
+}
+
+
 .fileupload {
     background-image: url("../../../../assets/img/upload1.png");
     background-repeat: no-repeat;
@@ -81,4 +88,13 @@ table {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.searchBar {
+    width: 100%;
+}
+
+.export-all-btn {
+    background-color: #EEA507;
+    margin-left: 5%;
 }

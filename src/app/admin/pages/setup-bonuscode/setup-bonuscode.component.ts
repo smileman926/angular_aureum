@@ -74,16 +74,6 @@ export class SetupBonuscodeComponent implements OnInit {
     this.rowData = [];
 
     this.listBonusCodes();
-    this.defaultColDef = {
-      filter: true,
-      sortable: true,
-      resizable: true,
-    };
-    this.gridOptions = {
-      unSortIcon: true,
-      rowSelection: "single",
-      context: {},
-    };
   }
 
   ngOnInit() {}
@@ -142,6 +132,17 @@ export class SetupBonuscodeComponent implements OnInit {
         filter: false,
       },
     ];
+
+    this.defaultColDef = {
+      filter: true,
+      sortable: true,
+      resizable: true,
+    };
+    this.gridOptions = {
+      unSortIcon: true,
+      rowSelection: "single",
+      context: {},
+    };
   }
 
   listBonusCodes() {

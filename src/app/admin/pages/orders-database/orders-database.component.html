@@ -1,32 +1,36 @@
-<div class="content-wrapper ">
-    <section class="content ">
-        <div class="container-fluid ">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="page-title-box-admin  page-title-box-sec">
-                        <h4 class="pageTitle admin pageTitle-sec">Orders</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="notification-sec ">
-                <div class="spinner-section" *ngIf="loader">
-                    <mat-spinner *ngIf="loader"></mat-spinner>
-                </div>
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-title-box-admin page-title-box-sec">
+            <h4 class="pageTitle admin pageTitle-sec">Orders</h4>
+          </div>
+        </div>
+      </div>
+      <div class="notification-sec">
+        <div class="spinner-section" *ngIf="loader">
+          <mat-spinner *ngIf="loader"></mat-spinner>
+        </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card cardTable">
-                            <div class="card-body add-product-list table-responsive">
-                                <div class="cases-filter">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card cardTable">
+              <div class="card-body add-product-list table-responsive">
+                <div class="cases-filter">
+                  <!-- <mat-form-field class="example-full-width">
+                    <span matPrefix>
+                      <i class="material-icons">search</i>
+                    </span>
+                    <input
+                      type="text"
+                      matInput
+                      placeholder="Search"
+                      (input)="searchOrder($event)"
+                    />
+                  </mat-form-field> -->
 
-                                    <mat-form-field class="example-full-width">
-                                        <span matPrefix>
-                                            <i class="material-icons">search</i>
-                                        </span>
-                                        <input type="text" matInput placeholder="Search" (input)=searchOrder($event)>
-                                    </mat-form-field>
-
-                                    <!-- <table mat-table [dataSource]="ordersData">
+                  <!-- <table mat-table [dataSource]="ordersData">
                                         <ng-container matColumnDef="date">
                                             <th mat-header-cell *matHeaderCellDef>
                                                 <div>Date</div>
@@ -198,46 +202,108 @@
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                     </table> -->
-
-                                    <div class="col-md-2"><button class="export-btn" mat-button
-                                        (click)="displayDialog()">Customize
-                                        Columns </button>
-                                </div>
-                                <ag-grid-angular style="width: 100%;" class="ag-theme-alpine"
-                                [gridOptions]="gridOptions"
-                                [rowData]="ordersData" domLayout='autoHeight' [columnDefs]="columnDefs">
-                            </ag-grid-angular>
-
-                                    <mat-paginator [length]="totalCount" (page)="paginate($event)" [pageSize]="count"
-                                        [pageSizeOptions]="[5,10,15,20,50,100]" showFirstLastButtons>
-                                    </mat-paginator>
-                                </div>
-                            </div>
-                        </div>
+                  <div class="row">
+                    <mat-form-field class="searchBar">
+                      <span matPrefix>
+                        <i class="material-icons">search</i>
+                      </span>
+                      <input
+                        type="text"
+                        matInput
+                        placeholder="Search"
+                        (input)="searchOrder($event)"
+                      />
+                    </mat-form-field>
+                    <div class="col-md-4">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="exportArray('currentPage')"
+                      >
+                        Export Orders
+                        <mat-icon> cloud_download</mat-icon>
+                      </button>
+                      <button
+                      class="export-all-btn export-btn"
+                      mat-button
+                      (click)="exportArray('fullExport')"
+                    >
+                      Export All Orders
+                      <mat-icon> cloud_download</mat-icon>
+                    </button>
                     </div>
+                    <div class="col-md-2">
+                      <button
+                        class="export-btn"
+                        mat-button
+                        (click)="displayDialog()"
+                      >
+                        Customize Columns
+                      </button>
+                    </div>
+                  </div>
+                  <ag-grid-angular
+                    style="width: 100%"
+                    class="ag-theme-alpine"
+                    [frameworkComponents]="frameworkComponents"
+                    [gridOptions]="gridOptions"
+                    [rowData]="ordersData"
+                    domLayout="autoHeight"
+                    [columnDefs]="columnDefs"
+                  >
+                  </ag-grid-angular>
+
+                  <mat-paginator
+                    [length]="totalCount"
+                    (page)="paginate($event)"
+                    [pageSize]="count"
+                    [pageSizeOptions]="[5, 10, 15, 20, 50, 100]"
+                    showFirstLastButtons
+                  >
+                  </mat-paginator>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </div>
 
-<p-dialog header="Customize Columns" (onHide)="closeViewdilog()" [(visible)]="customizedColumns" [modal]="true"
-    baseZIndex="1" [responsive]="true" [style]="{width: '600px', minWidth: '600px'}" [minY]="700" closable='true'
-    dismissableMask='true' baseZIndex='0' closeOnEscape='true' responsive='true' class="edit-example-form-admin">
-    <div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="">
-                    <div *ngFor="let item of columnsData; let i = index;">
-                        <mat-checkbox [checked]="item.checked" (change)="onChange($event, i, item)">
-                            {{item.label}}
-                        </mat-checkbox>
-                    </div>
-                </div>
-            </div>
+<p-dialog
+  header="Customize Columns"
+  (onHide)="closeViewdilog()"
+  [(visible)]="customizedColumns"
+  [modal]="true"
+  baseZIndex="1"
+  [responsive]="true"
+  [style]="{ width: '600px', minWidth: '600px' }"
+  [minY]="700"
+  closable="true"
+  dismissableMask="true"
+  baseZIndex="0"
+  closeOnEscape="true"
+  responsive="true"
+  class="edit-example-form-admin"
+>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="">
+          <div *ngFor="let item of columnsData; let i = index">
+            <mat-checkbox
+              [checked]="item.checked"
+              (change)="onChange($event, i, item)"
+            >
+              {{ item.label }}
+            </mat-checkbox>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="spinner-section" *ngIf="loader">
-        <mat-spinner *ngIf="loader"></mat-spinner>
-    </div>
+  </div>
+  <div class="spinner-section" *ngIf="loader">
+    <mat-spinner *ngIf="loader"></mat-spinner>
+  </div>
 </p-dialog>
