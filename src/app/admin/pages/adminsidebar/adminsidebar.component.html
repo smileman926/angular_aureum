@@ -155,6 +155,16 @@
                 >
               </a>
             </li>
+            <li
+              class="product-sec dropdown"
+              *ngIf="checkPermission('special_deals', 'buyers')"
+            >
+              <a class="dropdown-btn">
+                <span [routerLink]="['/layout/admin/notification/notify-list']"
+                  >Notification</span
+                >
+              </a>
+            </li>
           </ul>
         </li>
         <li class="dropdown" *ngIf="displayStaff">

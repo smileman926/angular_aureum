@@ -238,6 +238,11 @@ export class ApiUrlConstant {
     return this.appurl + '/public/notification/notificationListing';
   }
 
+  // user notifiaction API
+  public static get USER_NOTIFICATION_LIST(): string {
+    return this.appurl + '/aureum/notifications';
+  }
+
   // profile
   public static get EDITPROFILE(): string {
     return this.appurl + '/public/user/editProfile';

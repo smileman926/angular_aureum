@@ -34,6 +34,10 @@ const routes: Routes = [
         resolve: { userDetails: UserDetailsResolve },
       },
       { path: 'list-buyers', component: ListbuyersComponent },
+      { 
+        path: 'notification', 
+        loadChildren: './pages/notification/adminnotification.module#AdminNotificationModule'
+      },
       { path: 'list-testimonials', component: ListTestimonialComponent },
       { path: 'list-deals', component: ListDealsComponent },
       { path: 'list-instructions', component: ListInstructionsComponent },

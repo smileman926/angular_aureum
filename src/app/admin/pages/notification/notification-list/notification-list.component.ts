@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { genralConfig } from '../../../../core/constant/genral-config.constant';
 import { NotificationServiceService } from '../../../../core';
 import { ToastrService } from 'ngx-toastr';
+import { GridOptions } from 'ag-grid-community';
+import { IRowData } from 'src/app/admin/shared/models/IRowData.model';
 
 @Component({
   selector: 'app-notification-list',
@@ -9,68 +11,131 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent implements OnInit {
-  notificationData:any=[];
-  displayedColumns=['notification','action'];
-  rejectPopupCondition : boolean = false;
-  displayActions : boolean = false;
-  acceptToolTip : any = genralConfig.admin_notification_tooltip_messages.ACCEPT;
-  rejectToolTip : any = genralConfig.admin_notification_tooltip_messages.REJECT;
-  loader : boolean = false;
+  public gridOptions: GridOptions;
+  public rowData: IRowData[];
+  public defaultColDef;
 
+  frameworkComponents: any;
+
+  columnsData = [
+    { label: 'Content', checked: true },
+    { label: 'Is Read', checked: true },
+    { label: 'Created At', checked: true }
+  ];
+
+  buyersData = [];
+  buyersStatuses: any[] = [];
+  totalCount = 0;
+  count: any = genralConfig.paginator.COUNT;
+  page = genralConfig.paginator.PAGE;
+  noRecordFound = false;
+  loader = false;
+
+  sort: any;
+  public isSorting = false;
+  public sortColumn: string;
+  public firstcol = 0;
+  public secondcol = 0;
+  public sortingOrder: string;
+
+  sortOrder: any;
+  sortBy: any = {
+  };
+
+  public userStatus: string;
+
+  public columnDefs = [];
   constructor(
     private notificationService : NotificationServiceService,
     private toastr : ToastrService
   ) { }
 
   ngOnInit() {
-  
+    this.initializeCols();
     this.listNotification();
     
   }
+  initializeCols(): void {
+    this.columnDefs = [
+      {
+        headerName: 'Content',
+        field: 'content',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+      },
+      {
+        headerName: 'Is Read',
+        field: 'isRead',
+        cellRenderer: (params) => {
+          return params.value ? "Yes" : 'No';
+        },
+      },
+      {
+        headerName: 'Created At',
+        field: 'createdAt',
+        cellRenderer: (params) => {
+          return params.value ? params.value : 'N/A';
+        },
+      }
+    ];
+  }
+
+  onGridReady(params) {
+    params.api.sizeColumnsToFit();
+  };
 
   listNotification(){
     this.loader = true;
-    let notificationListObject = {
-      receiver_id : genralConfig.admin.ID,
-      roleId : genralConfig.roleId.ADMIN
-    }
-    this.notificationService.notificationList(notificationListObject).subscribe((res:any)=>{
+    const obj = {
+      page: this.page,
+      count: this.count,
+      sort: this.sort,
+      sortBy: this.sortOrder,
+      status: this.userStatus
+    };
+
+    this.notificationService.notificationList(obj).subscribe((res: any) => {
       this.loader = false;
-      if(res.code ==200){
-        if(!res.data.length){
-          this.displayActions = true;
-          res.data.push({message : 'No record found'});
+
+      let errorMessage: string = null;
+      if (res) {
+        if (res.code === genralConfig.statusCode.ok) {
+          //this.toastr.success(res.message);
+          console.log(res.total);
+          this.buyersData = res.data || [];
+          this.totalCount = (res.total && res.total.total) || 0;
         }
-        this.notificationData = res.data;
+
+        this.noRecordFound =
+          res.code === genralConfig.statusCode.data_not_found ||
+          this.totalCount <= 0;
+
+        if (
+          res.code !== genralConfig.statusCode.ok &&
+          res.code !== genralConfig.statusCode.data_not_found
+        ) {
+          errorMessage = res.message || res.code + ' Error occured';
+        }
+      } else {
+        errorMessage = 'Something went wrong!';
+        this.noRecordFound = true;
       }
-      else{
+
+      if (errorMessage) {
+        this.toastr.error(errorMessage);
       }
-    })
+
+      if (this.noRecordFound) {
+        this.buyersData = [];
+        this.totalCount = 0;
+      }
+    });
   }
-
-  acceptRequest(){
-    this.loader = true;
-    let obj ={
-      notification_id : this.notificationData[0]._id,
-      sender_id : this.notificationData[0].sender,
-      readers_id : genralConfig.admin.ID,
-      role_id : genralConfig.roleId.ADMIN
-    }
-    this.notificationService.acceptOrRejectRequest(obj).subscribe((res:any)=>{
-      this.loader = false;
-      if(res.code==200){
-        this.toastr.success(res.message);
-        this.listNotification();
-      }
-      else{
-      }
-    })
-
+  paginate(event) {
+    this.page = event.pageIndex + 1;
+    this.count = event.pageSize;
+    this.listNotification();
   }
-
-  rejectPopup(){
-    this.rejectPopupCondition = true
-  }
-
 
 }

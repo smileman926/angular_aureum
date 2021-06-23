@@ -69,6 +69,7 @@ import { EditProductLaunchByAdminComponent } from './pages/edit-product-launch-b
 import { WalletPageComponent } from './pages/wallet-page/wallet-page.component';
 import { OrdersHistoryComponent } from './pages/orders-history/orders-history.component';
 import { ViewOrderHistoryButtonRenderer } from './pages/orders-database/renderers/view-order-history-button-renderer.component';
+import { AdminNotificationModule } from './pages/notification/adminnotification.module';
 
 @NgModule({
   declarations: [

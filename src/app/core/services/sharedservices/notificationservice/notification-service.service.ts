@@ -12,7 +12,7 @@ export class NotificationServiceService {
   constructor(private http: HttpClient) {}
 
   notificationList(data: any): Rx.Observable<any> {
-    return this.http.post(ApiUrlConstant.NOTIFICATIONLISTING, data);
+    return this.http.post(ApiUrlConstant.USER_NOTIFICATION_LIST, data);
   }
 
   acceptOrRejectRequest(data: any): Rx.Observable<any> {
